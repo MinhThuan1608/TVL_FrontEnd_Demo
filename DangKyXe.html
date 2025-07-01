@@ -149,7 +149,8 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-200 ease-in-out z-50" id="main-content">
+    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-200 ease-in-out z-50"
+        id="main-content">
         <div class="bg-white rounded-lg shadow-md custom-shadow overflow-hidden">
             <!-- Form Title -->
             <div class="px-6 py-4 border-b border-gray-200">
@@ -165,25 +166,20 @@
                         <div>
                             <label for="licensePlate" class="block text-sm font-medium text-gray-700 mb-1">Biển số
                                 xe</label>
-                            <input type="text" id="licensePlate" name="licensePlate"
+                            <select id="licensePlate" name="licensePlate"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">---Chọn biển số xe---</option>
+                                <option value="29A-12345">29A-11111</option>
+                                <option value="29A-12345">29A-22222</option>
+                                <option value="29A-12345">29A-33333</option>
+                                <option value="29A-12345">29A-44444</option>
+                                <option value="29A-12345">29A-55555</option>
+                            </select>
                         </div>
                         <div>
                             <label for="driverName" class="block text-sm font-medium text-gray-700 mb-1">Tên tài
                                 xế</label>
                             <input type="text" id="driverName" name="driverName"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="cargoOwner" class="block text-sm font-medium text-gray-700 mb-1">Chủ
-                                hàng</label>
-                            <input type="text" id="cargoOwner" name="cargoOwner"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="cargoType" class="block text-sm font-medium text-gray-700 mb-1">Tên
-                                hàng</label>
-                            <input type="text" id="cargoType" name="cargoType"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
@@ -241,15 +237,14 @@
                     <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN CÂN TẠI KHO</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="customerName" class="block text-sm font-medium text-gray-700 mb-1">Tên khách
-                                hàng</label>
-                            <input type="text" id="customerName" name="customerName"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
                             <label for="warehouseWeightIn" class="block text-sm font-medium text-gray-700 mb-1">Trọng
                                 lượng xe vào (kg)</label>
                             <input type="number" id="warehouseWeightIn" name="warehouseWeightIn"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="timeIn" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe vào</label>
+                            <input type="datetime-local" id="timeIn" name="timeIn"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div>
@@ -259,29 +254,49 @@
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         </div>
                         <div>
+                            <label for="timeOut" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe ra</label>
+                            <input type="datetime-local" id="timeOut" name="timeOut"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
                             <label for="warehouseWeightCargo" class="block text-sm font-medium text-gray-700 mb-1">Trọng
                                 lượng hàng (kg)</label>
                             <input type="number" id="warehouseWeightCargo" name="warehouseWeightCargo"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                 readonly>
                         </div>
+
+
                         <div>
-                            <label for="timeIn" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe vào</label>
-                            <input type="datetime-local" id="timeIn" name="timeIn"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="timeOut" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe ra</label>
-                            <input type="datetime-local" id="timeOut" name="timeOut"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div class="md:col-span-2">
                             <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
                             <textarea id="notes" name="notes" rows="3"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                         </div>
                     </div>
                 </div>
+
+                <!-- Thông tin hàng hóa -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN HÀNG HÓA</h3>
+
+                    <!-- Danh sách hợp đồng -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Chọn hợp đồng</label>
+                        <div class="flex flex-wrap gap-2" id="contract-list">
+                            <!-- Các hợp đồng sẽ được thêm ở đây bằng JS -->
+                        </div>
+                        <button type="button" onclick="addContract()"
+                            class="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200">
+                            <i class="fas fa-plus mr-1"></i> Thêm hợp đồng
+                        </button>
+                    </div>
+
+                    <!-- Danh sách sản phẩm theo hợp đồng -->
+                    <div id="products-container">
+                        <!-- Các nhóm sản phẩm theo hợp đồng sẽ được thêm ở đây -->
+                    </div>
+                </div>
+
             </div>
 
             <!-- Form Actions -->
@@ -361,6 +376,139 @@
             sidebar.classList.toggle('md:translate-x-0');
             header.classList.toggle('md:ml-64');
             mainContent.classList.toggle('md:ml-64');
+        }
+
+        // Dữ liệu mẫu hợp đồng và sản phẩm
+        const contracts = [
+            {
+                id: 1, name: "HĐ-2023-001", products: [
+                    { id: 1, name: "Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông", unit: "m3" },
+                    { id: 2, name: "Gỗ sồi", unit: "m3" }
+                ]
+            },
+            {
+                id: 2, name: "HĐ-2023-002", products: [
+                    { id: 3, name: "Xi măng", unit: "bao" },
+                    { id: 4, name: "Cát xây dựng", unit: "m3" }
+                ]
+            },
+            {
+                id: 3, name: "HĐ-2023-003", products: [
+                    { id: 5, name: "Sắt thép", unit: "kg" },
+                    { id: 6, name: "Gạch ống", unit: "viên" }
+                ]
+            }
+        ];
+
+        // Thêm hợp đồng vào danh sách
+        function addContract(contractId = null) {
+            const contractList = document.getElementById('contract-list');
+            const productsContainer = document.getElementById('products-container');
+
+            // Tạo dropdown chọn hợp đồng
+            const select = document.createElement('select');
+            select.className = 'contract-select px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500';
+            select.onchange = function () { loadProducts(this); };
+
+            // Thêm option mặc định
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '--- Chọn hợp đồng ---';
+            select.appendChild(defaultOption);
+
+            // Thêm các hợp đồng vào dropdown
+            contracts.forEach(contract => {
+                const option = document.createElement('option');
+                option.value = contract.id;
+                option.textContent = contract.name;
+                option.dataset.products = JSON.stringify(contract.products);
+                select.appendChild(option);
+            });
+
+            // Nếu có contractId, chọn hợp đồng đó
+            if (contractId) {
+                select.value = contractId;
+                loadProducts(select);
+            }
+
+            // Thêm vào danh sách
+            const div = document.createElement('div');
+            div.className = 'contract-item flex items-center gap-2 bg-gray-100 p-2 rounded';
+            div.appendChild(select);
+
+            // Nút xóa
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+            deleteBtn.className = 'delete-contract';
+            deleteBtn.onclick = function () {
+                div.remove();
+                console.log(`Đã xóa hợp đồng ID: ${contractId}`);
+                // Xóa phần sản phẩm tương ứng nếu có
+                const productGroup = document.getElementById(`products-${contractId}`);
+                if (productGroup) productGroup.remove();
+            };
+            div.appendChild(deleteBtn);
+
+            contractList.appendChild(div);
+        }
+
+        // Tải sản phẩm theo hợp đồng
+        function loadProducts(select) {
+            const contractId = select.value;
+            if (!contractId) return;
+
+            const productsContainer = document.getElementById('products-container');
+            const productGroupId = `products-${contractId}`;
+
+            // Xóa nhóm sản phẩm cũ nếu có
+            const oldGroup = document.getElementById(productGroupId);
+            if (oldGroup) oldGroup.remove();
+
+            // Lấy thông tin hợp đồng
+            const contract = contracts.find(c => c.id == contractId);
+            if (!contract) return;
+
+            // Tạo nhóm sản phẩm mới
+            const productGroup = document.createElement('table');
+            productGroup.id = productGroupId;
+            productGroup.className = 'product-group mb-6 p-4 border border-gray-200 rounded-lg';
+
+            // Tiêu đề nhóm
+            const title = document.createElement('h4');
+            title.className = 'font-medium text-gray-700 mb-3';
+            title.textContent = `Sản phẩm hợp đồng ${contract.name}`;
+            productGroup.appendChild(title);
+
+            // Danh sách sản phẩm
+            contract.products.forEach(product => {
+                const div = document.createElement('tr');
+                div.className = 'product-item mb-3';
+
+                const td1 = document.createElement('td');
+                // Label
+                const label = document.createElement('label');
+                label.htmlFor = `product-${contractId}-${product.id}`;
+                label.className = 'mr-2';
+                label.textContent = `${product.name} (${product.unit})`;
+                td1.appendChild(label);
+
+                
+                const td2 = document.createElement('td');
+                // Số lượng
+                const qtyInput = document.createElement('input');
+                qtyInput.type = 'number';
+                qtyInput.name = `quantities[${contractId}][${product.id}]`;
+                qtyInput.placeholder = 'Số lượng';
+                qtyInput.className = 'ml-2 px-2 py-1 border border-gray-300 rounded w-24';
+                qtyInput.min = '0';
+                td2.appendChild(qtyInput);
+
+                div.appendChild(td1);
+                div.appendChild(td2);
+                productGroup.appendChild(div);
+            });
+
+            productsContainer.appendChild(productGroup);
         }
 
         // Đặt ngày mặc định cho các trường ngày tháng

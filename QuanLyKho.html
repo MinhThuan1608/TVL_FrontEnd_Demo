@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Kho</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-collapsed {
+            width: 70px;
+        }
+
+        .sidebar-collapsed .sidebar-text {
+            display: none;
+        }
+
+        .sidebar-collapsed .logo-text {
+            display: none;
+        }
+
+        .sidebar-collapsed .nav-item {
+            justify-content: center;
+        }
+
+        .content {
+            transition: all 0.3s ease;
+        }
+
+        .content-expanded {
+            margin-left: 70px;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <!-- Sidebar -->
+    <div class="sidebar fixed inset-y-0 left-0 bg-white shadow-lg z-50 w-64">
+        <div class="flex items-center justify-between p-4 border-b border-gray-200">
+            <div class="flex items-center">
+                <i class="fas fa-warehouse text-blue-600 text-2xl mr-3"></i>
+                <span class="logo-text text-xl font-bold text-blue-800">QUẢN LÝ KHO</span>
+            </div>
+            <button id="toggleSidebar" class="text-gray-500 hover:text-blue-600">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="mt-4">
+            <a href="#"
+                class="nav-item flex items-center px-4 py-3 text-blue-700 bg-blue-50 border-l-4 border-blue-600">
+                <i class="fas fa-home mr-3"></i>
+                <span class="sidebar-text">Tổng quan</span>
+            </a>
+            <a href="#" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-blue-700 hover:bg-blue-50">
+                <i class="fas fa-boxes mr-3"></i>
+                <span class="sidebar-text">Cụm kho</span>
+            </a>
+            <a href="#" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-blue-700 hover:bg-blue-50">
+                <i class="fas fa-box-open mr-3"></i>
+                <span class="sidebar-text">Hàng hóa</span>
+            </a>
+            <a href="#" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-blue-700 hover:bg-blue-50">
+                <i class="fas fa-exchange-alt mr-3"></i>
+                <span class="sidebar-text">Chuyển hàng</span>
+            </a>
+            <a href="#" class="nav-item flex items-center px-4 py-3 text-gray-600 hover:text-blue-700 hover:bg-blue-50">
+                <i class="fas fa-file-alt mr-3"></i>
+                <span class="sidebar-text">Báo cáo</span>
+            </a>
+        </nav>
+        <div class="absolute bottom-0 w-full p-4 border-t border-gray-200">
+            <div class="flex items-center">
+                <img src="https://via.placeholder.com/40" alt="User" class="rounded-full w-8 h-8">
+                <div class="ml-3 sidebar-text">
+                    <p class="text-sm font-medium text-gray-700">Admin</p>
+                    <p class="text-xs text-gray-500">Quản trị hệ thống</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content ml-64 p-6">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl font-bold text-blue-800">DANH SÁCH CỤM KHO</h1>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <input type="text" placeholder="Tìm kiếm cụm kho..."
+                        class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    <span>Thêm cụm kho</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Tổng số cụm kho</p>
+                        <h3 class="text-2xl font-bold text-blue-600">5</h3>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-warehouse text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-purple-600">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Tổng hàng</p>
+                        <h3 class="text-2xl font-bold text-purple-600">1,245.75 <span class="text-sm">tấn</span></h3>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full">
+                        <i class="fas fa-weight-hanging text-purple-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-orange-600">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Hàng xá</p>
+                        <h3 class="text-2xl font-bold text-orange-600">845.25 <span class="text-sm">tấn</span></h3>
+                    </div>
+                    <div class="bg-orange-100 p-3 rounded-full">
+                        <i class="fas fa-mountain text-orange-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-600">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Hàng bao</p>
+                        <h3 class="text-2xl font-bold text-green-600">400.50 <span class="text-sm">tấn</span></h3>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-boxes-stacked text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warehouse Clusters Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden animate-fade-in">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <span>Tên cụm kho</span><i class="p-1 fas fa-sort"></i></th>
+                            <th scope="col"
+                                class="cursor-pointer px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <span>Số kho</span><i class="p-1 fas fa-sort"></i></th>
+                            <th scope="col"
+                                class="cursor-pointer px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <span>Tổng hàng<i class="p-1 fas fa-sort"></i><br>(tấn)</span></th>
+                            <th scope="col"
+                                class="cursor-pointer px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <span></span>Hàng xá<i class="p-1 fas fa-sort"></i><br>(tấn)</span></th>
+                            <th scope="col"
+                                class="cursor-pointer px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <span></span>Hàng đóng bao<i class="p-1 fas fa-sort"></i><br>(tấn)</span></th>
+                            <th scope="col"
+                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <!-- Cluster 1 -->
+                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="openClusterDetail('Cụm kho A')">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-warehouse text-blue-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">Cụm kho TVL 1</div>
+                                        <div class="text-sm text-gray-500">Khu vực 1</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">5</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">325.5
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-center">215.2</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600 text-center">110.3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <button class="text-blue-600 hover:text-blue-800 mr-3">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Cluster 2 -->
+                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="openClusterDetail('Cụm kho B')">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-warehouse text-blue-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">Cụm kho TVL 2</div>
+                                        <div class="text-sm text-gray-500">Khu vực 2</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">8</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">420.8
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-center">180.5</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600 text-center">240.3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <button class="text-blue-600 hover:text-blue-800 mr-3 text-center">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Cluster 3 -->
+                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="openClusterDetail('Cụm kho C')">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-warehouse text-blue-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">Cụm kho BCC 2</div>
+                                        <div class="text-sm text-gray-500">Khu vực 3</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">198.7
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-center">120.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600 text-center">78.7</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <button class="text-blue-600 hover:text-blue-800 mr-3 text-center">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <!-- Cluster 4 -->
+                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="openClusterDetail('Cụm kho C')">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-warehouse text-blue-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">Cụm kho BCC 3</div>
+                                        <div class="text-sm text-gray-500">Khu vực 4</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">200.0
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-center">134.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600 text-center">66.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <button class="text-blue-600 hover:text-blue-800 mr-3 text-center">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Cluster 5 -->
+                        <tr class="hover:bg-blue-50 cursor-pointer" onclick="openClusterDetail('Cụm kho C')">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-warehouse text-blue-600"></i>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">Cụm kho BCC 5</div>
+                                        <div class="text-sm text-gray-500">Khu vực 5</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">437.6
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-center">400.0</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600 text-center">37.6</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                <button class="text-blue-600 hover:text-blue-800 mr-3 text-center">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between mt-6">
+            <div class="text-sm text-gray-500">
+                Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">3</span> của <span
+                    class="font-medium">12</span> cụm kho
+            </div>
+            <div class="flex space-x-2">
+                <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Trước
+                </button>
+                <button class="px-3 py-1 border border-blue-500 rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                    1
+                </button>
+                <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    2
+                </button>
+                <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    3
+                </button>
+                <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Sau
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Packaging Modal -->
+    <div id="packagingModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-purple-800">Đóng bao hàng hóa</h3>
+                            <p class="text-gray-500">Nhập thông tin đóng bao</p>
+                        </div>
+                        <button onclick="closeModal('packagingModal')" class="text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Khối lượng cần đóng
+                                (tấn)</label>
+                            <input type="number" id="packagingWeight"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm rounded-md border"
+                                placeholder="Nhập khối lượng">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Loại bao bì</label>
+                            <select id="packagingType"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm rounded-md border">
+                                <option value="1">Jumbo 1 tấn</option>
+                                <option value="0.05">Bao 50kg</option>
+                                <option value="0.07">Bao 70kg</option>
+                                <option value="0.025">Bao 25kg</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng bao</label>
+                            <input type="number" id="packagingCount"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm rounded-md border"
+                                placeholder="Tự động tính" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="confirmPackaging()"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-purple-600 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Xác nhận đóng bao
+                    </button>
+                    <button type="button" onclick="closeModal('packagingModal')"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Hủy bỏ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Modal -->
+    <div id="transferModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-800">Chuyển hàng hóa</h3>
+                            <p class="text-gray-500">Nhập thông tin chuyển hàng</p>
+                        </div>
+                        <button onclick="closeModal('transferModal')" class="text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-6 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Cụm kho đích</label>
+                            <select
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                <option>Cụm kho A</option>
+                                <option>Cụm kho B</option>
+                                <option>Cụm kho C</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Kho nhỏ đích</label>
+                            <select
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                <option>Kho A1</option>
+                                <option>Kho A2</option>
+                                <option>Kho A3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Khối lượng chuyển (tấn)</label>
+                            <input type="number"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
+                                placeholder="Nhập khối lượng">
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="confirmTransfer()"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Xác nhận chuyển hàng
+                    </button>
+                    <button type="button" onclick="closeModal('transferModal')"
+                        class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Hủy bỏ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cluster Detail Modal -->
+    <div id="clusterDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-6xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-2xl font-bold text-blue-800" id="modalClusterName">Cụm kho A</h3>
+                            <p class="text-gray-500">Chi tiết cụm kho</p>
+                        </div>
+                        <button onclick="closeClusterDetail()" class="text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- Warehouse Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <p class="text-sm text-blue-800">Tổng số kho nhỏ</p>
+                            <p class="text-2xl font-bold text-blue-800">5</p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                            <p class="text-sm text-green-800">Tổng hàng xá (tấn)</p>
+                            <p class="text-2xl font-bold text-green-800">215.2</p>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                            <p class="text-sm text-purple-800">Tổng hàng đóng bao (tấn)</p>
+                            <p class="text-2xl font-bold text-purple-800">110.3</p>
+                        </div>
+                    </div>
+
+                    <!-- Warehouse Tabs -->
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-8">
+                            <button id="warehouseTab"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600">Kho
+                                nhỏ</button>
+                            <button id="transferTab"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">Chuyển
+                                hàng</button>
+                            <button id="convertTab"
+                                class="whitespace-nowrap py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">Chuyển
+                                đổi bao bì</button>
+                        </nav>
+                    </div>
+
+                    <!-- Warehouse Content -->
+                    <div id="warehouseContent" class="mt-4">
+                        <!-- Small Warehouse 1 -->
+                        <div class="mb-8">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Kho A1</h4>
+                                <span class="text-sm text-gray-500">Tổng: 85.2 tấn</span>
+                            </div>
+                            <div class="bg-white rounded-lg shadow overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Chủ sở hữu</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Hàng xá (tấn)</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Hàng đóng bao (tấn)</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Tổng (tấn)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                Công ty A</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                                                <div class="flex items-center">
+                                                    <span>25.5</span>
+                                                    <button class="ml-2 text-blue-600 hover:text-blue-800"
+                                                        onclick="showTransferModal('Công ty A', 'Hàng xá', 25.5)">
+                                                        <i class="fas fa-exchange-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600">
+                                                <div class="flex items-center">
+                                                    <span>12.3</span>
+                                                    <button class="ml-2 text-purple-600 hover:text-purple-800"
+                                                        onclick="showConvertModal('Công ty A', 'Hàng đóng bao', 12.3)">
+                                                        <i class="fas fa-box-open"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">37.8</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                Công ty B</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                                                <div class="flex items-center">
+                                                    <span>18.7</span>
+                                                    <button class="ml-2 text-blue-600 hover:text-blue-800"
+                                                        onclick="showTransferModal('Công ty B', 'Hàng xá', 18.7)">
+                                                        <i class="fas fa-exchange-alt"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600">
+                                                <div class="flex items-center">
+                                                    <span>15.2</span>
+                                                    <button class="ml-2 text-purple-600 hover:text-purple-800"
+                                                        onclick="showConvertModal('Công ty B', 'Hàng đóng bao', 15.2)">
+                                                        <i class="fas fa-box-open"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">33.9</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                Công ty C</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">10.0</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600">3.5</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">13.5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Small Warehouse 2 -->
+                        <div class="mb-8">
+                            <div class="flex justify-between items-center mb-4">
+                                <h4 class="text-lg font-semibold text-gray-800">Kho A2</h4>
+                                <span class="text-sm text-gray-500">Tổng: 72.5 tấn</span>
+                            </div>
+                            <div class="bg-white rounded-lg shadow overflow-hidden">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Chủ sở hữu</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Hàng xá (tấn)</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Hàng đóng bao (tấn)</th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Tổng (tấn)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                Công ty D</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">30.2</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600">5.8</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">36.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                Công ty E</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">15.5</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-purple-600">21.0</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">36.5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Content (Hidden by default) -->
+                    <div id="transferContent" class="mt-4 hidden">
+                        <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                            <h4 class="text-lg font-semibold text-blue-800 mb-2">Chuyển hàng giữa các kho</h4>
+                            <p class="text-sm text-blue-700">Chọn hàng hóa cần chuyển và kho đích để thực hiện chuyển
+                                hàng</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-md font-medium text-gray-800 mb-3">Thông tin hàng chuyển</h5>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Kho nguồn</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Kho A1</option>
+                                            <option>Kho A2</option>
+                                            <option>Kho A3</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Chủ sở hữu</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Công ty A</option>
+                                            <option>Công ty B</option>
+                                            <option>Công ty C</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Loại hàng</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Hàng xá</option>
+                                            <option>Hàng đóng bao</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Khối lượng
+                                            (tấn)</label>
+                                        <input type="number"
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
+                                            placeholder="Nhập khối lượng">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="text-md font-medium text-gray-800 mb-3">Thông tin kho đích</h5>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Kho đích</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Kho A1</option>
+                                            <option>Kho A2</option>
+                                            <option>Kho A3</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
+                                        <textarea rows="4"
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
+                                            placeholder="Nhập ghi chú (nếu có)"></textarea>
+                                    </div>
+                                    <div class="pt-2">
+                                        <button
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                                            <i class="fas fa-exchange-alt mr-2"></i>
+                                            <span>Xác nhận chuyển hàng</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Convert Content (Hidden by default) -->
+                    <div id="convertContent" class="mt-4 hidden">
+                        <div class="bg-purple-50 p-4 rounded-lg mb-6">
+                            <h4 class="text-lg font-semibold text-purple-800 mb-2">Chuyển đổi hàng xá thành hàng đóng
+                                bao</h4>
+                            <p class="text-sm text-purple-700">Chọn hàng xá cần đóng bao và loại bao bì để thực hiện
+                                chuyển đổi</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-md font-medium text-gray-800 mb-3">Thông tin hàng xá</h5>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Kho chứa</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Kho A1</option>
+                                            <option>Kho A2</option>
+                                            <option>Kho A3</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Chủ sở hữu</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Công ty A</option>
+                                            <option>Công ty B</option>
+                                            <option>Công ty C</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Loại hàng</label>
+                                        <input type="text"
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
+                                            value="Phân bón" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Khối lượng cần đóng
+                                            (tấn)</label>
+                                        <input type="number"
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
+                                            placeholder="Nhập khối lượng">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h5 class="text-md font-medium text-gray-800 mb-3">Thông tin bao bì</h5>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Loại bao bì</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Jumbo 1 tấn</option>
+                                            <option>Bao 50kg</option>
+                                            <option>Bao 70kg</option>
+                                            <option>Bao 25kg</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng bao</label>
+                                        <input type="number"
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border"
+                                            placeholder="Tự động tính" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Kho đích</label>
+                                        <select
+                                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md border">
+                                            <option>Kho A1</option>
+                                            <option>Kho A2</option>
+                                            <option>Kho A3</option>
+                                        </select>
+                                    </div>
+                                    <div class="pt-2">
+                                        <button
+                                            class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg flex items-center">
+                                            <i class="fas fa-box-open mr-2"></i>
+                                            <span>Xác nhận đóng bao</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="closeClusterDetail()"
+                        class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Đóng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function () {
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+
+            sidebar.classList.toggle('sidebar-collapsed');
+
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                content.classList.remove('ml-64');
+                content.classList.add('ml-16', 'content-expanded');
+            } else {
+                content.classList.remove('ml-16', 'content-expanded');
+                content.classList.add('ml-64');
+            }
+        });
+
+        // Warehouse tabs
+        document.getElementById('warehouseTab').addEventListener('click', function () {
+            document.getElementById('warehouseContent').classList.remove('hidden');
+            document.getElementById('transferContent').classList.add('hidden');
+            document.getElementById('convertContent').classList.add('hidden');
+
+            document.getElementById('warehouseTab').classList.add('border-blue-500', 'text-blue-600');
+            document.getElementById('warehouseTab').classList.remove('border-transparent', 'text-gray-500');
+
+            document.getElementById('transferTab').classList.remove('border-blue-500', 'text-blue-600');
+            document.getElementById('transferTab').classList.add('border-transparent', 'text-gray-500');
+
+            document.getElementById('convertTab').classList.remove('border-blue-500', 'text-blue-600');
+            document.getElementById('convertTab').classList.add('border-transparent', 'text-gray-500');
+        });
+
+        document.getElementById('transferTab').addEventListener('click', function () {
+            document.getElementById('warehouseContent').classList.add('hidden');
+            document.getElementById('transferContent').classList.remove('hidden');
+            document.getElementById('convertContent').classList.add('hidden');
+
+            document.getElementById('warehouseTab').classList.remove('border-blue-500', 'text-blue-600');
+            document.getElementById('warehouseTab').classList.add('border-transparent', 'text-gray-500');
+
+            document.getElementById('transferTab').classList.add('border-blue-500', 'text-blue-600');
+            document.getElementById('transferTab').classList.remove('border-transparent', 'text-gray-500');
+
+            document.getElementById('convertTab').classList.remove('border-blue-500', 'text-blue-600');
+            document.getElementById('convertTab').classList.add('border-transparent', 'text-gray-500');
+        });
+
+        document.getElementById('convertTab').addEventListener('click', function () {
+            document.getElementById('warehouseContent').classList.add('hidden');
+            document.getElementById('transferContent').classList.add('hidden');
+            document.getElementById('convertContent').classList.remove('hidden');
+
+            document.getElementById('warehouseTab').classList.remove('border-blue-500', 'text-blue-600');
+            document.getElementById('warehouseTab').classList.add('border-transparent', 'text-gray-500');
+
+            document.getElementById('transferTab').classList.remove('border-blue-500', 'text-blue-600');
+            document.getElementById('transferTab').classList.add('border-transparent', 'text-gray-500');
+
+            document.getElementById('convertTab').classList.add('border-blue-500', 'text-blue-600');
+            document.getElementById('convertTab').classList.remove('border-transparent', 'text-gray-500');
+        });
+
+        // Open cluster detail modal
+        function openClusterDetail(clusterName) {
+            window.location.pathname = 'ChiTietCumKho.html';
+            // document.getElementById('modalClusterName').textContent = clusterName;
+            // document.getElementById('clusterDetailModal').classList.remove('hidden');
+
+            // // Reset to warehouse tab when opening
+            // document.getElementById('warehouseContent').classList.remove('hidden');
+            // document.getElementById('transferContent').classList.add('hidden');
+            // document.getElementById('convertContent').classList.add('hidden');
+
+            // document.getElementById('warehouseTab').classList.add('border-blue-500', 'text-blue-600');
+            // document.getElementById('warehouseTab').classList.remove('border-transparent', 'text-gray-500');
+
+            // document.getElementById('transferTab').classList.remove('border-blue-500', 'text-blue-600');
+            // document.getElementById('transferTab').classList.add('border-transparent', 'text-gray-500');
+
+            // document.getElementById('convertTab').classList.remove('border-blue-500', 'text-blue-600');
+            // document.getElementById('convertTab').classList.add('border-transparent', 'text-gray-500');
+        }
+
+        // Close cluster detail modal
+        function closeClusterDetail() {
+            document.getElementById('clusterDetailModal').classList.add('hidden');
+        }
+
+        // Show packaging modal
+        function showPackagingModal(owner, goodsType, quantity) {
+            document.getElementById('packagingModal').classList.remove('hidden');
+            document.getElementById('packagingWeight').value = quantity;
+            calculateBags();
+        }
+
+        // Show transfer modal
+        function showTransferModal(owner, goodsType, quantity) {
+            document.getElementById('transferModal').classList.remove('hidden');
+        }
+
+        // Close any modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Confirm packaging action
+        function confirmPackaging() {
+            const weight = document.getElementById('packagingWeight').value;
+            const bagType = document.getElementById('packagingType').value;
+            const bagCount = document.getElementById('packagingCount').value;
+
+            alert(`Đã xác nhận đóng ${bagCount} bao (${weight} tấn) loại ${bagType}`);
+            closeModal('packagingModal');
+        }
+
+        // Confirm transfer action
+        function confirmTransfer() {
+            alert('Đã xác nhận chuyển hàng');
+            closeModal('transferModal');
+        }
+
+        // Calculate number of bags when weight or bag type changes
+        function calculateBags() {
+            const weight = parseFloat(document.getElementById('packagingWeight').value) || 0;
+            const bagType = parseFloat(document.getElementById('packagingType').value);
+
+            const bagCount = weight / bagType;
+            document.getElementById('packagingCount').value = Math.ceil(bagCount);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Setup packaging calculation
+            document.getElementById('packagingWeight').addEventListener('input', calculateBags);
+            document.getElementById('packagingType').addEventListener('change', calculateBags);
+
+            function calculateBags() {
+                const weight = parseFloat(weightInput.value) || 0;
+                const bagType = bagTypeSelect.value;
+
+                let bagWeight = 1; // default to 1 ton for Jumbo
+
+                if (bagType === 'Bao 50kg') bagWeight = 0.05;
+                if (bagType === 'Bao 70kg') bagWeight = 0.07;
+                if (bagType === 'Bao 25kg') bagWeight = 0.025;
+
+                const bagCount = weight / bagWeight;
+                bagCountInput.value = Math.ceil(bagCount); // Round up to nearest whole number
+            }
+
+            bagTypeSelect.addEventListener('change', calculateBags);
+            weightInput.addEventListener('input', calculateBags);
+        });
+    </script>
+</body>
+
+</html>
