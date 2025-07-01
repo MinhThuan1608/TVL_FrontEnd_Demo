@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Lợi nhuận</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+  <main class="max-w-7xl mx-auto p-6">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-green-500">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold">📊 Báo cáo lợi nhuận</h1>
+        <p class="text-sm text-gray-500">Theo dõi và phân tích lợi nhuận theo thời gian</p>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Lợi nhuận tháng này</p>
+          <h2 class="text-3xl font-bold text-green-600">150.000.000đ</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Tăng trưởng tháng</p>
+          <h2 class="text-3xl font-bold text-blue-600">+12%</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Tăng trưởng năm</p>
+          <h2 class="text-3xl font-bold text-purple-600">+18%</h2>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="font-semibold mb-2">Lợi nhuận theo tháng</p>
+          <div class="relative h-72">
+            <canvas id="monthlyProfitChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="font-semibold mb-2">Tăng trưởng lợi nhuận</p>
+          <div class="relative h-72">
+            <canvas id="profitGrowthChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profit Table -->
+      <div class="bg-white rounded-2xl shadow p-4">
+        <p class="font-semibold mb-4">Chi tiết lợi nhuận</p>
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="p-2 text-left">Tháng</th>
+                <th class="p-2 text-left">Doanh thu</th>
+                <th class="p-2 text-left">Chi phí</th>
+                <th class="p-2 text-left">Lợi nhuận</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="p-2">Tháng 5</td>
+                <td class="p-2">180.000.000đ</td>
+                <td class="p-2">95.000.000đ</td>
+                <td class="p-2">85.000.000đ</td>
+              </tr>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="p-2">Tháng 6</td>
+                <td class="p-2">200.000.000đ</td>
+                <td class="p-2">100.000.000đ</td>
+                <td class="p-2">100.000.000đ</td>
+              </tr>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="p-2">Tháng 7</td>
+                <td class="p-2">220.000.000đ</td>
+                <td class="p-2">110.000.000đ</td>
+                <td class="p-2">110.000.000đ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: value => new Intl.NumberFormat('vi-VN').format(value)
+          }
+        }
+      }
+    };
+
+    new Chart(document.getElementById('monthlyProfitChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Tháng 5', 'Tháng 6', 'Tháng 7'],
+        datasets: [{
+          label: 'Lợi nhuận (VNĐ)',
+          data: [85000000, 100000000, 110000000],
+          backgroundColor: '#22c55e'
+        }]
+      },
+      options: chartOptions
+    });
+
+    new Chart(document.getElementById('profitGrowthChart'), {
+      type: 'line',
+      data: {
+        labels: ['Tháng 5', 'Tháng 6', 'Tháng 7'],
+        datasets: [{
+          label: 'Tăng trưởng lợi nhuận (%)',
+          data: [8, 12, 18],
+          borderColor: '#6366f1',
+          backgroundColor: 'rgba(99, 102, 241, 0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: chartOptions
+    });
+  </script>
+</body>
+</html>
+
