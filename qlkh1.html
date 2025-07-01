@@ -201,6 +201,70 @@
     list-style: none;
     padding: 10px;
   }
+  .form-popup {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 24px;
+  width: 700px; /* 👈 Tăng chiều rộng */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  border-radius: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.form-popup h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.form-popup label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-popup input,
+.form-popup select,
+.form-popup textarea {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.form-popup input:focus,
+.form-popup select:focus,
+.form-popup textarea:focus {
+  border-color: #1677ff;
+  outline: none;
+}
+
+.form-popup button {
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.form-popup button[type="submit"] {
+  background-color: #1677ff;
+  color: white;
+  border: none;
+}
+
+.form-popup button[type="button"] {
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+}
+
   </style>
 </head>
 <body>
@@ -241,22 +305,41 @@
 
   <!-- Form thêm/sửa -->
   <div id="customerForm" class="form-popup" style="display: none;">
-    <h3 id="formTitle">Thêm khách hàng</h3>
-    <form onsubmit="saveCustomer(); return false;">
-      <input type="hidden" id="customerId">
-      <input type="text" id="name" placeholder="Tên khách hàng" required>
-      <input type="text" id="phone" placeholder="Số điện thoại" required>
-      <input type="email" id="email" placeholder="Email" required>
-     <select id="type" onchange="updateSelectColor(this)" class="rounded px-3 py-2">
-        <option value="Cá nhân">Cá nhân</option>
-        <option value="Doanh nghiệp">Doanh nghiệp</option>
-     </select>
+  <h3 id="formTitle">Thêm khách hàng mới</h3>
+  <form onsubmit="saveCustomer(); return false;">
+    <input type="hidden" id="customerId">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div>
+        <label for="name">Tên khách hàng</label>
+        <input type="text" id="name" placeholder="Nhập tên khách hàng" required>
+      </div>
+      <div>
+        <label for="phone">Số điện thoại</label>
+        <input type="text" id="phone" placeholder="Nhập số điện thoại" required>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Nhập email" required>
+      </div>
+      <div>
+        <label for="type">Loại khách hàng</label>
+        <select id="type" required>
+          <option value="">Chọn loại khách hàng</option>
+          <option value="Cá nhân">Cá nhân</option>
+          <option value="Doanh nghiệp">Doanh nghiệp</option>
+        </select>
+      </div>
+      
+    </div>
 
-      <br>
-      <button type="submit">Lưu</button>
+    <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 12px;">
       <button type="button" onclick="closeForm()">Huỷ</button>
-    </form>
-  </div>
+      <button type="submit">Thêm khách hàng</button>
+    </div>
+  </form>
+</div>
+
+
 
   <script>
     let customers = [
