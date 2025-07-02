@@ -38,6 +38,32 @@
       .sidebar.collapsed .logo-text {
         display: none;
       }
+      .sidebar.collapsed ul li a i {
+        margin-right: 0;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+      /* New toggle button styles */
+      .toggle-btn {
+        transition: all 0.3s ease;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .toggle-btn:hover {
+        background-color: #f1f5f9;
+      }
+      .toggle-btn i {
+        transition: transform 0.3s ease;
+      }
+      .sidebar.collapsed .toggle-btn i {
+        transform: rotate(180deg);
+      }
       .content {
         transition: all 0.3s ease;
       }
@@ -90,8 +116,11 @@
               >WarehousePro</span
             >
           </div>
-          <button id="toggle-sidebar" class="text-gray-500 hover:text-gray-700">
-            <i class="fas fa-bars"></i>
+          <button
+            id="toggle-sidebar"
+            class="toggle-btn text-gray-500 hover:text-gray-700"
+          >
+            <i class="fas fa-chevron-left"></i>
           </button>
         </div>
         <div class="flex-1 overflow-y-auto custom-scrollbar">
@@ -239,7 +268,7 @@
                 <li>
                   <a
                     href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                    class="flex items-center p-2 bg-blue-50 text-blue-600 rounded-lg"
                   >
                     <i class="fas fa-file-contract fa-fw mr-3"></i>
                     <span class="nav-text">Hợp đồng</span>
@@ -263,6 +292,15 @@
                     <span class="nav-text">Danh mục cân</span>
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="./CongNo.html"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-file-invoice-dollar fa-fw mr-3"></i>
+                    <span class="nav-text">Quản lý công nợ</span>
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -276,7 +314,7 @@
               <ul>
                 <li>
                   <a
-                    href="#"
+                    href="./NguoiDung.html"
                     class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
                   >
                     <i class="fas fa-user-cog fa-fw mr-3"></i>
@@ -388,64 +426,107 @@
           <div
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
           >
-            <div class="bg-white rounded-lg shadow p-4">
-              <div class="flex justify-between items-start">
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-sm text-gray-500">Tổng hợp đồng</p>
-                  <h3 class="text-2xl font-bold text-gray-800">128</h3>
+                  <p class="text-gray-500 text-sm">Tổng hợp đồng</p>
+                  <h3 class="text-2xl font-bold">128</h3>
                 </div>
-                <div class="p-3 rounded-full bg-blue-50 text-primary">
-                  <i class="fas fa-file-contract text-xl"></i>
+                <div
+                  class="p-3 rounded-full bg-blue-50 text-primary w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-file-contract text-2xl"></i>
                 </div>
               </div>
               <p class="text-xs text-success mt-2">
                 <i class="fas fa-caret-up mr-1"></i> 12% so với tháng trước
               </p>
             </div>
-            <div class="bg-white rounded-lg shadow p-4">
-              <div class="flex justify-between items-start">
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-sm text-gray-500">Doanh thu tháng</p>
-                  <h3 class="text-2xl font-bold text-gray-800">1.245tr</h3>
+                  <p class="text-gray-500 text-sm">Doanh thu tháng</p>
+                  <h3 class="text-2xl font-bold">1,245,000,000 ₫</h3>
                 </div>
-                <div class="p-3 rounded-full bg-green-50 text-success">
-                  <i class="fas fa-hand-holding-usd text-xl"></i>
+                <div
+                  class="p-3 rounded-full bg-green-50 text-success w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-hand-holding-usd text-2xl"></i>
                 </div>
               </div>
               <p class="text-xs text-danger mt-2">
                 <i class="fas fa-caret-down mr-1"></i> 5% so với tháng trước
               </p>
             </div>
-            <div class="bg-white rounded-lg shadow p-4">
-              <div class="flex justify-between items-start">
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-sm text-gray-500">Công nợ</p>
-                  <h3 class="text-2xl font-bold text-gray-800">325tr</h3>
+                  <p class="text-gray-500 text-sm">Công nợ</p>
+                  <h3 class="text-2xl font-bold">325,000,000 ₫</h3>
                 </div>
-                <div class="p-3 rounded-full bg-yellow-50 text-warning">
-                  <i class="fas fa-file-invoice-dollar text-xl"></i>
+                <div
+                  class="p-3 rounded-full bg-yellow-50 text-warning w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-file-invoice-dollar text-2xl"></i>
                 </div>
               </div>
               <p class="text-xs text-danger mt-2">
                 <i class="fas fa-caret-up mr-1"></i> 8% so với tháng trước
               </p>
             </div>
-            <div class="bg-white rounded-lg shadow p-4">
-              <div class="flex justify-between items-start">
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
                 <div>
-                  <p class="text-sm text-gray-500">Hợp đồng sắp hết hạn</p>
-                  <h3 class="text-2xl font-bold text-gray-800">15</h3>
+                  <p class="text-gray-500 text-sm">Hợp đồng sắp hết hạn</p>
+                  <h3 class="text-2xl font-bold">15</h3>
                 </div>
-                <div class="p-3 rounded-full bg-red-50 text-danger">
-                  <i class="fas fa-exclamation-circle text-xl"></i>
+                <div
+                  class="p-3 rounded-full bg-red-50 text-danger w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-exclamation-circle text-2xl"></i>
                 </div>
               </div>
-              <p class="text-xs text-gray-500 mt-2">Trong 30 ngày tới</p>
+              <p class="text-sm text-gray-500 mt-2">Trong 30 ngày tới</p>
+            </div>
+          </div>
+
+          <!-- Revenue Charts -->
+          <div class="bg-white rounded-lg shadow mb-6">
+            <div class="p-4 border-b">
+              <h2 class="text-lg font-semibold text-gray-800">
+                Báo cáo doanh thu
+              </h2>
+            </div>
+            <div class="p-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Monthly Revenue -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h3 class="text-md font-medium text-gray-800 mb-3">
+                    Doanh thu theo tháng
+                  </h3>
+                  <div class="chart-container">
+                    <canvas id="monthlyRevenueChart"></canvas>
+                  </div>
+                </div>
+
+                <!-- Customer Revenue -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h3 class="text-md font-medium text-gray-800 mb-3">
+                    Doanh thu theo khách hàng
+                  </h3>
+                  <div class="chart-container">
+                    <canvas id="customerRevenueChart"></canvas>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Contract Management Section -->
-          <div class="bg-white rounded-lg shadow mb-6">
+          <div class="bg-white rounded-lg shadow">
             <div class="p-4 border-b flex justify-between items-center">
               <h2 class="text-lg font-semibold text-gray-800">
                 Danh sách hợp đồng
@@ -811,156 +892,6 @@
                       <i class="fas fa-chevron-right"></i>
                     </a>
                   </nav>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Debt and Invoice Management -->
-          <div class="bg-white rounded-lg shadow mb-6">
-            <div class="p-4 border-b flex justify-between items-center">
-              <h2 class="text-lg font-semibold text-gray-800">
-                Quản lý công nợ & hóa đơn
-              </h2>
-              <div class="flex space-x-2">
-                <button
-                  class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 flex items-center"
-                >
-                  <i class="fas fa-file-invoice mr-2"></i> Tạo hóa đơn
-                </button>
-                <button
-                  class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center"
-                >
-                  <i class="fas fa-print mr-2"></i> In báo cáo
-                </button>
-              </div>
-            </div>
-            <div class="p-4">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Customer Debt -->
-                <div>
-                  <h3 class="text-md font-medium text-gray-800 mb-3">
-                    Công nợ theo khách hàng
-                  </h3>
-                  <div class="bg-gray-50 p-4 rounded-lg">
-                    <div class="flex justify-between items-center mb-3">
-                      <span class="text-sm font-medium">Công ty TNHH ABC</span>
-                      <span class="text-sm font-bold text-danger"
-                        >25,000,000đ</span
-                      >
-                    </div>
-                    <div class="space-y-2">
-                      <div class="flex justify-between">
-                        <span class="text-xs text-gray-600"
-                          >Hóa đơn HD-001 (15/10/2023)</span
-                        >
-                        <span class="text-xs font-medium">15,000,000đ</span>
-                      </div>
-                      <div class="flex justify-between">
-                        <span class="text-xs text-gray-600"
-                          >Hóa đơn HD-002 (15/11/2023)</span
-                        >
-                        <span class="text-xs font-medium">10,000,000đ</span>
-                      </div>
-                    </div>
-                    <div class="border-t border-gray-200 my-3"></div>
-                    <div class="flex justify-between">
-                      <span class="text-xs text-gray-600">Tuổi nợ:</span>
-                      <div class="flex space-x-2">
-                        <span
-                          class="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded"
-                          >0-30 ngày: 10,000,000đ</span
-                        >
-                        <span
-                          class="text-xs px-2 py-1 bg-red-100 text-red-800 rounded"
-                          >>30 ngày: 15,000,000đ</span
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Invoice Application -->
-                <div>
-                  <h3 class="text-md font-medium text-gray-800 mb-3">
-                    Áp dụng hóa đơn cấn trừ
-                  </h3>
-                  <div class="bg-gray-50 p-4 rounded-lg">
-                    <form>
-                      <div class="mb-3">
-                        <label
-                          class="block text-sm font-medium text-gray-700 mb-1"
-                          >Số tiền cấn trừ</label
-                        >
-                        <input
-                          type="text"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                          placeholder="Nhập số tiền"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label
-                          class="block text-sm font-medium text-gray-700 mb-1"
-                          >Hóa đơn áp dụng</label
-                        >
-                        <select
-                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        >
-                          <option>Chọn hóa đơn</option>
-                          <option>HD-001 (15,000,000đ)</option>
-                          <option>HD-002 (10,000,000đ)</option>
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label
-                          class="block text-sm font-medium text-gray-700 mb-1"
-                          >Ngày áp dụng</label
-                        >
-                        <input
-                          type="date"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        class="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-blue-600"
-                      >
-                        Xác nhận cấn trừ
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Revenue Charts -->
-          <div class="bg-white rounded-lg shadow">
-            <div class="p-4 border-b">
-              <h2 class="text-lg font-semibold text-gray-800">
-                Báo cáo doanh thu
-              </h2>
-            </div>
-            <div class="p-4">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Monthly Revenue -->
-                <div class="bg-gray-50 p-4 rounded-lg">
-                  <h3 class="text-md font-medium text-gray-800 mb-3">
-                    Doanh thu theo tháng
-                  </h3>
-                  <div class="chart-container">
-                    <canvas id="monthlyRevenueChart"></canvas>
-                  </div>
-                </div>
-
-                <!-- Customer Revenue -->
-                <div class="bg-gray-50 p-4 rounded-lg">
-                  <h3 class="text-md font-medium text-gray-800 mb-3">
-                    Doanh thu theo khách hàng
-                  </h3>
-                  <div class="chart-container">
-                    <canvas id="customerRevenueChart"></canvas>
-                  </div>
                 </div>
               </div>
             </div>
