@@ -3,61 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🔐 Quản lý Role</title>
+  <title>Quản lý Role</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-200 text-gray-700 min-h-screen">
   <main class="max-w-7xl mx-auto p-6">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold text-gray-800">Danh sách Role</h1>
-      <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Thêm Role</button>
+      <button onclick="openModal()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"><i class="fas fa-add"></i> Thêm Role</button>
     </div>
 
     <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
-      <table class="min-w-full text-sm" id="roleList">
+      <table class="min-w-full text-sm table-fixed" id="roleList" style="table-layout: fixed">
         <thead class="bg-gray-100 text-gray-500 border-b border-gray-200">
           <tr>
-            <th class="px-6 py-3 text-left font-medium">Tên Role</th>
-            <th class="px-6 py-3 text-left font-medium">Số quyền</th>
-            <th class="px-6 py-3 text-right font-medium">Hành động</th>
+            <th class="w-3/12 px-6 py-3 text-left font-medium cursor-pointer" onclick="sortTable(0)">Tên Role <i class="fas fa-sort"></i></th>
+            <th class="w-2/12 px-6 py-3 text-left font-medium cursor-pointer" onclick="sortTable(1)">Cấp trên <i class="fas fa-sort"></i></th>
+            <th class="w-2/12 px-6 py-3 text-center font-medium">Số người dùng</th>
+            <th class="w-2/12 px-6 py-3 text-center font-medium">Số quyền</th>
+            <th class="w-3/12 px-6 py-3 text-center font-medium">Thao tác</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200 bg-gray-50" id="roleTableBody">
-        </tbody>
+        <tbody class="divide-y divide-gray-200 bg-gray-50" id="roleTableBody"></tbody>
       </table>
+      <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between mt-4 px-4 py-2" id="paginationWrapper">
+        <div>
+            <p class="text-sm text-gray-700">
+            Hiển thị
+            <span id="fromIndex" class="font-medium">1</span>
+            đến
+            <span id="toIndex" class="font-medium">5</span>
+            của
+            <span id="totalCount" class="font-medium">12</span>
+            kết quả
+            </p>
+        </div>
+        <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination" id="paginationNav">
+            <!-- Dynamic buttons inserted here -->
+            </nav>
+        </div>
+        </div>
+
     </div>
   </main>
 
-  <!-- Modal thêm Role -->
+
+  <!-- Modal thêm/sửa/xem Role -->
   <div id="roleModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 backdrop-blur-sm">
     <div class="bg-gray-100 w-full max-w-6xl rounded-xl p-6 relative shadow-2xl border border-gray-300 text-gray-700">
       <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-      <h2 class="text-2xl font-semibold mb-4 text-gray-800" id="modalTitle">➕ Thêm mới Role</h2>
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800" id="modalTitle">Thêm mới Role</h2>
 
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-600 mb-1">Tên Role:</label>
         <input id="roleName" type="text" class="w-full border border-gray-300 rounded px-4 py-2 text-gray-700 bg-white" placeholder="Nhập tên role..." />
       </div>
 
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-600 mb-1">Cấp trên:</label>
+        <select id="parentRole" class="w-full border border-gray-300 rounded px-4 py-2 text-gray-700 bg-white">
+          <option value="">Không có</option>
+        </select>
+      </div>
+
       <div class="overflow-x-auto border border-gray-300 rounded-xl bg-white">
         <table class="min-w-full text-sm">
           <thead class="bg-gray-200 text-gray-700">
             <tr>
-              <th class="px-6 py-3 text-left">Chức năng</th>
-              <th class="px-6 py-3 text-center">Xem</th>
-              <th class="px-6 py-3 text-center">Thêm</th>
-              <th class="px-6 py-3 text-center">Sửa</th>
-              <th class="px-6 py-3 text-center">Xóa</th>
+              <th class="px-6 py-3 text-left font-medium">Chức năng</th>
+              <th class="px-6 py-3 text-center font-medium">Xem</th>
+              <th class="px-6 py-3 text-center font-medium">Thêm</th>
+              <th class="px-6 py-3 text-center font-medium">Sửa</th>
+              <th class="px-6 py-3 text-center font-medium">Xóa</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200" id="permissionTable">
-          </tbody>
+          <tbody class="divide-y divide-gray-200" id="permissionTable"></tbody>
         </table>
       </div>
 
       <div class="text-right mt-4">
         <button onclick="closeModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors mr-2">Hủy</button>
-        <button onclick="saveRole()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-md">Lưu Role</button>
+        <button onclick="saveRole()" id="saveButton" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-md">Lưu</button>
       </div>
     </div>
   </div>
@@ -74,22 +102,99 @@
       { name: "Quản lý báo cáo quản trị" },
     ];
 
+    const full = () => permissions.reduce((acc, p) => {
+      acc[p.name] = { view: true, add: true, edit: true, delete: true };
+      return acc;
+    }, {});
+
     const roleData = {
-      "Admin": permissions.reduce((acc, p) => {
-        acc[p.name] = { view: true, add: true, edit: true, delete: true };
-        return acc;
-      }, {})
+        "Super Admin": { permissions: full(), parent: "" },
+        "Admin": { permissions: full(), parent: "Super Admin" },
+        "Director": { permissions: full(), parent: "Admin" },
+        "Manager": { permissions: full(), parent: "Director" },
+        "Supervisor": { permissions: {
+            "Quản lý kho": { view: true, add: true, edit: true, delete: false },
+            "Quản lý khách hàng": { view: true, add: true, edit: true, delete: false },
+            "Quản lý hợp đồng": { view: true, add: true, edit: false, delete: false },
+        }, parent: "Manager" },
+        "Support": { permissions: {
+            "Quản lý kết nối": { view: true, add: false, edit: false, delete: false },
+            "Quản lý khách hàng": { view: true, add: false, edit: false, delete: false }
+        }, parent: "Supervisor" },
+        "User": { permissions: {
+            "Quản lý kho": { view: true, add: true, edit: true, delete: false }
+        }, parent: "Support" },
+        "HR Staff": { permissions: {
+            "Quản lý khách hàng": { view: true, add: true, edit: true, delete: true },
+            "Quản lý hợp đồng": { view: true, add: true, edit: true, delete: false }
+        }, parent: "Manager" },
+        "Finance Officer": { permissions: {
+            "Quản lý báo cáo quản trị": { view: true, add: true, edit: false, delete: false }
+        }, parent: "Director" },
+        "Warehouse Staff": { permissions: {
+            "Quản lý kho": { view: true, add: true, edit: false, delete: false }
+        }, parent: "Supervisor" },
+        "Auditor": { permissions: {
+            "Quản lý báo cáo quản trị": { view: true, add: false, edit: false, delete: false }
+        }, parent: "Director" }
     };
 
-    function openModal() {
-      document.getElementById('modalTitle').innerText = '➕ Thêm mới Role';
-      document.getElementById('roleName').value = '';
-      renderPermissionTable();
-      document.getElementById('roleModal').classList.remove('hidden');
+    const users = [
+        { name: "Nguyễn Văn A", role: "Admin" },
+        { name: "Trần Thị B", role: "Manager" },
+        { name: "Lê Văn C", role: "Admin" },
+        { name: "Phạm Thị D", role: "Supervisor" },
+        { name: "Trương Văn E", role: "Support" },
+        { name: "Nguyễn Văn F", role: "Admin" }
+    ];
+
+    let sortState = {
+      column: '',
+      ascending: true
+    };
+
+    function openModal(editingRole = null) {
+        const isEdit = editingRole !== null;
+        document.getElementById('modalTitle').textContent = isEdit ? `Sửa Role: ${editingRole}` : 'Thêm mới Role';
+        const roleNameInput = document.getElementById('roleName');
+        const parentRoleSelect = document.getElementById('parentRole');
+        const saveBtn = document.getElementById('saveButton');
+
+        roleNameInput.disabled = isEdit;
+        parentRoleSelect.disabled = false;
+        saveBtn.style.display = 'inline-block';
+
+        if (isEdit) {
+            roleNameInput.value = editingRole;
+
+            // Đảm bảo render xong option trước khi set value
+            renderParentOptions(editingRole);
+            parentRoleSelect.value = roleData[editingRole].parent;
+
+            renderPermissionTable(roleData[editingRole].permissions);
+        } else {
+            roleNameInput.value = '';
+            parentRoleSelect.value = '';
+            renderParentOptions();
+            renderPermissionTable();
+        }
+
+        document.getElementById('roleModal').classList.remove('hidden');
     }
+
 
     function closeModal() {
       document.getElementById('roleModal').classList.add('hidden');
+    }
+
+    function renderParentOptions(currentRole = '') {
+      const select = document.getElementById("parentRole");
+      select.innerHTML = '<option value="">Không có</option>';
+      Object.keys(roleData).forEach(role => {
+        if (role !== currentRole) {
+          select.innerHTML += `<option value="${role}">${role}</option>`;
+        }
+      });
     }
 
     function renderPermissionTable(existingPermissions = {}) {
@@ -108,13 +213,13 @@
         tbody.appendChild(row);
       });
     }
+    
 
     function saveRole() {
       const name = document.getElementById("roleName").value.trim();
-      if (!name) {
-        alert("Vui lòng nhập tên role.");
-        return;
-      }
+      const parent = document.getElementById("parentRole").value;
+      if (!name) return alert("Vui lòng nhập tên role.");
+      if (parent === name) return alert("Role không thể thuộc chính nó.");
 
       const checkboxes = document.querySelectorAll("#permissionTable input[type=checkbox]");
       const rolePermissions = {};
@@ -128,42 +233,154 @@
         if (cb.checked) rolePermissions[func][action] = true;
       });
 
-      roleData[name] = rolePermissions;
+      roleData[name] = { permissions: rolePermissions, parent };
       renderRoleTable();
       closeModal();
       alert("Đã lưu thành công!");
     }
 
-    function viewRole(roleName) {
-      const existing = roleData[roleName];
+    function viewRole(name) {
+      const existing = roleData[name];
       if (!existing) return alert("Không tìm thấy role.");
 
-      document.getElementById('modalTitle').innerText = `🔍 Chi tiết Role: ${roleName}`;
-      document.getElementById('roleName').value = roleName;
-      renderPermissionTable(existing);
+      document.getElementById('modalTitle').innerText = `Chi tiết Role: ${name}`;
+      document.getElementById('roleName').value = name;
+      renderParentOptions(name);
+      document.getElementById('parentRole').value = existing.parent;
+      renderPermissionTable(existing.permissions);
+      document.getElementById('roleName').disabled = true;
+      document.getElementById('parentRole').disabled = true;
+      document.querySelectorAll('#permissionTable input').forEach(input => input.disabled = true);
+      document.getElementById('saveButton').style.display = 'none';
       document.getElementById('roleModal').classList.remove('hidden');
     }
 
+    function editRole(name) {
+      openModal(name);
+    }
+
+    function deleteRole(name) {
+      if (name === "Super Admin") return alert("Không thể xoá Super Admin!");
+      if (confirm(`Bạn có chắc chắn muốn xoá role "${name}"?`)) {
+        delete roleData[name];
+        renderRoleTable();
+      }
+    }
+
+    function sortTable(colIndex) {
+      const columns = {
+        0: "name",   // Tên Role
+        1: "parent"  // Thuộc nhóm
+      };
+
+      const column = columns[colIndex];
+      if (!column) return;
+
+      if (sortState.column === column) {
+        sortState.ascending = !sortState.ascending;
+      } else {
+        sortState.column = column;
+        sortState.ascending = true;
+      }
+
+      renderRoleTable();
+    }
+
+    let currentPage = 1;
+    const rowsPerPage = 10;
+
+    function renderPagination(totalRows) {
+        const pageCount = Math.ceil(totalRows / rowsPerPage);
+        const nav = document.getElementById("paginationNav");
+        nav.innerHTML = "";
+
+        const prevBtn = document.createElement("a");
+        prevBtn.href = "#";
+        prevBtn.className = "relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50";
+        prevBtn.innerHTML = '<span class="sr-only">Trước</span><i class="fas fa-chevron-left"></i>';
+        prevBtn.onclick = (e) => {
+        e.preventDefault();
+        if (currentPage > 1) {
+            currentPage--;
+            renderRoleTable();
+        }
+        };
+        nav.appendChild(prevBtn);
+
+        for (let i = 1; i <= pageCount; i++) {
+        const pageBtn = document.createElement("a");
+        pageBtn.href = "#";
+        pageBtn.className = `relative inline-flex items-center px-4 py-2 border text-sm font-medium ${i === currentPage ? 'z-10 bg-blue-50 border-blue-500 text-blue-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = (e) => {
+            e.preventDefault();
+            currentPage = i;
+            renderRoleTable();
+        };
+        nav.appendChild(pageBtn);
+        }
+
+        const nextBtn = document.createElement("a");
+        nextBtn.href = "#";
+        nextBtn.className = "relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50";
+        nextBtn.innerHTML = '<span class="sr-only">Sau</span><i class="fas fa-chevron-right"></i>';
+        nextBtn.onclick = (e) => {
+        e.preventDefault();
+        if (currentPage < pageCount) {
+            currentPage++;
+            renderRoleTable();
+        }
+        };
+        nav.appendChild(nextBtn);
+
+        document.getElementById("totalCount").textContent = totalRows;
+        const from = (currentPage - 1) * rowsPerPage + 1;
+        const to = Math.min(currentPage * rowsPerPage, totalRows);
+        document.getElementById("fromIndex").textContent = from;
+        document.getElementById("toIndex").textContent = to;
+    }
+
     function renderRoleTable() {
-      const tbody = document.getElementById("roleTableBody");
-      tbody.innerHTML = "";
-      Object.entries(roleData).forEach(([name, perms]) => {
+        const tbody = document.getElementById("roleTableBody");
+        tbody.innerHTML = "";
+
+        const entries = Object.entries(roleData);
+
+        if (sortState.column) {
+        entries.sort(([nameA, dataA], [nameB, dataB]) => {
+            let a = sortState.column === "name" ? nameA.toLowerCase() : (dataA.parent || '').toLowerCase();
+            let b = sortState.column === "name" ? nameB.toLowerCase() : (dataB.parent || '').toLowerCase();
+            return sortState.ascending ? a.localeCompare(b) : b.localeCompare(a);
+        });
+        }
+
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginated = entries.slice(start, end);
+
+        paginated.forEach(([name, data]) => {
+        const perms = data.permissions;
+        const totalChecked = Object.values(perms).reduce((total, p) => total + (p.view + p.add + p.edit + p.delete), 0);
+        const permissionSummary = totalChecked === permissions.length * 4 ? 'Tất cả quyền' : totalChecked + ' quyền';
+        const userCount = users.filter(u => u.role === name).length;
+
         const tr = document.createElement("tr");
         tr.className = "hover:bg-gray-100 transition-colors";
         tr.innerHTML = `
-          <td class="px-6 py-4">${name}</td>
-          <td class="px-6 py-4">${
-            (() => {
-            const totalChecked = Object.values(perms).reduce((total, p) => {
-                return total + (p.view ? 1 : 0) + (p.add ? 1 : 0) + (p.edit ? 1 : 0) + (p.delete ? 1 : 0);
-            }, 0);
-            return totalChecked === permissions.length * 4 ? 'Tất cả quyền' : totalChecked + ' quyền';
-            })()
-            }</td>
-          <td class="px-6 py-4 text-right text-blue-600 cursor-pointer" onclick="viewRole('${name}')">Chi tiết</td>
+            <td class="w-3/12 px-6 py-4 font-semibold text-gray-800 truncate">${name}</td>
+            <td class="w-2/12 px-6 py-4 truncate">${data.parent || '-'}</td>
+            <td class="w-2/12 px-6 py-4 text-center">${userCount}</td>
+            <td class="w-2/12 px-6 py-4 text-center truncate">${permissionSummary}</td>
+            <td class="w-3/12 px-6 py-4 text-center whitespace-nowrap">
+            <button class="text-blue-600 hover:text-blue-900 mr-1.5" onclick="viewRole('${name}')"><i class="fas fa-eye"></i></button>
+            ${name !== 'Super Admin' ? `<button class="text-yellow-600 hover:text-yellow-900 edit-btn mr-1.5" onclick="editRole('${name}')"><i class="fas fa-edit"></i></button>` : ''}
+            ${name !== 'Super Admin' ? `<button class="text-red-600 hover:text-red-900 delete-btn" onclick="deleteRole('${name}')"><i class="fas fa-trash"></i></button>` : ''}
+            </td>
         `;
         tbody.appendChild(tr);
-      });
+        });
+
+        renderPagination(entries.length);
     }
 
     window.onload = () => {
