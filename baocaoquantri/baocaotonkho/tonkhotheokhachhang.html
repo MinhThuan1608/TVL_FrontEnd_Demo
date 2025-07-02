@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>📊 Tồn kho theo khách hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 flex">
+<main class="flex-1 overflow-y-auto p-6">
+    <!-- Customer Inventory Report -->
+    <div id="customer-inventory" class="tab-content animate-fade-in">
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-orange-500">
+            <div class="mb-6">
+                <h1 class="text-2xl font-bold">📊 Tồn kho theo khách hàng</h1>
+                <p class="text-sm text-gray-500">Thống kê chi tiết tồn kho theo từng khách hàng</p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow p-4">
+                    <p class="text-sm text-gray-500">📦 Tổng mặt hàng</p>
+                    <h2 class="text-3xl font-bold text-blue-600">1,245</h2>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-4">
+                    <p class="text-sm text-gray-500">👥 Khách hàng</p>
+                    <h2 class="text-3xl font-bold text-green-600">28</h2>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-4">
+                    <p class="text-sm text-gray-500">⚠️ Hàng sắp hết</p>
+                    <h2 class="text-3xl font-bold text-amber-600">56</h2>
+                </div>
+                <div class="bg-white rounded-2xl shadow p-4">
+                    <p class="text-sm text-gray-500">⏱️ Hàng quá hạn</p>
+                    <h2 class="text-3xl font-bold text-red-600">12</h2>
+                </div>
+            </div>
+
+            <!-- Charts and Top 5 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white rounded-2xl shadow p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="font-semibold">📊 Tồn kho theo thời gian</p>
+                        <select class="border border-gray-300 rounded-md px-2 py-1 text-sm">
+                            <option>7 ngày</option>
+                            <option>30 ngày</option>
+                            <option>3 tháng</option>
+                        </select>
+                    </div>
+                    <div class="relative h-72">
+                        <canvas id="customerInventoryChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow p-4">
+                    <p class="font-semibold mb-2">🏆 Top 5 khách hàng tồn nhiều nhất</p>
+                    <ul class="text-sm space-y-3">
+                        <li class="flex items-center justify-between"><span>1. Công ty A</span><span>245 mặt hàng</span></li>
+                        <li class="flex items-center justify-between"><span>2. Công ty B</span><span>180 mặt hàng</span></li>
+                        <li class="flex items-center justify-between"><span>3. Công ty C</span><span>150 mặt hàng</span></li>
+                        <li class="flex items-center justify-between"><span>4. Công ty D</span><span>120 mặt hàng</span></li>
+                        <li class="flex items-center justify-between"><span>5. Công ty E</span><span>90 mặt hàng</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="bg-white rounded-2xl shadow p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="font-semibold">🕑 Chi tiết tồn kho</p>
+                    <button class="text-sm text-blue-600 hover:underline">Làm mới</button>
+                </div>
+                <div class="overflow-auto">
+                    <table class="table-auto w-full text-sm">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-2 text-left">Khách hàng</th>
+                                <th class="p-2 text-left">Mã hàng</th>
+                                <th class="p-2 text-left">Tên hàng</th>
+                                <th class="p-2 text-left">Số lượng</th>
+                                <th class="p-2 text-left">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="p-2">Công ty A</td>
+                                <td class="p-2">SP001</td>
+                                <td class="p-2">Hàng A</td>
+                                <td class="p-2">245</td>
+                                <td class="p-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Tốt</span></td>
+                            </tr>
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="p-2">Công ty B</td>
+                                <td class="p-2">SP002</td>
+                                <td class="p-2">Hàng B</td>
+                                <td class="p-2">180</td>
+                                <td class="p-2"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs">Sắp hết</span></td>
+                            </tr>
+                            <tr class="border-t hover:bg-gray-50">
+                                <td class="p-2">Công ty C</td>
+                                <td class="p-2">SP003</td>
+                                <td class="p-2">Hàng C</td>
+                                <td class="p-2">150</td>
+                                <td class="p-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">Tốt</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { position: 'top' },
+        tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: {
+                callback: value => new Intl.NumberFormat('vi-VN').format(value)
+            }
+        }
+    }
+};
+
+new Chart(document.getElementById('customerInventoryChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Công ty A', 'Công ty B', 'Công ty C', 'Công ty D', 'Công ty E'],
+        datasets: [
+            {
+                label: 'Tồn kho hiện tại',
+                data: [245, 180, 150, 120, 90],
+                backgroundColor: '#f59e0b'
+            },
+            {
+                label: 'Tồn kho tháng trước',
+                data: [200, 150, 120, 100, 80],
+                backgroundColor: '#d97706'
+            }
+        ]
+    },
+    options: chartOptions
+});
+</script>
+</body>
+</html>
