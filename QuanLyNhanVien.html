@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
+        input[readonly] {
+            background-color: #f3f4f6;
+            cursor: not-allowed;
+        }
         .avatar-upload {
             position: relative;
             width: 120px;
@@ -59,14 +63,10 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800">Quản lý nhân viên</h1>
-            <button id="addEmployeeBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center">
-                <i class="fas fa-plus mr-2"></i> Thêm nhân viên
-            </button>
-        </div>
-        <!-- Search Box -->
-        <div class="mb-4">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Quản lý nhân viên</h1>
+        
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <!-- Search Box -->
             <div class="relative max-w-md">
                 <input type="text" placeholder="Tìm kiếm nhân viên..." 
                     class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -74,6 +74,10 @@
                     <i class="fas fa-search text-gray-400"></i>
                 </div>
             </div>
+            
+            <button id="addEmployeeBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center md:justify-start">
+                <i class="fas fa-plus mr-2"></i> Thêm nhân viên
+            </button>
         </div>
 
         <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -81,11 +85,36 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nhân viên</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã NV</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Chức vụ</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phòng ban</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Liên hệ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('name')">
+                                <div class="flex items-center">
+                                    Nhân viên
+                                    <i class="fas fa-sort ml-1 text-gray-400"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('employeeCode')">
+                                <div class="flex items-center">
+                                    Mã NV
+                                    <i class="fas fa-sort ml-1 text-gray-400"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('position')">
+                                <div class="flex items-center">
+                                    Chức vụ
+                                    <i class="fas fa-sort ml-1 text-gray-400"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('department')">
+                                <div class="flex items-center">
+                                    Phòng ban
+                                    <i class="fas fa-sort ml-1 text-gray-400"></i>
+                                </div>
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100" onclick="sortTable('email')">
+                                <div class="flex items-center">
+                                    Liên hệ
+                                    <i class="fas fa-sort ml-1 text-gray-400"></i>
+                                </div>
+                            </th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
                         </tr>
                     </thead>
@@ -94,6 +123,22 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex items-center justify-between mt-4">
+        <div class="text-sm text-gray-500 ml-4">
+            Hiển thị <span id="startItem">1</span>-<span id="endItem">8</span> của <span id="totalItems">0</span> nhân viên
+        </div>
+        <div class="flex space-x-2">
+            <button id="prevPage" class="px-3 py-1 border rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div id="pageNumbers" class="flex space-x-1"></div>
+            <button id="nextPage" class="px-3 py-1 border rounded-md text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </div>
 
@@ -130,18 +175,18 @@
                             <div class="w-full md:w-2/3 space-y-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label for="name" class="block text-sm font-medium text-gray-700">Họ tên *</label>
+                                        <label for="name" class="block text-sm font-medium text-gray-700">Họ tên <span class="text-red-600">*</span></label>
                                         <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
                                     </div>
                                     <div>
-                                        <label for="employeeCode" class="block text-sm font-medium text-gray-700">Mã nhân viên *</label>
+                                        <label for="employeeCode" class="block text-sm font-medium text-gray-700">Mã nhân viên <span class="text-red-600">*</span></label>
                                         <input type="text" id="employeeCode" name="employeeCode" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
                                     </div>
                                 </div>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label for="position" class="block text-sm font-medium text-gray-700">Chức vụ *</label>
+                                        <label for="position" class="block text-sm font-medium text-gray-700">Chức vụ <span class="text-red-600">*</span></label>
                                         <select id="position" name="position" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
                                             <option value="">Chọn chức vụ</option>
                                             <option value="Manager">Manager</option>
@@ -152,7 +197,7 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label for="department" class="block text-sm font-medium text-gray-700">Phòng ban *</label>
+                                        <label for="department" class="block text-sm font-medium text-gray-700">Phòng ban <span class="text-red-600">*</span></label>
                                         <select id="department" name="department" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border">
                                             <option value="">Chọn phòng ban</option>
                                             <option value="IT">IT</option>
@@ -317,6 +362,17 @@
     </div>
 
     <script>
+        // Sort state
+        let currentSort = {
+            field: null,
+            direction: 'asc' // 'asc' or 'desc'
+        };
+
+        // Pagination variables
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        let totalPages = 1;
+
         // Sample employee data
         let employees = [
             {
@@ -332,6 +388,76 @@
                 phone: '0123456789',
                 mobile: '0987654321',
                 address: '123 Main St, City'
+            },
+            {
+                id: 2,
+                name: 'Trần Thị Mai',
+                employeeCode: 'EMP002',
+                position: 'HR',
+                department: 'Human Resources'
+            },
+            {
+                id: 3,
+                name: 'Lê Văn Tùng',
+                employeeCode: 'EMP003',
+                position: 'Accountant',
+                department: 'Finance'
+            },
+            {
+                id: 4,
+                name: 'Phạm Thị Hương',
+                employeeCode: 'EMP004',
+                position: 'Designer',
+                department: 'Marketing'
+            },
+            {
+                id: 5,
+                name: 'Hoàng Văn Nam',
+                employeeCode: 'EMP005',
+                position: 'Manager',
+                department: 'Operations'
+            },
+            {
+                id: 6,
+                name: 'Vũ Thị Lan',
+                employeeCode: 'EMP006',
+                position: 'Developer',
+                department: 'IT'
+            },
+            {
+                id: 7,
+                name: 'Đặng Văn Sơn',
+                employeeCode: 'EMP007',
+                position: 'HR',
+                department: 'Human Resources'
+            },
+            {
+                id: 8,
+                name: 'Bùi Thị Hoa',
+                employeeCode: 'EMP008',
+                position: 'Accountant',
+                department: 'Finance'
+            },
+            {
+                id: 9,
+                name: 'Nguyễn Văn Đạt',
+                employeeCode: 'EMP009',
+                position: 'Designer',
+                department: 'Marketing'
+            },
+            {
+                id: 10,
+                name: 'Trần Văn Minh',
+                employeeCode: 'EMP010',
+                position: 'Manager',
+                department: 'Operations'
+            },
+            {
+                id: 11,
+                name: 'Lê Thị Hồng',
+                employeeCode: 'EMP011',
+                position: 'Developer',
+                department: 'IT'
             }
         ];
 
@@ -357,6 +483,7 @@
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
             renderEmployeeTable();
+            updatePaginationInfo();
             setupEventListeners();
         });
         
@@ -377,11 +504,59 @@
             maxDate: "today",
             allowInput: true
         });
+        // Get paginated employees
+        function getPaginatedEmployees() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            return employees.slice(startIndex, startIndex + itemsPerPage);
+        }
+
+        // Update pagination info
+        function updatePaginationInfo() {
+            totalPages = Math.ceil(employees.length / itemsPerPage);
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(startItem + itemsPerPage - 1, employees.length);
+            
+            document.getElementById('startItem').textContent = startItem;
+            document.getElementById('endItem').textContent = endItem;
+            document.getElementById('totalItems').textContent = employees.length;
+            
+            // Update pagination buttons
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+            
+            // Update page numbers
+            const pageNumbersContainer = document.getElementById('pageNumbers');
+            pageNumbersContainer.innerHTML = '';
+            
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `px-3 py-1 border rounded-md ${i === currentPage ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-50'}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderEmployeeTable();
+                });
+                pageNumbersContainer.appendChild(pageBtn);
+            }
+        }
+
         // Render employee table
         function renderEmployeeTable() {
+            updateSortIcons();
             employeeTableBody.innerHTML = '';
+            updatePaginationInfo();
             
-            employees.forEach(employee => {
+            const paginatedEmployees = getPaginatedEmployees();
+            
+            paginatedEmployees.forEach(employee => {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50';
                 row.innerHTML = `
@@ -447,6 +622,7 @@
                 modalTitle.textContent = 'Thêm nhân viên mới';
                 employeeForm.reset();
                 document.getElementById('employeeId').value = '';
+                document.getElementById('employeeCode').readOnly = false;
                 avatarPreview.src = '';
                 avatarPreview.classList.add('hidden');
                 avatarPreviewIcon.classList.remove('hidden');
@@ -501,6 +677,21 @@
                 }
             });
             
+            // Pagination buttons
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderEmployeeTable();
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderEmployeeTable();
+                }
+            });
+
             // Form submission
             employeeForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -527,7 +718,10 @@
                 modalTitle.textContent = 'Chỉnh sửa thông tin nhân viên';
                 document.getElementById('employeeId').value = employee.id;
                 document.getElementById('name').value = employee.name;
-                document.getElementById('employeeCode').value = employee.employeeCode;
+                const employeeCodeInput = document.getElementById('employeeCode');
+                employeeCodeInput.value = employee.employeeCode;
+                employeeCodeInput.readOnly = true;
+                employeeCodeInput.classList.add('bg-gray-100');
                 document.getElementById('position').value = employee.position;
                 document.getElementById('department').value = employee.department;
                 document.getElementById('gender').value = employee.gender;
@@ -559,6 +753,7 @@
 
         // Save employee (add or update)
         function saveEmployee() {
+            currentPage = 1;
             const id = document.getElementById('employeeId').value;
             const avatar = avatarPreview.src || '';
             const name = document.getElementById('name').value;
@@ -594,8 +789,53 @@
 
         // Delete employee
         function deleteEmployee(id) {
+            currentPage = 1;
             employees = employees.filter(emp => emp.id !== id);
             renderEmployeeTable();
+        }
+
+        // Sort table
+        function sortTable(field) {
+            // Update sort direction
+            if (currentSort.field === field) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+                currentSort.direction = 'asc';
+            }
+
+            // Sort employees
+            employees.sort((a, b) => {
+                const valueA = a[field]?.toString().toLowerCase() || '';
+                const valueB = b[field]?.toString().toLowerCase() || '';
+
+                if (valueA < valueB) {
+                    return currentSort.direction === 'asc' ? -1 : 1;
+                }
+                if (valueA > valueB) {
+                    return currentSort.direction === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+
+            renderEmployeeTable();
+            updateSortIcons();
+        }
+
+        // Update sort icons
+        function updateSortIcons() {
+            document.querySelectorAll('[onclick^="sortTable"]').forEach(header => {
+                const icon = header.querySelector('i');
+                const field = header.getAttribute('onclick').replace('sortTable(\'', '').replace('\')', '');
+                
+                if (currentSort.field === field) {
+                    icon.className = currentSort.direction === 'asc' 
+                        ? 'fas fa-sort-up ml-1 text-gray-700' 
+                        : 'fas fa-sort-down ml-1 text-gray-700';
+                } else {
+                    icon.className = 'fas fa-sort ml-1 text-gray-400';
+                }
+            });
         }
     </script>
 </body>
