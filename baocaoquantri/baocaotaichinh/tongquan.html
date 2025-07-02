@@ -1,143 +1,194 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
   <title>📈 Tổng quan tài chính</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
+
 <body class="bg-gray-100">
-<main class="max-w-7xl mx-auto p-6">
-  <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-blue-500">
-    <div class="mb-6">
-      <h1 class="text-2xl font-bold">📈 Tổng quan tài chính</h1>
-      <p class="text-sm text-gray-500">Báo cáo tài chính tổng hợp theo thời gian</p>
-    </div>
+  <main class="max-w-7xl mx-auto p-6">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-blue-500">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold">📈 Tổng quan tài chính</h1>
+        <p class="text-sm text-gray-500">Báo cáo tài chính tổng hợp theo thời gian</p>
+      </div>
 
-    <!-- KPI Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="text-sm text-gray-500">Tổng doanh thu</p>
-        <h2 class="text-3xl font-bold text-green-600">1.200.000.000đ</h2>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="text-sm text-gray-500">Tổng chi phí</p>
-        <h2 class="text-3xl font-bold text-red-600">680.000.000đ</h2>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="text-sm text-gray-500">Lợi nhuận ròng</p>
-        <h2 class="text-3xl font-bold text-blue-600">520.000.000đ</h2>
-      </div>
-    </div>
-
-    <!-- Charts -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-      <div class="bg-white rounded-2xl shadow p-4">
-        <p class="font-semibold mb-2">Doanh thu vs Chi phí</p>
-        <div class="relative h-72">
-          <canvas id="revenueVsCostChart"></canvas>
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Tổng doanh thu</p>
+          <h2 class="text-3xl font-bold text-green-600">1.200.000.000đ</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Tổng chi phí</p>
+          <h2 class="text-3xl font-bold text-red-600">680.000.000đ</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Lợi nhuận ròng</p>
+          <h2 class="text-3xl font-bold text-blue-600">520.000.000đ</h2>
         </div>
       </div>
 
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="font-semibold mb-2">Doanh thu vs Chi phí</p>
+          <div class="relative h-72">
+            <canvas id="revenueVsCostChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="font-semibold mb-2">Cơ cấu tài chính</p>
+          <div class="relative h-72">
+            <canvas id="financialStructureChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Table -->
       <div class="bg-white rounded-2xl shadow p-4">
-        <p class="font-semibold mb-2">Cơ cấu tài chính</p>
-        <div class="relative h-72">
-          <canvas id="financialStructureChart"></canvas>
+        <p class="font-semibold mb-4">Chi tiết tài chính theo tháng</p>
+        <div class="overflow-x-auto">
+          <table class="table-auto w-full text-sm">
+            <thead class="bg-gray-100">
+              <tr>
+                <th class="p-2 text-left">Tháng</th>
+                <th class="p-2 text-left">Doanh thu</th>
+                <th class="p-2 text-left">Chi phí</th>
+                <th class="p-2 text-left">Lợi nhuận</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="p-2">Tháng 1</td>
+                <td class="p-2">150.000.000đ</td>
+                <td class="p-2">80.000.000đ</td>
+                <td class="p-2">70.000.000đ</td>
+              </tr>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="p-2">Tháng 2</td>
+                <td class="p-2">160.000.000đ</td>
+                <td class="p-2">85.000.000đ</td>
+                <td class="p-2">75.000.000đ</td>
+              </tr>
+              <tr class="border-t hover:bg-gray-50">
+                <td class="p-2">Tháng 3</td>
+                <td class="p-2">180.000.000đ</td>
+                <td class="p-2">95.000.000đ</td>
+                <td class="p-2">85.000.000đ</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div>
+              <p class="text-sm text-gray-700">
+                Hiển thị
+                <span class="font-medium">1</span>
+                đến
+                <span class="font-medium">5</span>
+                của
+                <span class="font-medium">12</span>
+                kết quả
+              </p>
+            </div>
+            <div>
+              <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <a href="#"
+                  class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  <span class="sr-only">Trước</span>
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+                <a href="#" aria-current="page"
+                  class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                  1
+                </a>
+                <a href="#"
+                  class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                  2
+                </a>
+                <a href="#"
+                  class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                  3
+                </a>
+                <span
+                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                  ...
+                </span>
+                <a href="#"
+                  class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                  8
+                </a>
+                <a href="#"
+                  class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                  <span class="sr-only">Sau</span>
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </main>
 
-    <!-- Financial Table -->
-    <div class="bg-white rounded-2xl shadow p-4">
-      <p class="font-semibold mb-4">Chi tiết tài chính theo tháng</p>
-      <div class="overflow-x-auto">
-        <table class="table-auto w-full text-sm">
-          <thead class="bg-gray-100">
-            <tr>
-              <th class="p-2 text-left">Tháng</th>
-              <th class="p-2 text-left">Doanh thu</th>
-              <th class="p-2 text-left">Chi phí</th>
-              <th class="p-2 text-left">Lợi nhuận</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-t hover:bg-gray-50">
-              <td class="p-2">Tháng 1</td>
-              <td class="p-2">150.000.000đ</td>
-              <td class="p-2">80.000.000đ</td>
-              <td class="p-2">70.000.000đ</td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50">
-              <td class="p-2">Tháng 2</td>
-              <td class="p-2">160.000.000đ</td>
-              <td class="p-2">85.000.000đ</td>
-              <td class="p-2">75.000.000đ</td>
-            </tr>
-            <tr class="border-t hover:bg-gray-50">
-              <td class="p-2">Tháng 3</td>
-              <td class="p-2">180.000.000đ</td>
-              <td class="p-2">95.000.000đ</td>
-              <td class="p-2">85.000.000đ</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</main>
-
-<script>
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'top',
-    }
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      ticks: {
-        callback: value => new Intl.NumberFormat('vi-VN').format(value)
-      }
-    }
-  }
-};
-
-new Chart(document.getElementById('revenueVsCostChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Tháng 1', 'Tháng 2', 'Tháng 3'],
-    datasets: [
-      {
-        label: 'Doanh thu',
-        data: [150000000, 160000000, 180000000],
-        backgroundColor: '#4ade80'
+  <script>
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        }
       },
-      {
-        label: 'Chi phí',
-        data: [80000000, 85000000, 95000000],
-        backgroundColor: '#f87171'
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: value => new Intl.NumberFormat('vi-VN').format(value)
+          }
+        }
       }
-    ]
-  },
-  options: chartOptions
-});
+    };
 
-new Chart(document.getElementById('financialStructureChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Doanh thu', 'Chi phí', 'Lợi nhuận'],
-    datasets: [{
-      label: 'Cơ cấu tài chính',
-      data: [1200000000, 680000000, 520000000],
-      backgroundColor: ['#34d399', '#f87171', '#60a5fa'],
-      hoverOffset: 6
-    }]
-  },
-  options: chartOptions
-});
-</script>
+    new Chart(document.getElementById('revenueVsCostChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3'],
+        datasets: [
+          {
+            label: 'Doanh thu',
+            data: [150000000, 160000000, 180000000],
+            backgroundColor: '#4ade80'
+          },
+          {
+            label: 'Chi phí',
+            data: [80000000, 85000000, 95000000],
+            backgroundColor: '#f87171'
+          }
+        ]
+      },
+      options: chartOptions
+    });
+
+    new Chart(document.getElementById('financialStructureChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Doanh thu', 'Chi phí', 'Lợi nhuận'],
+        datasets: [{
+          label: 'Cơ cấu tài chính',
+          data: [1200000000, 680000000, 520000000],
+          backgroundColor: ['#34d399', '#f87171', '#60a5fa'],
+          hoverOffset: 6
+        }]
+      },
+      options: chartOptions
+    });
+  </script>
 </body>
+
 </html>
