@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Công Nợ Khách Hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3b82f6",
+              secondary: "#64748b",
+              success: "#10b981",
+              danger: "#ef4444",
+              warning: "#f59e0b",
+              info: "#06b6d4",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .sidebar {
+        transition: all 0.3s ease;
+      }
+      .sidebar.collapsed {
+        width: 70px;
+      }
+      .sidebar.collapsed .nav-text {
+        display: none;
+      }
+      .sidebar.collapsed .logo-text {
+        display: none;
+      }
+      /* New toggle button styles */
+      .toggle-btn {
+        transition: all 0.3s ease;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+      .toggle-btn:hover {
+        background-color: #f1f5f9;
+      }
+      .toggle-btn i {
+        transition: transform 0.3s ease;
+      }
+      .sidebar.collapsed .toggle-btn i {
+        transform: rotate(180deg);
+      }
+      .content {
+        transition: all 0.3s ease;
+      }
+      .sidebar.collapsed + .content {
+        margin-left: 70px;
+      }
+      .table-container {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+      .chart-container {
+        height: 300px;
+      }
+      .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      <div class="sidebar bg-white shadow-md w-64 flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b">
+          <div class="flex items-center">
+            <i class="fas fa-warehouse text-primary text-2xl mr-3"></i>
+            <span class="logo-text font-bold text-xl text-gray-800"
+              >WarehousePro</span
+            >
+          </div>
+          <button
+            id="toggle-sidebar"
+            class="toggle-btn text-gray-500 hover:text-gray-700"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        </div>
+        <div class="flex-1 overflow-y-auto custom-scrollbar">
+          <nav class="p-4">
+            <!-- Đăng ký xe -->
+            <div class="mb-6">
+              <p
+                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
+              >
+                Đăng ký xe
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="./DangKyXe.html"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                    <span class="nav-text">Nhập kho</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                    <span class="nav-text">Xuất kho</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Quản lý kho -->
+            <div class="mb-6">
+              <p
+                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
+              >
+                Quản lý kho
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-exchange-alt fa-fw mr-3"></i>
+                    <span class="nav-text">Chuyển trạng thái hàng</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                    <span class="nav-text">Xuất kho</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-random fa-fw mr-3"></i>
+                    <span class="nav-text">Chuyển kho</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Danh mục -->
+            <div class="mb-6">
+              <p
+                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
+              >
+                Danh mục
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-warehouse fa-fw mr-3"></i>
+                    <span class="nav-text">Kho</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-user fa-fw mr-3"></i>
+                    <span class="nav-text">Nhân viên</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                    <span class="nav-text">Đơn vị tính</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-truck fa-fw mr-3"></i>
+                    <span class="nav-text">Xe</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-cubes fa-fw mr-3"></i>
+                    <span class="nav-text">Hàng hóa</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Khách hàng -->
+            <div class="mb-6">
+              <p
+                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
+              >
+                Khách hàng
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-users fa-fw mr-3"></i>
+                    <span class="nav-text">Quản lý khách hàng</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="./HopDong.html"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-file-contract fa-fw mr-3"></i>
+                    <span class="nav-text">Hợp đồng</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-money-check-alt fa-fw mr-3"></i>
+                    <span class="nav-text">Thanh toán</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                    <span class="nav-text">Danh mục cân</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="./CongNo.html"
+                    class="flex items-center p-2 bg-blue-50 text-blue-600 rounded-lg"
+                  >
+                    <i class="fas fa-file-invoice-dollar fa-fw mr-3"></i>
+                    <span class="nav-text">Quản lý công nợ</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Quản trị hệ thống -->
+            <div class="mb-6">
+              <p
+                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
+              >
+                Quản trị hệ thống
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="./NguoiDung.html"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-user-cog fa-fw mr-3"></i>
+                    <span class="nav-text">Quản lý người dùng</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-users-cog fa-fw mr-3"></i>
+                    <span class="nav-text">Quản lý nhóm người dùng</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-shield-alt fa-fw mr-3"></i>
+                    <span class="nav-text">Quản lý phân quyền</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Báo cáo quản trị -->
+            <div>
+              <p
+                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
+              >
+                Báo cáo quản trị
+              </p>
+              <ul>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                    <span class="nav-text"
+                      >Báo cáo tồn kho theo khách hàng</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                    <span class="nav-text">Báo cáo tồn kho theo công nợ</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
+                  >
+                    <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                    <span class="nav-text">Dashboard</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="p-4 border-t">
+          <div class="flex items-center">
+            <img
+              src="https://randomuser.me/api/portraits/men/32.jpg"
+              alt="User"
+              class="w-8 h-8 rounded-full mr-2"
+            />
+            <div class="nav-text">
+              <p class="text-sm font-medium text-gray-800">Admin</p>
+              <p class="text-xs text-gray-500">Quản trị hệ thống</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content-area flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header
+          class="bg-white shadow-sm p-4 flex justify-between items-center"
+        >
+          <h1 class="text-xl font-semibold text-gray-800">Quản lý công nợ</h1>
+          <div class="flex items-center space-x-4">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="Tìm kiếm..."
+                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              />
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button class="p-2 text-gray-500 hover:text-gray-700">
+              <i class="fas fa-bell"></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 bg-gray-50">
+          <!-- Stats Cards -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
+          >
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm">Tổng công nợ</p>
+                  <h3 class="text-2xl font-bold text-red-600">125,450,000 ₫</h3>
+                </div>
+                <div
+                  class="p-3 rounded-full bg-red-100 text-red-600 w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-money-bill-wave text-2xl"></i>
+                </div>
+              </div>
+              <p class="text-sm text-success mt-2">
+                <i class="fas fa-caret-up mr-1"></i> 12% so với tháng trước
+              </p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm">Khách hàng nợ</p>
+                  <h3 class="text-2xl font-bold text-blue-600">24</h3>
+                </div>
+                <div
+                  class="p-3 rounded-full bg-blue-100 text-blue-600 w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-users text-xl"></i>
+                </div>
+              </div>
+              <p class="text-sm text-danger mt-2">
+                <i class="fas fa-caret-down mr-1"></i> Giảm 2 khách so với tháng
+                trước
+              </p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm">Công nợ quá hạn</p>
+                  <h3 class="text-2xl font-bold text-orange-600">
+                    42,300,000 ₫
+                  </h3>
+                </div>
+                <div
+                  class="p-3 rounded-full bg-orange-100 text-orange-600 w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-exclamation-triangle text-xl"></i>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">5 khách hàng</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-gray-500 text-sm">Đã thu hồi</p>
+                  <h3 class="text-2xl font-bold text-green-600">
+                    83,150,000 ₫
+                  </h3>
+                </div>
+                <div
+                  class="p-3 rounded-full bg-green-100 text-green-600 w-[50px] flex justify-center items-center"
+                >
+                  <i class="fas fa-check-circle text-2xl"></i>
+                </div>
+              </div>
+              <p class="text-sm text-gray-500 mt-2">Trong tháng này</p>
+            </div>
+          </div>
+
+          <!-- Debt Chart -->
+          <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-semibold text-gray-800">
+                Biểu đồ công nợ theo tháng
+              </h2>
+              <select
+                class="border rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option>Năm 2023</option>
+                <option>Năm 2022</option>
+                <option>Năm 2021</option>
+              </select>
+            </div>
+            <div class="chart-container">
+              <canvas id="debtChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Customer Debt Table -->
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div
+              class="p-4 border-b flex flex-col md:flex-row md:items-center md:justify-between"
+            >
+              <h2 class="text-lg font-semibold text-gray-800 mb-2 md:mb-0">
+                Danh sách công nợ khách hàng
+              </h2>
+              <div class="flex space-x-2">
+                <div class="relative w-full md:w-64">
+                  <input
+                    type="text"
+                    placeholder="Tìm khách hàng..."
+                    class="pl-10 pr-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <i
+                    class="fas fa-search absolute left-3 top-3 text-gray-400"
+                  ></i>
+                </div>
+                <div class="flex space-x-2">
+                  <select
+                    class="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option>Tất cả trạng thái</option>
+                    <option>Đang nợ</option>
+                    <option>Quá hạn</option>
+                    <option>Đã thanh toán</option>
+                  </select>
+                </div>
+                <button
+                  class="px-4 py-2 border rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <i class="fas fa-download mr-2"></i> Xuất Excel
+                </button>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Khách hàng
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Số điện thoại
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Tổng nợ
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Đã trả
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Còn lại
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Hạn thanh toán
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Tuổi nợ
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Trạng thái
+                    </th>
+                    <th
+                      scope="col"
+                      class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                    >
+                      Thao tác
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                          <img
+                            class="h-10 w-10 rounded-full"
+                            src="https://randomuser.me/api/portraits/men/32.jpg"
+                            alt=""
+                          />
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm font-medium text-gray-900">
+                            Nguyễn Văn A
+                          </div>
+                          <div class="text-sm text-gray-500">KH001</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      0987654321
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
+                      25,000,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      10,000,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600"
+                    >
+                      15,000,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      15/07/2023
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800"
+                        >30-60 ngày</span
+                      >
+                    </td>
+
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                        >Quá hạn</span
+                      >
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-green-600 hover:text-green-900 mr-3">
+                        <i class="fas fa-money-bill-wave"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                          <img
+                            class="h-10 w-10 rounded-full"
+                            src="https://randomuser.me/api/portraits/women/44.jpg"
+                            alt=""
+                          />
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm font-medium text-gray-900">
+                            Trần Thị B
+                          </div>
+                          <div class="text-sm text-gray-500">KH002</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      0912345678
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
+                      18,500,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      5,000,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-bold text-yellow-600"
+                    >
+                      13,500,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      20/07/2023
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800"
+                        >0-30 ngày</span
+                      >
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800"
+                        >Đang nợ</span
+                      >
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-green-600 hover:text-green-900 mr-3">
+                        <i class="fas fa-money-bill-wave"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                          <img
+                            class="h-10 w-10 rounded-full"
+                            src="https://randomuser.me/api/portraits/men/75.jpg"
+                            alt=""
+                          />
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm font-medium text-gray-900">
+                            Lê Văn C
+                          </div>
+                          <div class="text-sm text-gray-500">KH003</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      0909123456
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
+                      32,000,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      32,000,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600"
+                    >
+                      0 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      10/07/2023
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800"
+                        >Đã thanh toán</span
+                      >
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                        >Đã thanh toán</span
+                      >
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-green-600 hover:text-green-900 mr-3">
+                        <i class="fas fa-money-bill-wave"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                          <img
+                            class="h-10 w-10 rounded-full"
+                            src="https://randomuser.me/api/portraits/women/68.jpg"
+                            alt=""
+                          />
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm font-medium text-gray-900">
+                            Phạm Thị D
+                          </div>
+                          <div class="text-sm text-gray-500">KH004</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      0978123456
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
+                      12,750,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      0 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600"
+                    >
+                      12,750,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      05/07/2023
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800"
+                        >60-90 ngày</span
+                      >
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
+                        >Quá hạn</span
+                      >
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-green-600 hover:text-green-900 mr-3">
+                        <i class="fas fa-money-bill-wave"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                          <img
+                            class="h-10 w-10 rounded-full"
+                            src="https://randomuser.me/api/portraits/men/22.jpg"
+                            alt=""
+                          />
+                        </div>
+                        <div class="ml-4">
+                          <div class="text-sm font-medium text-gray-900">
+                            Hoàng Văn E
+                          </div>
+                          <div class="text-sm text-gray-500">KH005</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      0967123456
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
+                      8,200,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      8,200,000 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600"
+                    >
+                      0 ₫
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      18/07/2023
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800"
+                        >Đã thanh toán</span
+                      >
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                        >Đã thanh toán</span
+                      >
+                    </td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                    >
+                      <button class="text-blue-600 hover:text-blue-900 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-green-600 hover:text-green-900 mr-3">
+                        <i class="fas fa-money-bill-wave"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination -->
+            <div
+              class="px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"
+            >
+              <div
+                class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+              >
+                <div>
+                  <p class="text-sm text-gray-700">
+                    Hiển thị
+                    <span class="font-medium">1</span>
+                    đến
+                    <span class="font-medium">5</span>
+                    của
+                    <span class="font-medium">24</span>
+                    khách hàng
+                  </p>
+                </div>
+                <div>
+                  <nav
+                    class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                    aria-label="Pagination"
+                  >
+                    <a
+                      href="#"
+                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                    >
+                      <span class="sr-only">Previous</span>
+                      <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <a
+                      href="#"
+                      aria-current="page"
+                      class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                    >
+                      1
+                    </a>
+                    <a
+                      href="#"
+                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                    >
+                      2
+                    </a>
+                    <a
+                      href="#"
+                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                    >
+                      3
+                    </a>
+                    <span
+                      class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+                    >
+                      ...
+                    </span>
+                    <a
+                      href="#"
+                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+                    >
+                      8
+                    </a>
+                    <a
+                      href="#"
+                      class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                    >
+                      <span class="sr-only">Next</span>
+                      <i class="fas fa-chevron-right"></i>
+                    </a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+      <div
+        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span
+          class="hidden sm:inline-block sm:align-middle sm:h-screen"
+          aria-hidden="true"
+          >&#8203;</span
+        >
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        >
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+              <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                <div class="flex justify-between items-center mb-4">
+                  <div>
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                      Thanh toán công nợ
+                    </h3>
+                    <p
+                      class="text-sm text-gray-500"
+                      id="customerPaymentInfo"
+                    ></p>
+                  </div>
+                  <button
+                    type="button"
+                    class="close-payment-modal text-gray-400 hover:text-gray-500"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="paymentDate"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Ngày thanh toán</label
+                      >
+                      <input
+                        type="date"
+                        id="paymentDate"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                        value=""
+                      />
+                    </div>
+                    <div>
+                      <label
+                        for="paymentAmount"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Số tiền (₫)</label
+                      >
+                      <div class="relative">
+                        <input
+                          type="text"
+                          id="paymentAmount"
+                          class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="0"
+                        />
+                        <span
+                          class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                        >
+                          <span class="text-gray-500">₫</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      for="paymentMethod"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Phương thức thanh toán</label
+                    >
+                    <select
+                      id="paymentMethod"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="cash">Tiền mặt</option>
+                      <option value="bank">Chuyển khoản</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      for="paymentNote"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Ghi chú</label
+                    >
+                    <textarea
+                      id="paymentNote"
+                      rows="2"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Nhập ghi chú (nếu có)"
+                    ></textarea>
+                  </div>
+
+                  <div>
+                    <label
+                      for="invoiceFile"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Hóa đơn cấn trừ công nợ</label
+                    >
+                    <input
+                      type="file"
+                      id="invoiceFile"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                    />
+                    <p class="mt-1 text-xs text-gray-500">
+                      Chấp nhận file PDF, JPG, PNG (tối đa 5MB)
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              id="confirmPayment"
+              class="w-full inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <i class="fas fa-check-circle mr-2"></i> Xác nhận thanh toán
+            </button>
+            <button
+              type="button"
+              class="close-payment-modal mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+            >
+              Hủy bỏ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debt Detail Modal -->
+    <div id="debtDetailModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+      <div
+        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span
+          class="hidden sm:inline-block sm:align-middle sm:h-screen"
+          aria-hidden="true"
+          >&#8203;</span
+        >
+        <div
+          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
+        >
+          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="sm:flex sm:items-start">
+              <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                <div class="flex justify-between items-center">
+                  <h3
+                    class="text-lg leading-6 font-medium text-gray-900"
+                    id="modalTitle"
+                  >
+                    Chi tiết công nợ
+                  </h3>
+                  <button
+                    type="button"
+                    class="close-modal text-gray-400 hover:text-gray-500"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <div class="mt-4">
+                  <div class="flex items-center mb-4">
+                    <img
+                      id="customerAvatar"
+                      class="h-12 w-12 rounded-full mr-4"
+                      src=""
+                      alt=""
+                    />
+                    <div>
+                      <h4
+                        id="customerName"
+                        class="font-medium text-gray-900"
+                      ></h4>
+                      <p id="customerCode" class="text-sm text-gray-500"></p>
+                      <p id="customerPhone" class="text-sm text-gray-500"></p>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <p class="text-sm text-gray-500">Tổng công nợ</p>
+                      <p
+                        id="totalDebt"
+                        class="text-xl font-bold text-red-600"
+                      ></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <p class="text-sm text-gray-500">Đã thanh toán</p>
+                      <p
+                        id="paidAmount"
+                        class="text-xl font-bold text-green-600"
+                      ></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <p class="text-sm text-gray-500">Còn nợ</p>
+                      <p
+                        id="remainingDebt"
+                        class="text-xl font-bold text-blue-600"
+                      ></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <p class="text-sm text-gray-500">Tuổi nợ</p>
+                      <p
+                        id="debtAge"
+                        class="text-xl font-bold text-purple-600"
+                      ></p>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <p class="text-sm text-gray-500">Ngày phát sinh</p>
+                      <p id="debtCreatedDate" class="text-sm font-medium"></p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <p class="text-sm text-gray-500">Hạn thanh toán</p>
+                      <p id="paymentDueDate" class="text-sm font-medium"></p>
+                    </div>
+                  </div>
+
+                  <div class="mb-6">
+                    <h4 class="font-medium text-gray-900 mb-2">
+                      Lịch sử công nợ
+                    </h4>
+                    <div class="overflow-x-auto">
+                      <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                          <tr>
+                            <th
+                              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Ngày
+                            </th>
+                            <th
+                              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Số tiền
+                            </th>
+                            <th
+                              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Ghi chú
+                            </th>
+                            <th
+                              class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            >
+                              Tài liệu
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          id="debtHistory"
+                          class="bg-white divide-y divide-gray-200"
+                        >
+                          <!-- Will be populated by JavaScript -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              class="close-modal w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+            >
+              Đóng
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Toggle sidebar
+      document
+        .getElementById("toggle-sidebar")
+        .addEventListener("click", function () {
+          document.querySelector(".sidebar").classList.toggle("collapsed");
+        });
+
+      // Initialize chart
+      const ctx = document.getElementById("debtChart").getContext("2d");
+      const debtChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "Tháng 1",
+            "Tháng 2",
+            "Tháng 3",
+            "Tháng 4",
+            "Tháng 5",
+            "Tháng 6",
+            "Tháng 7",
+          ],
+          datasets: [
+            {
+              label: "Tổng công nợ",
+              data: [
+                85000000, 92000000, 105000000, 98000000, 115000000, 125000000,
+                125450000,
+              ],
+              borderColor: "rgb(239, 68, 68)",
+              backgroundColor: "rgba(239, 68, 68, 0.05)",
+              tension: 0.3,
+              fill: true,
+            },
+            {
+              label: "Công nợ quá hạn",
+              data: [
+                25000000, 32000000, 28000000, 35000000, 38000000, 45000000,
+                42300000,
+              ],
+              borderColor: "rgb(249, 115, 22)",
+              backgroundColor: "rgba(249, 115, 22, 0.05)",
+              tension: 0.3,
+              fill: true,
+            },
+            {
+              label: "Đã thu hồi",
+              data: [
+                60000000, 60000000, 77000000, 63000000, 77000000, 80000000,
+                83150000,
+              ],
+              borderColor: "rgb(16, 185, 129)",
+              backgroundColor: "rgba(16, 185, 129, 0.05)",
+              tension: 0.3,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "top",
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  let label = context.dataset.label || "";
+                  if (label) {
+                    label += ": ";
+                  }
+                  if (context.parsed.y !== null) {
+                    label += new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(context.parsed.y);
+                  }
+                  return label;
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              ticks: {
+                callback: function (value) {
+                  return new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(value);
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // Format currency in tables
+      document.querySelectorAll(".currency-cell").forEach((cell) => {
+        const value = parseFloat(cell.textContent);
+        cell.textContent = new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(value);
+      });
+
+      // Debt Detail Modal functionality
+      const modal = document.getElementById("debtDetailModal");
+      const closeButtons = document.querySelectorAll(".close-modal");
+
+      // Payment functionality
+      let currentCustomerCode = "";
+      let currentRow = null;
+
+      // Open payment modal
+      document
+        .querySelectorAll("button i.fa-money-bill-wave")
+        .forEach((icon) => {
+          icon.closest("button").addEventListener("click", function () {
+            currentRow = this.closest("tr");
+            currentCustomerCode = currentRow.querySelector(
+              "div.text-sm.text-gray-500"
+            ).textContent;
+            document.getElementById("paymentModal").classList.remove("hidden");
+          });
+        });
+
+      // Close payment modal
+      document.querySelectorAll(".close-payment-modal").forEach((button) => {
+        button.addEventListener("click", function () {
+          document.getElementById("paymentModal").classList.add("hidden");
+        });
+      });
+
+      // Format currency input
+      document
+        .getElementById("paymentAmount")
+        .addEventListener("input", function (e) {
+          const value = e.target.value.replace(/\D/g, "");
+          const formattedValue = new Intl.NumberFormat("vi-VN").format(value);
+          e.target.value = formattedValue;
+          updateRemainingAmount();
+        });
+
+      function updateRemainingAmount() {
+        const amountInput = document.getElementById("paymentAmount");
+        const amount = parseFloat(amountInput.value.replace(/\D/g, "")) || 0;
+        const remainingAmount = currentCustomerData.remainingDebt - amount;
+
+        document.getElementById("remainingAfterPayment").textContent =
+          new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(remainingAmount);
+
+        // Disable button if amount is invalid
+        const confirmBtn = document.getElementById("confirmPayment");
+        confirmBtn.disabled =
+          amount <= 0 || amount > currentCustomerData.remainingDebt;
+      }
+
+      // Set today as default payment date
+      document.getElementById("paymentDate").valueAsDate = new Date();
+
+      // Calculate and update remaining amount after payment
+      function calculateRemaining() {
+        const amountInput = document.getElementById("paymentAmount");
+        const amount = parseFloat(amountInput.value.replace(/\D/g, "")) || 0;
+        const customerData = debtData[currentCustomerCode];
+
+        if (!customerData) return;
+
+        const remainingAfterPayment = customerData.remainingDebt - amount;
+
+        // Update payment info display
+        document.getElementById("customerPaymentInfo").innerHTML = `
+          <div class="flex items-center space-x-2 mt-2">
+            <div class="text-sm">
+              <span class="text-gray-500">Tổng nợ:</span> 
+              <span class="font-medium">${new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(customerData.totalDebt)}</span>
+            </div>
+            <span class="text-gray-400">|</span>
+            <div class="text-sm">
+              <span class="text-gray-500">Đã trả:</span> 
+              <span class="font-medium">${new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(customerData.paidAmount)}</span>
+            </div>
+            <span class="text-gray-400">|</span>
+            <div class="text-sm">
+              <span class="text-gray-500">Còn lại:</span> 
+              <span class="font-medium ${
+                remainingAfterPayment > 0 ? "text-red-600" : "text-green-600"
+              }">${new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(remainingAfterPayment)}</span>
+            </div>
+          </div>
+        `;
+
+        // Enable/disable confirm button based on valid amount
+        const confirmBtn = document.getElementById("confirmPayment");
+        confirmBtn.disabled =
+          amount <= 0 || amount > customerData.remainingDebt;
+      }
+
+      // Update payment info when amount changes
+      document
+        .getElementById("paymentAmount")
+        .addEventListener("input", function () {
+          calculateRemaining();
+        });
+
+      // Confirm payment
+      document
+        .getElementById("confirmPayment")
+        .addEventListener("click", function () {
+          const amount =
+            parseFloat(
+              document.getElementById("paymentAmount").value.replace(/\D/g, "")
+            ) || 0;
+          const note =
+            document.getElementById("paymentNote").value ||
+            "Thanh toán công nợ";
+          const paymentDate = document.getElementById("paymentDate").value;
+          const paymentMethod = document.getElementById("paymentMethod").value;
+
+          if (amount <= 0 || amount > currentCustomerData.remainingDebt) {
+            return;
+          }
+
+          // Update customer data
+          const customerData = debtData[currentCustomerCode];
+          customerData.paidAmount += amount;
+          customerData.remainingDebt =
+            customerData.totalDebt - customerData.paidAmount;
+
+          // Add to history
+          customerData.history.push({
+            date: new Date().toLocaleDateString("vi-VN"),
+            type: "Thanh toán",
+            amount: -amount,
+            note: note,
+          });
+
+          // Update UI
+          updateCustomerRow(currentRow, customerData);
+
+          // Reset and close modal
+          document.getElementById("paymentAmount").value = "";
+          document.getElementById("paymentNote").value = "";
+          document.getElementById("paymentModal").classList.add("hidden");
+        });
+
+      // Initialize payment info when opening modal
+      document
+        .querySelectorAll("button i.fa-money-bill-wave")
+        .forEach((icon) => {
+          icon.closest("button").addEventListener("click", function () {
+            currentRow = this.closest("tr");
+            currentCustomerCode = currentRow.querySelector(
+              "div.text-sm.text-gray-500"
+            ).textContent;
+            currentCustomerData = debtData[currentCustomerCode];
+
+            document.getElementById("paymentModal").classList.remove("hidden");
+            calculateRemaining();
+          });
+        });
+
+      function updateCustomerRow(row, customerData) {
+        // Update paid amount
+        const paidCell = row.querySelector("td:nth-child(4)");
+        paidCell.textContent = new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(customerData.paidAmount);
+
+        // Update remaining debt
+        const remainingCell = row.querySelector("td:nth-child(5)");
+        remainingCell.textContent = new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(customerData.remainingDebt);
+        remainingCell.className =
+          customerData.remainingDebt > 0
+            ? "px-6 py-4 whitespace-nowrap text-sm font-bold text-red-600"
+            : "px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600";
+
+        // Update status
+        const statusCell = row.querySelector("td:nth-child(7) span");
+        if (customerData.remainingDebt <= 0) {
+          statusCell.textContent = "Đã thanh toán";
+          statusCell.className =
+            "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800";
+        } else if (customerData.remainingDebt < customerData.totalDebt * 0.5) {
+          statusCell.textContent = "Đang nợ";
+          statusCell.className =
+            "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800";
+        } else {
+          statusCell.textContent = "Quá hạn";
+          statusCell.className =
+            "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800";
+        }
+      }
+
+      // Sample data - in real app this would come from API
+      const debtData = {
+        KH001: {
+          name: "Nguyễn Văn A",
+          phone: "0987654321",
+          avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+          totalDebt: 25000000,
+          paidAmount: 10000000,
+          remainingDebt: 15000000,
+          debtAge: "30-60 ngày",
+          createdDate: "15/06/2023",
+          dueDate: "15/07/2023",
+          history: [
+            {
+              date: "10/06/2023",
+              type: "Phát sinh",
+              amount: 15000000,
+              note: "Hợp đồng số HD001",
+              document: "HD001.pdf",
+            },
+            {
+              date: "15/06/2023",
+              type: "Phát sinh",
+              amount: 10000000,
+              note: "Hợp đồng số HD002",
+            },
+            {
+              date: "20/06/2023",
+              type: "Thanh toán",
+              amount: -10000000,
+              note: "Thanh toán lần 1",
+            },
+          ],
+        },
+        KH002: {
+          name: "Trần Thị B",
+          phone: "0912345678",
+          avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+          totalDebt: 18500000,
+          paidAmount: 5000000,
+          remainingDebt: 13500000,
+          history: [
+            {
+              date: "05/06/2023",
+              type: "Phát sinh",
+              amount: 8500000,
+              note: "Hợp đồng số HD003",
+            },
+            {
+              date: "10/06/2023",
+              type: "Phát sinh",
+              amount: 10000000,
+              note: "Hợp đồng số HD004",
+            },
+            {
+              date: "25/06/2023",
+              type: "Thanh toán",
+              amount: -5000000,
+              note: "Thanh toán lần 1",
+            },
+          ],
+        },
+      };
+
+      // Open modal when eye icon is clicked
+      document.querySelectorAll("button i.fa-eye").forEach((icon) => {
+        icon.closest("button").addEventListener("click", function () {
+          const row = this.closest("tr");
+          const customerCode = row.querySelector(
+            "div.text-sm.text-gray-500"
+          ).textContent;
+          const customerData = debtData[customerCode];
+
+          // Populate modal with data
+          document.getElementById("customerName").textContent =
+            customerData.name;
+          document.getElementById("customerCode").textContent = customerCode;
+          document.getElementById("customerPhone").textContent =
+            customerData.phone;
+          document.getElementById("customerAvatar").src = customerData.avatar;
+
+          document.getElementById("totalDebt").textContent =
+            new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(customerData.totalDebt);
+
+          document.getElementById("paidAmount").textContent =
+            new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(customerData.paidAmount);
+
+          document.getElementById("remainingDebt").textContent =
+            new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(customerData.remainingDebt);
+
+          document.getElementById("debtAge").textContent =
+            customerData.debtAge || "0-30 ngày";
+          document.getElementById("debtCreatedDate").textContent =
+            customerData.createdDate || "15/06/2023";
+          document.getElementById("paymentDueDate").textContent =
+            customerData.dueDate || "15/07/2023";
+
+          // Populate history table
+          const historyTable = document.getElementById("debtHistory");
+          historyTable.innerHTML = "";
+
+          customerData.history.forEach((item) => {
+            const row = document.createElement("tr");
+            row.className = "hover:bg-gray-50";
+
+            row.innerHTML = `
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                item.date
+              }</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm ${
+                item.amount < 0 ? "text-green-600" : "text-red-600"
+              }">
+                ${new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(Math.abs(item.amount))}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${
+                item.note
+              }</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600">
+                ${
+                  item.document
+                    ? `<a href="/documents/${item.document}" class="hover:underline" target="_blank">Xem</a>`
+                    : "Không có"
+                }
+              </td>
+            `;
+
+            historyTable.appendChild(row);
+          });
+
+          // Show modal
+          modal.classList.remove("hidden");
+        });
+      });
+
+      // Close modal
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+          modal.classList.add("hidden");
+        });
+      });
+
+      // Close when clicking outside modal
+      modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    </script>
+  </body>
+</html>
