@@ -1,1818 +1,1545 @@
 <!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản Lý Hợp Đồng Thuê Kho Bãi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: "#3b82f6",
-              secondary: "#64748b",
-              success: "#10b981",
-              danger: "#ef4444",
-              warning: "#f59e0b",
-              info: "#06b6d4",
-            },
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVL - Hệ thống quản lý kho bãi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#3b82f6",
+            secondary: "#64748b",
+            success: "#10b981",
+            danger: "#ef4444",
+            warning: "#f59e0b",
+            info: "#06b6d4",
           },
         },
-      };
-    </script>
-    <style>
-      .sidebar {
-        transition: all 0.3s ease;
+      },
+    };
+  </script>
+  <style>
+    .sidebar {
+      transition: all 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      width: 70px;
+    }
+
+    .sidebar.collapsed .nav-text {
+      display: none;
+    }
+
+    .sidebar.collapsed .logo-text {
+      display: none;
+    }
+
+    .sidebar.collapsed>div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .sidebar #show-sidebar {
+      display: none;
+    }
+
+    .sidebar #close-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed+.content {
+      margin-left: 10px;
+    }
+
+    .sidebar.collapsed #show-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed #close-sidebar {
+      display: none;
+    }
+
+    .sidebar.collapsed nav {
+      padding: 0.5rem;
+    }
+
+    .sidebar.collapsed nav li>a>i {
+      margin-right: 0;
+    }
+
+    .content {
+      transition: all 0.3s ease;
+    }
+
+    .table-container {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .chart-container {
+      height: 300px;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    #user-menu {
+      transition: all 0.2s ease;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
       }
-      .sidebar.collapsed {
-        width: 70px;
+
+      50% {
+        opacity: 0.5;
       }
-      .sidebar.collapsed .nav-text {
-        display: none;
-      }
-      .sidebar.collapsed .logo-text {
-        display: none;
-      }
-      .sidebar.collapsed ul li a i {
-        margin-right: 0;
-        display: flex;
-        justify-content: center;
-        width: 100%;
-      }
-      /* New toggle button styles */
-      .toggle-btn {
-        transition: all 0.3s ease;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      .toggle-btn:hover {
-        background-color: #f1f5f9;
-      }
-      .toggle-btn i {
-        transition: transform 0.3s ease;
-      }
-      .sidebar.collapsed .toggle-btn i {
-        transform: rotate(180deg);
-      }
-      .content {
-        transition: all 0.3s ease;
-      }
-      .sidebar.collapsed + .content {
-        margin-left: 70px;
-      }
-      .table-container {
-        max-height: calc(100vh - 200px);
-        overflow-y: auto;
-      }
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: #f1f1f1;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
-      }
-      .chart-container {
-        height: 300px;
-      }
-      .animate-pulse {
-        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.5;
-        }
-      }
-    </style>
-  </head>
-  <body class="bg-gray-50">
-    <div class="flex h-screen overflow-hidden">
-      <!-- Sidebar -->
-      <div class="sidebar bg-white shadow-md w-64 flex flex-col">
-        <div class="p-4 flex items-center justify-between border-b">
-          <div class="flex items-center">
-            <i class="fas fa-warehouse text-primary text-2xl mr-3"></i>
-            <span class="logo-text font-bold text-xl text-gray-800"
-              >WarehousePro</span
-            >
-          </div>
-          <button
-            id="toggle-sidebar"
-            class="toggle-btn text-gray-500 hover:text-gray-700"
-          >
-            <i class="fas fa-chevron-left"></i>
-          </button>
+    }
+  </style>
+  <!-- insert libs here -->
+
+  <!-- insert libs here -->
+  <!-- insert style here -->
+
+  <!-- insert style here -->
+</head>
+
+<body class="bg-gray-50">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="sidebar bg-white shadow-md w-64 flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b">
+        <div class="flex items-center">
+          <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
+          <span class="logo-text font-bold text-xl text-blue-800">WarehouseTVL</span>
         </div>
-        <div class="flex-1 overflow-y-auto custom-scrollbar">
-          <nav class="p-4">
-            <!-- Đăng ký xe -->
-            <div class="mb-6">
-              <p
-                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
-              >
-                Đăng ký xe
-              </p>
-              <ul>
-                <li>
-                  <a
-                    href="./DangKyXe.html"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-arrow-down fa-fw mr-3"></i>
-                    <span class="nav-text">Nhập kho</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-arrow-up fa-fw mr-3"></i>
-                    <span class="nav-text">Xuất kho</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Quản lý kho -->
-            <div class="mb-6">
-              <p
-                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
-              >
-                Quản lý kho
-              </p>
-              <ul>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-exchange-alt fa-fw mr-3"></i>
-                    <span class="nav-text">Chuyển trạng thái hàng</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-arrow-up fa-fw mr-3"></i>
-                    <span class="nav-text">Xuất kho</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-random fa-fw mr-3"></i>
-                    <span class="nav-text">Chuyển kho</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Danh mục -->
-            <div class="mb-6">
-              <p
-                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
-              >
-                Danh mục
-              </p>
-              <ul>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-warehouse fa-fw mr-3"></i>
-                    <span class="nav-text">Kho</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-user fa-fw mr-3"></i>
-                    <span class="nav-text">Nhân viên</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-balance-scale fa-fw mr-3"></i>
-                    <span class="nav-text">Đơn vị tính</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-truck fa-fw mr-3"></i>
-                    <span class="nav-text">Xe</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-cubes fa-fw mr-3"></i>
-                    <span class="nav-text">Hàng hóa</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Khách hàng -->
-            <div class="mb-6">
-              <p
-                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
-              >
-                Khách hàng
-              </p>
-              <ul>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-users fa-fw mr-3"></i>
-                    <span class="nav-text">Quản lý khách hàng</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 bg-blue-50 text-blue-600 rounded-lg"
-                  >
-                    <i class="fas fa-file-contract fa-fw mr-3"></i>
-                    <span class="nav-text">Hợp đồng</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-money-check-alt fa-fw mr-3"></i>
-                    <span class="nav-text">Thanh toán</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-balance-scale fa-fw mr-3"></i>
-                    <span class="nav-text">Danh mục cân</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="./CongNo.html"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-file-invoice-dollar fa-fw mr-3"></i>
-                    <span class="nav-text">Quản lý công nợ</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Quản trị hệ thống -->
-            <div class="mb-6">
-              <p
-                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
-              >
-                Quản trị hệ thống
-              </p>
-              <ul>
-                <li>
-                  <a
-                    href="./NguoiDung.html"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-user-cog fa-fw mr-3"></i>
-                    <span class="nav-text">Quản lý người dùng</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-users-cog fa-fw mr-3"></i>
-                    <span class="nav-text">Quản lý nhóm người dùng</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-shield-alt fa-fw mr-3"></i>
-                    <span class="nav-text">Quản lý phân quyền</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Báo cáo quản trị -->
-            <div>
-              <p
-                class="text-xs uppercase text-gray-500 font-semibold mb-2 nav-text"
-              >
-                Báo cáo quản trị
-              </p>
-              <ul>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                    <span class="nav-text"
-                      >Báo cáo tồn kho theo khách hàng</span
-                    >
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                    <span class="nav-text">Báo cáo tồn kho theo công nợ</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg"
-                  >
-                    <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
-                    <span class="nav-text">Dashboard</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-        <div class="p-4 border-t">
-          <div class="flex items-center">
-            <img
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="User"
-              class="w-8 h-8 rounded-full mr-2"
-            />
-            <div class="nav-text">
-              <p class="text-sm font-medium text-gray-800">Admin</p>
-              <p class="text-xs text-gray-500">Quản trị hệ thống</p>
-            </div>
-          </div>
-        </div>
+        <button id="toggle-sidebar" class="text-gray-500 hover:text-gray-700">
+          <i id="close-sidebar" class="fas fa-chevron-left"></i>
+          <i id="show-sidebar" class="fas fa-chevron-right"></i>
+        </button>
       </div>
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <nav class="p-4">
+          <!-- Đăng ký xe -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Đăng ký xe
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyDangKyXe.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý đăng ký xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeNhapKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Nhập kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeXuatKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                  <span class="nav-text">Xuất kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-      <!-- Main Content -->
-      <div class="content flex-1 overflow-auto">
-        <header
-          class="bg-white shadow-sm p-4 flex justify-between items-center"
-        >
-          <h1 class="text-xl font-semibold text-gray-800">
-            Quản lý hợp đồng thuê kho bãi
-          </h1>
-          <div class="flex items-center space-x-4">
+
+          <!-- Quản lý kho -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Kho bãi
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-exchange-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Danh mục -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Danh mục
+            </p>
+            <ul>
+              <li>
+                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-warehouse fa-fw mr-3"></i>
+                  <span class="nav-text">Kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucNhanVien.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user fa-fw mr-3"></i>
+                  <span class="nav-text">Nhân viên</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucDonVitinh.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                  <span class="nav-text">Đơn vị tính</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-truck fa-fw mr-3"></i>
+                  <span class="nav-text">Xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucHangHoa.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Hàng hóa</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Trạm cân</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Khách hàng -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Khách hàng
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKhachHang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý khách hàng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./QuanLyHopDong.html" class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Hợp đồng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quản trị hệ thống -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Quản trị hệ thống
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý người dùng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý role</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tổng quan -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tổng quan
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tài chính -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tài chính
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Chi phí</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/congno.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Lợi nhuận</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tồn kho -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tồn kho
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo khách hàng</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+        <h1 class="text-xl font-semibold text-blue-800 uppercase">
+          Quản lý hợp đồng thuê kho bãi
+        </h1>
+        <div class="flex item-right gap-4">
+          <div class="hidden md:flex items-center space-x-4">
             <div class="relative">
-              <input
-                type="text"
-                placeholder="Tìm kiếm..."
-                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-              />
+              <input type="text" placeholder="Tìm kiếm..."
+                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
               <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
             <button class="p-2 text-gray-500 hover:text-gray-700">
               <i class="fas fa-bell"></i>
             </button>
           </div>
-        </header>
 
-        <main class="p-4">
-          <!-- Summary Cards -->
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
-          >
-            <div class="bg-white rounded-lg shadow p-6">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 text-sm">Tổng hợp đồng</p>
-                  <h3 class="text-2xl font-bold">128</h3>
-                </div>
-                <div
-                  class="p-3 rounded-full bg-blue-50 text-primary w-[50px] flex justify-center items-center"
-                >
-                  <i class="fas fa-file-contract text-2xl"></i>
-                </div>
+          <div>
+            <div class="flex items-center cursor-pointer" id="user-menu-button">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
+              <div class="nav-text">
+                <p class="text-sm font-medium text-gray-800">Admin</p>
+                <p class="text-xs text-gray-500">Quản trị hệ thống</p>
               </div>
-              <p class="text-xs text-success mt-2">
-                <i class="fas fa-caret-up mr-1"></i> 12% so với tháng trước
-              </p>
+              <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
             </div>
-
-            <div class="bg-white rounded-lg shadow p-6">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 text-sm">Doanh thu tháng</p>
-                  <h3 class="text-2xl font-bold">1,245,000,000 ₫</h3>
-                </div>
-                <div
-                  class="p-3 rounded-full bg-green-50 text-success w-[50px] flex justify-center items-center"
-                >
-                  <i class="fas fa-hand-holding-usd text-2xl"></i>
-                </div>
-              </div>
-              <p class="text-xs text-danger mt-2">
-                <i class="fas fa-caret-down mr-1"></i> 5% so với tháng trước
-              </p>
-            </div>
-
-            <div class="bg-white rounded-lg shadow p-6">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 text-sm">Công nợ</p>
-                  <h3 class="text-2xl font-bold">325,000,000 ₫</h3>
-                </div>
-                <div
-                  class="p-3 rounded-full bg-yellow-50 text-warning w-[50px] flex justify-center items-center"
-                >
-                  <i class="fas fa-file-invoice-dollar text-2xl"></i>
-                </div>
-              </div>
-              <p class="text-xs text-danger mt-2">
-                <i class="fas fa-caret-up mr-1"></i> 8% so với tháng trước
-              </p>
-            </div>
-
-            <div class="bg-white rounded-lg shadow p-6">
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="text-gray-500 text-sm">Hợp đồng sắp hết hạn</p>
-                  <h3 class="text-2xl font-bold">15</h3>
-                </div>
-                <div
-                  class="p-3 rounded-full bg-red-50 text-danger w-[50px] flex justify-center items-center"
-                >
-                  <i class="fas fa-exclamation-circle text-2xl"></i>
-                </div>
-              </div>
-              <p class="text-sm text-gray-500 mt-2">Trong 30 ngày tới</p>
+            <!-- Dropdown menu -->
+            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              <a href="./ChangePassword.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thay đổi
+                mật khẩu</a>
+              <a href="./index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
             </div>
           </div>
-
-          <!-- Revenue Charts -->
-          <div class="bg-white rounded-lg shadow mb-6">
-            <div class="p-4 border-b">
-              <h2 class="text-lg font-semibold text-gray-800">
-                Báo cáo doanh thu
-              </h2>
-            </div>
-            <div class="p-4">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Monthly Revenue -->
-                <div class="bg-gray-50 p-4 rounded-lg">
-                  <h3 class="text-md font-medium text-gray-800 mb-3">
-                    Doanh thu theo tháng
-                  </h3>
-                  <div class="chart-container">
-                    <canvas id="monthlyRevenueChart"></canvas>
-                  </div>
-                </div>
-
-                <!-- Customer Revenue -->
-                <div class="bg-gray-50 p-4 rounded-lg">
-                  <h3 class="text-md font-medium text-gray-800 mb-3">
-                    Doanh thu theo khách hàng
-                  </h3>
-                  <div class="chart-container">
-                    <canvas id="customerRevenueChart"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Contract Management Section -->
-          <div class="bg-white rounded-lg shadow">
-            <div class="p-4 border-b flex justify-between items-center">
-              <h2 class="text-lg font-semibold text-gray-800">
-                Danh sách hợp đồng
-              </h2>
-              <div class="flex space-x-2">
-                <button
-                  class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 flex items-center"
-                >
-                  <i class="fas fa-plus mr-2"></i> Thêm mới
-                </button>
-                <button
-                  class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center"
-                >
-                  <i class="fas fa-filter mr-2"></i> Lọc
-                </button>
-                <button
-                  class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center"
-                >
-                  <i class="fas fa-file-export mr-2"></i> Xuất Excel
-                </button>
-              </div>
-            </div>
-            <div class="p-4">
-              <div class="table-container custom-scrollbar">
-                <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Số hợp đồng
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Khách hàng
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Diện tích (m²)
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Trọng lượng (kg)
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Đơn giá
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Ngày kết thúc
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Tình trạng
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Thao tác
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="bg-white divide-y divide-gray-200">
-                    <tr class="hover:bg-gray-50">
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-primary">
-                          HD-2023-001
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">
-                          Công ty TNHH ABC
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">150</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">5,000</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">50,000đ/m²</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">15/12/2023</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white"
-                          >Đang hoạt động</span
-                        >
-                      </td>
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                      >
-                        <button class="text-primary hover:text-blue-600 mr-3">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button
-                          class="text-warning hover:text-yellow-600 mr-3"
-                          onclick="document.getElementById('edit-contract-modal').classList.remove('hidden')"
-                        >
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="text-danger hover:text-red-600">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-primary">
-                          HD-2023-002
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">
-                          Công ty CP XYZ
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">200</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">8,000</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">45,000đ/m²</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">30/11/2023</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-warning text-white"
-                          >Sắp hết hạn</span
-                        >
-                      </td>
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                      >
-                        <button class="text-primary hover:text-blue-600 mr-3">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-warning hover:text-yellow-600 mr-3">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="text-danger hover:text-red-600">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-primary">
-                          HD-2023-003
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">
-                          Công ty TNHH DEF
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">120</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">3,500</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">55,000đ/m²</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">15/01/2024</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white"
-                          >Đang hoạt động</span
-                        >
-                      </td>
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                      >
-                        <button class="text-primary hover:text-blue-600 mr-3">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-warning hover:text-yellow-600 mr-3">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="text-danger hover:text-red-600">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-primary">
-                          HD-2023-004
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">
-                          Công ty TNHH GHI
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">80</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">2,000</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">60,000đ/m²</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">10/10/2023</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-danger text-white"
-                          >Đã hết hạn</span
-                        >
-                      </td>
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                      >
-                        <button class="text-primary hover:text-blue-600 mr-3">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-warning hover:text-yellow-600 mr-3">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="text-danger hover:text-red-600">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-primary">
-                          HD-2023-005
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">
-                          Công ty CP JKL
-                        </div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">300</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">10,000</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">40,000đ/m²</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">20/12/2023</div>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <span
-                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white"
-                          >Đang hoạt động</span
-                        >
-                      </td>
-                      <td
-                        class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                      >
-                        <button class="text-primary hover:text-blue-600 mr-3">
-                          <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="text-warning hover:text-yellow-600 mr-3">
-                          <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="text-danger hover:text-red-600">
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div
-              class="px-4 py-3 bg-gray-50 border-t flex items-center justify-between"
-            >
-              <div class="flex-1 flex justify-between sm:hidden">
-                <a
-                  href="#"
-                  class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                  >Previous</a
-                >
-                <a
-                  href="#"
-                  class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                  >Next</a
-                >
-              </div>
-              <div
-                class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
-              >
-                <div>
-                  <p class="text-sm text-gray-700">
-                    Hiển thị
-                    <span class="font-medium">1</span>
-                    đến
-                    <span class="font-medium">5</span>
-                    của
-                    <span class="font-medium">128</span>
-                    kết quả
-                  </p>
-                </div>
-                <div>
-                  <nav
-                    class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                    aria-label="Pagination"
-                  >
-                    <a
-                      href="#"
-                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                    >
-                      <span class="sr-only">Previous</span>
-                      <i class="fas fa-chevron-left"></i>
-                    </a>
-                    <a
-                      href="#"
-                      aria-current="page"
-                      class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                      >1</a
-                    >
-                    <a
-                      href="#"
-                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                      >2</a
-                    >
-                    <a
-                      href="#"
-                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
-                      >3</a
-                    >
-                    <a
-                      href="#"
-                      class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
-                    >
-                      <span class="sr-only">Next</span>
-                      <i class="fas fa-chevron-right"></i>
-                    </a>
-                  </nav>
-                </div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-
-    <!-- Modal for Contract Details -->
-    <div
-      id="contract-details-modal"
-      class="fixed inset-0 z-50 hidden overflow-y-auto"
-    >
-      <div
-        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <span
-          class="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-          >&#8203;</span
-        >
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
-        >
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <div class="flex justify-between items-start">
-                  <h3 class="text-md font-bold text-primary mb-3">
-                    CHI TIẾT HỢP ĐỒNG
-                  </h3>
-                  <button
-                    onclick="document.getElementById('contract-details-modal').classList.add('hidden')"
-                    class="text-gray-400 hover:text-gray-500"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
+      </header>
+
+      <main class="p-4">
+        <!-- insert code here -->
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Tổng hợp đồng</p>
+                <h3 class="text-2xl font-bold">128</h3>
+              </div>
+              <div class="p-3 rounded-full bg-blue-50 text-primary w-[50px] flex justify-center items-center">
+                <i class="fas fa-file-contract text-2xl"></i>
+              </div>
+            </div>
+            <p class="text-xs text-success mt-2">
+              <i class="fas fa-caret-up mr-1"></i> 12% so với tháng trước
+            </p>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Doanh thu tháng</p>
+                <h3 class="text-2xl font-bold">1,245,000,000 ₫</h3>
+              </div>
+              <div class="p-3 rounded-full bg-green-50 text-success w-[50px] flex justify-center items-center">
+                <i class="fas fa-hand-holding-usd text-2xl"></i>
+              </div>
+            </div>
+            <p class="text-xs text-danger mt-2">
+              <i class="fas fa-caret-down mr-1"></i> 5% so với tháng trước
+            </p>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Công nợ</p>
+                <h3 class="text-2xl font-bold">325,000,000 ₫</h3>
+              </div>
+              <div class="p-3 rounded-full bg-yellow-50 text-warning w-[50px] flex justify-center items-center">
+                <i class="fas fa-file-invoice-dollar text-2xl"></i>
+              </div>
+            </div>
+            <p class="text-xs text-danger mt-2">
+              <i class="fas fa-caret-up mr-1"></i> 8% so với tháng trước
+            </p>
+          </div>
+
+          <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-500 text-sm">Hợp đồng sắp hết hạn</p>
+                <h3 class="text-2xl font-bold">15</h3>
+              </div>
+              <div class="p-3 rounded-full bg-red-50 text-danger w-[50px] flex justify-center items-center">
+                <i class="fas fa-exclamation-circle text-2xl"></i>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-2">Trong 30 ngày tới</p>
+          </div>
+        </div>
+
+        <!-- Revenue Charts -->
+        <div class="bg-white rounded-lg shadow mb-6">
+          <div class="p-4 border-b">
+            <h2 class="text-lg font-semibold text-gray-800">
+              Báo cáo doanh thu
+            </h2>
+          </div>
+          <div class="p-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Monthly Revenue -->
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-md font-medium text-gray-800 mb-3">
+                  Doanh thu theo tháng
+                </h3>
+                <div class="chart-container">
+                  <canvas id="monthlyRevenueChart"></canvas>
                 </div>
-                <div class="space-y-4" id="contract-details-content">
-                  <!-- Contract Info -->
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Row 1 -->
-                    <div>
-                      <p class="text-sm text-gray-500">Số hợp đồng</p>
-                      <p class="text-sm font-medium text-gray-900">
+              </div>
+
+              <!-- Customer Revenue -->
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="text-md font-medium text-gray-800 mb-3">
+                  Doanh thu theo khách hàng
+                </h3>
+                <div class="chart-container">
+                  <canvas id="customerRevenueChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contract Management Section -->
+        <div class="bg-white rounded-lg shadow">
+          <div class="p-4 border-b flex justify-between items-center">
+            <h2 class="text-lg font-semibold text-gray-800">
+              Danh sách hợp đồng
+            </h2>
+            <div class="flex space-x-2">
+              <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 flex items-center">
+                <i class="fas fa-plus mr-2"></i> Thêm mới
+              </button>
+              <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center">
+                <i class="fas fa-filter mr-2"></i> Lọc
+              </button>
+              <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center">
+                <i class="fas fa-file-export mr-2"></i> Xuất Excel
+              </button>
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="table-container custom-scrollbar">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Số hợp đồng
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Khách hàng
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Diện tích (m²)
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Trọng lượng (kg)
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Đơn giá
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Ngày kết thúc
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Tình trạng
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Thao tác
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-primary">
                         HD-2023-001
-                      </p>
-                    </div>
-                    <div>
-                      <p class="text-sm text-gray-500">Ngày bắt đầu</p>
-                      <p class="text-sm font-medium text-gray-900">
-                        15/01/2023
-                      </p>
-                    </div>
-                    <div>
-                      <p class="text-sm text-gray-500">Ngày kết thúc</p>
-                      <p class="text-sm font-medium text-gray-900">
-                        15/12/2023
-                      </p>
-                    </div>
-
-                    <!-- Row 2 -->
-                    <div class="md:col-span-2">
-                      <p class="text-sm text-gray-500">Khách hàng</p>
-                      <p class="text-sm font-medium text-gray-900">
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
                         Công ty TNHH ABC
-                      </p>
-                    </div>
-                    <div>
-                      <p class="text-sm text-gray-500">Tình trạng</p>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">150</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">5,000</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">50,000đ/m²</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">15/12/2023</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
                       <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white"
-                        >Đang hoạt động</span
-                      >
-                    </div>
-                    <!-- Row 3 -->
-                    <div>
-                      <p class="text-sm text-gray-500">Loại hợp đồng</p>
-                      <p class="text-sm font-medium text-gray-900">
-                        Thuê theo diện tích
-                      </p>
-                    </div>
-                    <div>
-                      <p class="text-sm text-gray-500">Diện tích thuê</p>
-                      <p class="text-sm font-medium text-gray-900">150 m²</p>
-                    </div>
-
-                    <!-- Row 3 -->
-
-                    <div>
-                      <p class="text-sm text-gray-500">Đơn giá thuê</p>
-                      <p class="text-sm font-medium text-gray-900">
-                        50,000đ/m²/tháng
-                      </p>
-                    </div>
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                        hoạt động</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button class="text-primary hover:text-blue-600 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-warning hover:text-yellow-600 mr-3"
+                        onclick="document.getElementById('edit-contract-modal').classList.remove('hidden')">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="text-danger hover:text-red-600">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-primary">
+                        HD-2023-002
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
+                        Công ty CP XYZ
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">200</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">8,000</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">45,000đ/m²</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">30/11/2023</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-warning text-white">Sắp
+                        hết hạn</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button class="text-primary hover:text-blue-600 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-warning hover:text-yellow-600 mr-3">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="text-danger hover:text-red-600">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-primary">
+                        HD-2023-003
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
+                        Công ty TNHH DEF
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">120</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">3,500</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">55,000đ/m²</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">15/01/2024</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                        hoạt động</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button class="text-primary hover:text-blue-600 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-warning hover:text-yellow-600 mr-3">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="text-danger hover:text-red-600">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-primary">
+                        HD-2023-004
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
+                        Công ty TNHH GHI
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">80</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">2,000</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">60,000đ/m²</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">10/10/2023</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-danger text-white">Đã
+                        hết hạn</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button class="text-primary hover:text-blue-600 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-warning hover:text-yellow-600 mr-3">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="text-danger hover:text-red-600">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-primary">
+                        HD-2023-005
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm font-medium text-gray-900">
+                        Công ty CP JKL
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">300</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">10,000</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">40,000đ/m²</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="text-sm text-gray-900">20/12/2023</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                        hoạt động</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button class="text-primary hover:text-blue-600 mr-3">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <button class="text-warning hover:text-yellow-600 mr-3">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="text-danger hover:text-red-600">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="px-4 py-3 bg-gray-50 border-t flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+              <a href="#"
+                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
+            </div>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Hiển thị
+                  <span class="font-medium">1</span>
+                  đến
+                  <span class="font-medium">5</span>
+                  của
+                  <span class="font-medium">128</span>
+                  kết quả
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <a href="#"
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Previous</span>
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                  <a href="#" aria-current="page"
+                    class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
+                  <a href="#"
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
+                  <a href="#"
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">3</a>
+                  <a href="#"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Next</span>
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- insert code here -->
+      </main>
+    </div>
+  </div>
+  <!-- Modal for Contract Details -->
+  <div id="contract-details-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div
+        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <div class="flex justify-between items-start">
+                <h3 class="text-md font-bold text-primary mb-3">
+                  CHI TIẾT HỢP ĐỒNG
+                </h3>
+                <button onclick="document.getElementById('contract-details-modal').classList.add('hidden')"
+                  class="text-gray-400 hover:text-gray-500">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="space-y-4" id="contract-details-content">
+                <!-- Contract Info -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <!-- Row 1 -->
+                  <div>
+                    <p class="text-sm text-gray-500">Số hợp đồng</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      HD-2023-001
+                    </p>
                   </div>
                   <div>
-                    <p class="text-sm text-gray-500">Hàng hóa</p>
+                    <p class="text-sm text-gray-500">Ngày bắt đầu</p>
                     <p class="text-sm font-medium text-gray-900">
-                      Thực phẩm đông lạnh
+                      15/01/2023
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Ngày kết thúc</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      15/12/2023
                     </p>
                   </div>
 
-                  <!-- Cost Calculations -->
-                  <div class="border-t border-gray-200 pt-4">
-                    <h4 class="text-md font-bold text-primary mb-3">
-                      TÍNH TOÁN CHI PHÍ
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <!-- Rental Cost -->
-                      <div class="bg-gray-50 p-4 rounded-lg">
-                        <h5 class="text-sm font-medium text-gray-800 mb-2">
-                          Chi phí thuê kho bãi
-                        </h5>
-                        <div class="space-y-2">
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Diện tích thuê:</span
-                            >
-                            <span class="text-xs font-medium">150 m²</span>
-                          </div>
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600">Đơn giá:</span>
-                            <span class="text-xs font-medium">50,000đ/m²</span>
-                          </div>
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Thời gian thuê:</span
-                            >
-                            <span class="text-xs font-medium">11 tháng</span>
-                          </div>
-                          <div class="border-t border-gray-200 my-2"></div>
-                          <div class="flex justify-between">
-                            <span class="text-sm font-semibold"
-                              >Tổng chi phí:</span
-                            >
-                            <span class="text-sm font-bold text-primary"
-                              >82,500,000đ</span
-                            >
-                          </div>
-                        </div>
-                      </div>
+                  <!-- Row 2 -->
+                  <div class="md:col-span-2">
+                    <p class="text-sm text-gray-500">Khách hàng</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      Công ty TNHH ABC
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Tình trạng</p>
+                    <span
+                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                      hoạt động</span>
+                  </div>
+                  <!-- Row 3 -->
+                  <div>
+                    <p class="text-sm text-gray-500">Loại hợp đồng</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      Thuê theo diện tích
+                    </p>
+                  </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Diện tích thuê</p>
+                    <p class="text-sm font-medium text-gray-900">150 m²</p>
+                  </div>
 
-                      <!-- Service Cost -->
-                      <div class="bg-gray-50 p-4 rounded-lg">
-                        <h5 class="text-sm font-medium text-gray-800 mb-2">
-                          Chi phí dịch vụ
-                        </h5>
-                        <div class="space-y-2">
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Trộn hàng:</span
-                            >
-                            <span class="text-xs font-medium">2,000,000đ</span>
-                          </div>
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600">Đóng bao:</span>
-                            <span class="text-xs font-medium">1,500,000đ</span>
-                          </div>
-                          <div class="border-t border-gray-200 my-2"></div>
-                          <div class="flex justify-between">
-                            <span class="text-sm font-semibold"
-                              >Tổng chi phí:</span
-                            >
-                            <span class="text-sm font-bold text-primary"
-                              >3,500,000đ</span
-                            >
-                          </div>
-                        </div>
-                      </div>
+                  <!-- Row 3 -->
 
-                      <!-- Loss Compensation -->
-                      <div class="bg-gray-50 p-4 rounded-lg">
-                        <h5 class="text-sm font-medium text-gray-800 mb-2">
-                          Chi phí hao hụt
-                        </h5>
-                        <div class="space-y-2">
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Ngưỡng hao hụt:</span
-                            >
-                            <span class="text-xs font-medium">1.5%</span>
-                          </div>
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Giá đền bù:</span
-                            >
-                            <span class="text-xs font-medium">200,000đ/kg</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Total Cost -->
-                      <div class="bg-gray-50 p-4 rounded-lg">
-                        <h5 class="text-sm font-medium text-gray-800 mb-2">
-                          Tổng hợp chi phí
-                        </h5>
-                        <div class="space-y-2">
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Chi phí thuê:</span
-                            >
-                            <span class="text-xs font-medium">82,500,000đ</span>
-                          </div>
-                          <div class="flex justify-between">
-                            <span class="text-xs text-gray-600"
-                              >Chi phí dịch vụ:</span
-                            >
-                            <span class="text-xs font-medium">3,500,000đ</span>
-                          </div>
-
-                          <div class="border-t border-gray-200 my-2"></div>
-                          <div class="flex justify-between">
-                            <span class="text-sm font-semibold"
-                              >Tổng cộng:</span
-                            >
-                            <span class="text-sm font-bold text-primary"
-                              >86,000,000đ</span
-                            >
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div>
+                    <p class="text-sm text-gray-500">Đơn giá thuê</p>
+                    <p class="text-sm font-medium text-gray-900">
+                      50,000đ/m²/tháng
+                    </p>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sm:items-center sm:justify-between"
-          >
-            <div class="flex space-x-2">
-              <button
-                type="button"
-                class="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm"
-                onclick="document.getElementById('contract-details-modal').classList.add('hidden'); document.getElementById('edit-contract-modal').classList.remove('hidden')"
-              >
-                <i class="fas fa-edit mr-2"></i> Sửa
-              </button>
-              <button
-                type="button"
-                class="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-success text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm"
-              >
-                <i class="fas fa-calendar-plus mr-2"></i> Gia hạn
-              </button>
-              <button
-                type="button"
-                class="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-danger text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm"
-              >
-                <i class="fas fa-trash mr-2"></i> Xóa
-              </button>
-            </div>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              onclick="document.getElementById('contract-details-modal').classList.add('hidden')"
-            >
-              Đóng
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal for Delete Confirmation -->
-    <div
-      id="delete-confirm-modal"
-      class="fixed inset-0 z-50 hidden overflow-y-auto"
-    >
-      <div
-        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <span
-          class="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-          >&#8203;</span
-        >
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-        >
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div
-                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
-              >
-                <i class="fas fa-exclamation-triangle text-red-600"></i>
-              </div>
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                <h3 class="text-lg leading-6 font-medium text-gray-900">
-                  Xác nhận xóa
-                </h3>
-                <div class="mt-2">
-                  <p class="text-sm text-gray-500">
-                    Bạn có chắc chắn muốn xóa hợp đồng này? Hành động này không
-                    thể hoàn tác.
+                <div>
+                  <p class="text-sm text-gray-500">Hàng hóa</p>
+                  <p class="text-sm font-medium text-gray-900">
+                    Thực phẩm đông lạnh
                   </p>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-              id="confirm-delete"
-            >
-              Xóa
-            </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              onclick="document.getElementById('delete-confirm-modal').classList.add('hidden')"
-            >
-              Hủy
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Modal for Edit Contract -->
-    <div
-      id="edit-contract-modal"
-      class="fixed inset-0 z-50 hidden overflow-y-auto"
-    >
-      <div
-        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <span
-          class="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-          >&#8203;</span
-        >
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
-        >
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <div class="flex justify-between items-start">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                    Chỉnh sửa hợp đồng
-                  </h3>
-                  <button
-                    onclick="document.getElementById('edit-contract-modal').classList.add('hidden')"
-                    class="text-gray-400 hover:text-gray-500"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                <form class="space-y-4">
+                <!-- Cost Calculations -->
+                <div class="border-t border-gray-200 pt-4">
+                  <h4 class="text-md font-bold text-primary mb-3">
+                    TÍNH TOÁN CHI PHÍ
+                  </h4>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Số hợp đồng</label
-                      >
-                      <input
-                        type="text"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        value="HD-2023-001"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Khách hàng</label
-                      >
-                      <select
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option>Công ty TNHH ABC</option>
-                        <option>Công ty CP XYZ</option>
-                        <option>Công ty TNHH DEF</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Ngày bắt đầu</label
-                      >
-                      <input
-                        type="date"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        value="2023-01-15"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Ngày kết thúc</label
-                      >
-                      <input
-                        type="date"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        value="2023-12-15"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Loại hợp đồng</label
-                      >
-                      <select
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option>Thuê theo diện tích</option>
-                        <option>Thuê theo tháng</option>
-                        <option>Thuê theo ngày</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Diện tích thuê (m²)</label
-                      >
-                      <input
-                        type="number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        value="150"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Trọng lượng thuê (kg)</label
-                      >
-                      <input
-                        type="number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        value="5000"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Đơn giá thuê</label
-                      >
-                      <div class="flex">
-                        <input
-                          type="number"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                          value="50000"
-                        />
-                        <span
-                          class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md"
-                          >đ/m²</span
-                        >
+                    <!-- Rental Cost -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <h5 class="text-sm font-medium text-gray-800 mb-2">
+                        Chi phí thuê kho bãi
+                      </h5>
+                      <div class="space-y-2">
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Diện tích thuê:</span>
+                          <span class="text-xs font-medium">150 m²</span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Đơn giá:</span>
+                          <span class="text-xs font-medium">50,000đ/m²</span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Thời gian thuê:</span>
+                          <span class="text-xs font-medium">11 tháng</span>
+                        </div>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <div class="flex justify-between">
+                          <span class="text-sm font-semibold">Tổng chi phí:</span>
+                          <span class="text-sm font-bold text-primary">82,500,000đ</span>
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Hàng hóa</label
-                      >
-                      <select
-                        multiple
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option value="Thực phẩm đông lạnh" selected>
-                          Thực phẩm đông lạnh
-                        </option>
-                        <option value="Hàng may mặc">Hàng may mặc</option>
-                        <option value="Điện tử">Điện tử</option>
-                        <option value="Gỗ">Gỗ</option>
-                        <option value="Vật liệu xây dựng">
-                          Vật liệu xây dựng
-                        </option>
-                        <option value="Hóa chất">Hóa chất</option>
-                      </select>
-                      <p class="text-xs text-gray-500 mt-1">
-                        Nhấn Ctrl/Cmd để chọn nhiều. Hàng hóa đã chọn: Thực phẩm
-                        đông lạnh
-                      </p>
+
+                    <!-- Service Cost -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <h5 class="text-sm font-medium text-gray-800 mb-2">
+                        Chi phí dịch vụ
+                      </h5>
+                      <div class="space-y-2">
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Trộn hàng:</span>
+                          <span class="text-xs font-medium">2,000,000đ</span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Đóng bao:</span>
+                          <span class="text-xs font-medium">1,500,000đ</span>
+                        </div>
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <div class="flex justify-between">
+                          <span class="text-sm font-semibold">Tổng chi phí:</span>
+                          <span class="text-sm font-bold text-primary">3,500,000đ</span>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Tỉ lệ hao hụt (%)</label
-                      >
-                      <input
-                        type="number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        value="1.5"
-                        step="0.1"
-                      />
+
+                    <!-- Loss Compensation -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <h5 class="text-sm font-medium text-gray-800 mb-2">
+                        Chi phí hao hụt
+                      </h5>
+                      <div class="space-y-2">
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Ngưỡng hao hụt:</span>
+                          <span class="text-xs font-medium">1.5%</span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Giá đền bù:</span>
+                          <span class="text-xs font-medium">200,000đ/kg</span>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Giá đền bù hao hụt</label
-                      >
-                      <div class="flex">
-                        <input
-                          type="number"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                          value="200000"
-                        />
-                        <span
-                          class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md"
-                          >đ/kg</span
-                        >
+
+                    <!-- Total Cost -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                      <h5 class="text-sm font-medium text-gray-800 mb-2">
+                        Tổng hợp chi phí
+                      </h5>
+                      <div class="space-y-2">
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Chi phí thuê:</span>
+                          <span class="text-xs font-medium">82,500,000đ</span>
+                        </div>
+                        <div class="flex justify-between">
+                          <span class="text-xs text-gray-600">Chi phí dịch vụ:</span>
+                          <span class="text-xs font-medium">3,500,000đ</span>
+                        </div>
+
+                        <div class="border-t border-gray-200 my-2"></div>
+                        <div class="flex justify-between">
+                          <span class="text-sm font-semibold">Tổng cộng:</span>
+                          <span class="text-sm font-bold text-primary">86,000,000đ</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Lưu thay đổi
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sm:items-center sm:justify-between">
+          <div class="flex space-x-2">
+            <button type="button"
+              class="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:w-auto sm:text-sm"
+              onclick="document.getElementById('contract-details-modal').classList.add('hidden'); document.getElementById('edit-contract-modal').classList.remove('hidden')">
+              <i class="fas fa-edit mr-2"></i> Sửa
             </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-              onclick="document.getElementById('edit-contract-modal').classList.add('hidden')"
-            >
-              Hủy bỏ
+            <button type="button"
+              class="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-success text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto sm:text-sm">
+              <i class="fas fa-calendar-plus mr-2"></i> Gia hạn
+            </button>
+            <button type="button"
+              class="inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-danger text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm">
+              <i class="fas fa-trash mr-2"></i> Xóa
             </button>
           </div>
+          <button type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+            onclick="document.getElementById('contract-details-modal').classList.add('hidden')">
+            Đóng
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Modal for New Contract -->
-    <div
-      id="new-contract-modal"
-      class="fixed inset-0 z-50 hidden overflow-y-auto"
-    >
+  <!-- Modal for Delete Confirmation -->
+  <div id="delete-confirm-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
       <div
-        class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
-        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-          <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+              <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Xác nhận xóa
+              </h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  Bạn có chắc chắn muốn xóa hợp đồng này? Hành động này không
+                  thể hoàn tác.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <span
-          class="hidden sm:inline-block sm:align-middle sm:h-screen"
-          aria-hidden="true"
-          >&#8203;</span
-        >
-        <div
-          class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
-        >
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <div class="flex justify-between items-start">
-                  <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
-                    Thêm hợp đồng mới
-                  </h3>
-                  <button
-                    onclick="document.getElementById('new-contract-modal').classList.add('hidden')"
-                    class="text-gray-400 hover:text-gray-500"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-                <form class="space-y-4">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Số hợp đồng</label
-                      >
-                      <input
-                        type="text"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="HD-2023-XXX"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Khách hàng</label
-                      >
-                      <select
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option>Chọn khách hàng</option>
-                        <option>Công ty TNHH ABC</option>
-                        <option>Công ty CP XYZ</option>
-                        <option>Công ty TNHH DEF</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Ngày bắt đầu</label
-                      >
-                      <input
-                        type="date"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Ngày kết thúc</label
-                      >
-                      <input
-                        type="date"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Loại hợp đồng</label
-                      >
-                      <select
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option>Thuê theo tháng</option>
-                        <option>Thuê theo ngày</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Diện tích thuê (m²)</label
-                      >
-                      <input
-                        type="number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="150"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Trọng lượng thuê (kg)</label
-                      >
-                      <input
-                        type="number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="5000"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Đơn giá thuê</label
-                      >
-                      <div class="flex">
-                        <input
-                          type="number"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                          placeholder="50000"
-                        />
-                        <span
-                          class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md"
-                          >đ/m²</span
-                        >
-                      </div>
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Hàng hóa</label
-                      >
-                      <select
-                        multiple
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option>Thực phẩm đông lạnh</option>
-                        <option>Hàng may mặc</option>
-                        <option>Điện tử</option>
-                        <option>Gỗ</option>
-                        <option>Vật liệu xây dựng</option>
-                        <option>Hóa chất</option>
-                      </select>
-                      <p class="text-xs text-gray-500 mt-1">
-                        Nhấn Ctrl/Cmd để chọn nhiều
-                      </p>
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Tỉ lệ hao hụt (%)</label
-                      >
-                      <input
-                        type="number"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="1.5"
-                        step="0.1"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        class="block text-sm font-medium text-gray-700 mb-1"
-                        >Giá đền bù hao hụt</label
-                      >
-                      <div class="flex">
-                        <input
-                          type="number"
-                          class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                          placeholder="200000"
-                        />
-                        <span
-                          class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md"
-                          >đ/kg</span
-                        >
-                      </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+            id="confirm-delete">
+            Xóa
+          </button>
+          <button type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+            onclick="document.getElementById('delete-confirm-modal').classList.add('hidden')">
+            Hủy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Edit Contract -->
+  <div id="edit-contract-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div
+        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  Chỉnh sửa hợp đồng
+                </h3>
+                <button onclick="document.getElementById('edit-contract-modal').classList.add('hidden')"
+                  class="text-gray-400 hover:text-gray-500">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <form class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số hợp đồng</label>
+                    <input type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value="HD-2023-001" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Khách hàng</label>
+                    <select
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option>Công ty TNHH ABC</option>
+                      <option>Công ty CP XYZ</option>
+                      <option>Công ty TNHH DEF</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày bắt đầu</label>
+                    <input type="date"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value="2023-01-15" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày kết thúc</label>
+                    <input type="date"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value="2023-12-15" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Loại hợp đồng</label>
+                    <select
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option>Thuê theo diện tích</option>
+                      <option>Thuê theo tháng</option>
+                      <option>Thuê theo ngày</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Diện tích thuê (m²)</label>
+                    <input type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value="150" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Trọng lượng thuê (kg)</label>
+                    <input type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value="5000" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Đơn giá thuê</label>
+                    <div class="flex">
+                      <input type="number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        value="50000" />
+                      <span
+                        class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md">đ/m²</span>
                     </div>
                   </div>
-                </form>
-              </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Hàng hóa</label>
+                    <select multiple
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option value="Thực phẩm đông lạnh" selected>
+                        Thực phẩm đông lạnh
+                      </option>
+                      <option value="Hàng may mặc">Hàng may mặc</option>
+                      <option value="Điện tử">Điện tử</option>
+                      <option value="Gỗ">Gỗ</option>
+                      <option value="Vật liệu xây dựng">
+                        Vật liệu xây dựng
+                      </option>
+                      <option value="Hóa chất">Hóa chất</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">
+                      Nhấn Ctrl/Cmd để chọn nhiều. Hàng hóa đã chọn: Thực phẩm
+                      đông lạnh
+                    </p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tỉ lệ hao hụt (%)</label>
+                    <input type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      value="1.5" step="0.1" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Giá đền bù hao hụt</label>
+                    <div class="flex">
+                      <input type="number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        value="200000" />
+                      <span
+                        class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md">đ/kg</span>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button
-              type="button"
-              class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Lưu hợp đồng
-            </button>
-            <button
-              type="button"
-              class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            >
-              Hủy bỏ
-            </button>
-          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+            Lưu thay đổi
+          </button>
+          <button type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+            onclick="document.getElementById('edit-contract-modal').classList.add('hidden')">
+            Hủy bỏ
+          </button>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      // Toggle sidebar
-      document
-        .getElementById("toggle-sidebar")
-        .addEventListener("click", function () {
-          document.querySelector(".sidebar").classList.toggle("collapsed");
-        });
+  <!-- Modal for New Contract -->
+  <div id="new-contract-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div
+        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                  Thêm hợp đồng mới
+                </h3>
+                <button onclick="document.getElementById('new-contract-modal').classList.add('hidden')"
+                  class="text-gray-400 hover:text-gray-500">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <form class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số hợp đồng</label>
+                    <input type="text"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="HD-2023-XXX" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Khách hàng</label>
+                    <select
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option>Chọn khách hàng</option>
+                      <option>Công ty TNHH ABC</option>
+                      <option>Công ty CP XYZ</option>
+                      <option>Công ty TNHH DEF</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày bắt đầu</label>
+                    <input type="date"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ngày kết thúc</label>
+                    <input type="date"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Loại hợp đồng</label>
+                    <select
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option>Thuê theo tháng</option>
+                      <option>Thuê theo ngày</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Diện tích thuê (m²)</label>
+                    <input type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="150" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Trọng lượng thuê (kg)</label>
+                    <input type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="5000" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Đơn giá thuê</label>
+                    <div class="flex">
+                      <input type="number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        placeholder="50000" />
+                      <span
+                        class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md">đ/m²</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Hàng hóa</label>
+                    <select multiple
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                      <option>Thực phẩm đông lạnh</option>
+                      <option>Hàng may mặc</option>
+                      <option>Điện tử</option>
+                      <option>Gỗ</option>
+                      <option>Vật liệu xây dựng</option>
+                      <option>Hóa chất</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">
+                      Nhấn Ctrl/Cmd để chọn nhiều
+                    </p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tỉ lệ hao hụt (%)</label>
+                    <input type="number"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="1.5" step="0.1" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Giá đền bù hao hụt</label>
+                    <div class="flex">
+                      <input type="number"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        placeholder="200000" />
+                      <span
+                        class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 text-sm rounded-r-md">đ/kg</span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button"
+            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+            Lưu hợp đồng
+          </button>
+          <button type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+            Hủy bỏ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- insert script here -->
 
-      // Initialize charts
-      document.addEventListener("DOMContentLoaded", function () {
-        // Monthly Revenue Chart
-        const monthlyCtx = document
-          .getElementById("monthlyRevenueChart")
-          .getContext("2d");
-        const monthlyChart = new Chart(monthlyCtx, {
-          type: "bar",
-          data: {
-            labels: [
-              "Tháng 1",
-              "Tháng 2",
-              "Tháng 3",
-              "Tháng 4",
-              "Tháng 5",
-              "Tháng 6",
-              "Tháng 7",
-              "Tháng 8",
-              "Tháng 9",
-              "Tháng 10",
-              "Tháng 11",
-              "Tháng 12",
-            ],
-            datasets: [
-              {
-                label: "Doanh thu (triệu đồng)",
-                data: [
-                  120, 150, 180, 200, 220, 250, 280, 300, 290, 310, 320, 350,
-                ],
-                backgroundColor: "rgba(59, 130, 246, 0.7)",
-                borderColor: "rgba(59, 130, 246, 1)",
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
+
+  <!-- insert script here -->
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Initialize charts
+    document.addEventListener("DOMContentLoaded", function () {
+      // Monthly Revenue Chart
+      const monthlyCtx = document
+        .getElementById("monthlyRevenueChart")
+        .getContext("2d");
+      const monthlyChart = new Chart(monthlyCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "Tháng 1",
+            "Tháng 2",
+            "Tháng 3",
+            "Tháng 4",
+            "Tháng 5",
+            "Tháng 6",
+            "Tháng 7",
+            "Tháng 8",
+            "Tháng 9",
+            "Tháng 10",
+            "Tháng 11",
+            "Tháng 12",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu (triệu đồng)",
+              data: [
+                120, 150, 180, 200, 220, 250, 280, 300, 290, 310, 320, 350,
+              ],
+              backgroundColor: "rgba(59, 130, 246, 0.7)",
+              borderColor: "rgba(59, 130, 246, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
             },
           },
-        });
+        },
+      });
 
-        // Customer Revenue Chart
-        const customerCtx = document
-          .getElementById("customerRevenueChart")
-          .getContext("2d");
-        const customerChart = new Chart(customerCtx, {
-          type: "pie",
-          data: {
-            labels: [
-              "Công ty TNHH ABC",
-              "Công ty CP XYZ",
-              "Công ty TNHH DEF",
-              "Công ty TNHH GHI",
-              "Công ty CP JKL",
-            ],
-            datasets: [
-              {
-                label: "Doanh thu (triệu đồng)",
-                data: [350, 280, 200, 150, 120],
-                backgroundColor: [
-                  "rgba(59, 130, 246, 0.7)",
-                  "rgba(16, 185, 129, 0.7)",
-                  "rgba(245, 158, 11, 0.7)",
-                  "rgba(239, 68, 68, 0.7)",
-                  "rgba(100, 116, 139, 0.7)",
-                ],
-                borderColor: [
-                  "rgba(59, 130, 246, 1)",
-                  "rgba(16, 185, 129, 1)",
-                  "rgba(245, 158, 11, 1)",
-                  "rgba(239, 68, 68, 1)",
-                  "rgba(100, 116, 139, 1)",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-          },
-        });
+      // Customer Revenue Chart
+      const customerCtx = document
+        .getElementById("customerRevenueChart")
+        .getContext("2d");
+      const customerChart = new Chart(customerCtx, {
+        type: "pie",
+        data: {
+          labels: [
+            "Công ty TNHH ABC",
+            "Công ty CP XYZ",
+            "Công ty TNHH DEF",
+            "Công ty TNHH GHI",
+            "Công ty CP JKL",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu (triệu đồng)",
+              data: [350, 280, 200, 150, 120],
+              backgroundColor: [
+                "rgba(59, 130, 246, 0.7)",
+                "rgba(16, 185, 129, 0.7)",
+                "rgba(245, 158, 11, 0.7)",
+                "rgba(239, 68, 68, 0.7)",
+                "rgba(100, 116, 139, 0.7)",
+              ],
+              borderColor: [
+                "rgba(59, 130, 246, 1)",
+                "rgba(16, 185, 129, 1)",
+                "rgba(245, 158, 11, 1)",
+                "rgba(239, 68, 68, 1)",
+                "rgba(100, 116, 139, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        },
+      });
 
-        // Show contract details modal
-        document.querySelectorAll("button:has(i.fa-eye)").forEach((button) => {
-          button.addEventListener("click", function () {
-            const contractDetails = document.getElementById(
-              "contract-details-content"
-            ).innerHTML;
-            document.getElementById("contract-details-content").innerHTML =
-              contractDetails;
-            document
-              .getElementById("contract-details-modal")
-              .classList.remove("hidden");
-          });
+      // Show contract details modal
+      document.querySelectorAll("button:has(i.fa-eye)").forEach((button) => {
+        button.addEventListener("click", function () {
+          const contractDetails = document.getElementById(
+            "contract-details-content"
+          ).innerHTML;
+          document.getElementById("contract-details-content").innerHTML =
+            contractDetails;
+          document
+            .getElementById("contract-details-modal")
+            .classList.remove("hidden");
         });
+      });
 
-        // Show edit contract modal when clicking edit buttons
-        document.querySelectorAll("button:has(i.fa-edit)").forEach((button) => {
+      // Show edit contract modal when clicking edit buttons
+      document.querySelectorAll("button:has(i.fa-edit)").forEach((button) => {
+        button.addEventListener("click", function () {
+          document
+            .getElementById("edit-contract-modal")
+            .classList.remove("hidden");
+        });
+      });
+
+      // Close edit modal when clicking cancel or outside
+      document
+        .querySelectorAll("#edit-contract-modal button:not(:has(i))")
+        .forEach((button) => {
           button.addEventListener("click", function () {
             document
               .getElementById("edit-contract-modal")
-              .classList.remove("hidden");
+              .classList.add("hidden");
           });
         });
 
-        // Close edit modal when clicking cancel or outside
-        document
-          .querySelectorAll("#edit-contract-modal button:not(:has(i))")
-          .forEach((button) => {
-            button.addEventListener("click", function () {
-              document
-                .getElementById("edit-contract-modal")
-                .classList.add("hidden");
-            });
-          });
+      // Show new contract modal
+      document
+        .querySelector("button:has(i.fa-plus)")
+        .addEventListener("click", function () {
+          document
+            .getElementById("new-contract-modal")
+            .classList.remove("hidden");
+        });
 
-        // Show new contract modal
-        document
-          .querySelector("button:has(i.fa-plus)")
-          .addEventListener("click", function () {
+      // Handle delete confirmation
+      document
+        .querySelectorAll("button:has(i.fa-trash)")
+        .forEach((button) => {
+          button.addEventListener("click", function () {
+            const deleteModal = document.getElementById(
+              "delete-confirm-modal"
+            );
+            deleteModal.classList.remove("hidden");
+
+            // Store the clicked button for later reference
+            deleteModal._deleteButton = this;
+          });
+        });
+
+      // Confirm delete action
+      document
+        .getElementById("confirm-delete")
+        .addEventListener("click", function () {
+          const deleteModal = document.getElementById("delete-confirm-modal");
+          const deleteButton = deleteModal._deleteButton;
+
+          // Here you would normally make an AJAX call to delete the record
+          // For this example, we'll just remove the table row
+          const row = deleteButton.closest("tr");
+          row.parentNode.removeChild(row);
+
+          deleteModal.classList.add("hidden");
+        });
+
+      // Hide modal when clicking cancel or outside
+      document
+        .querySelectorAll("#new-contract-modal button:not(:has(i))")
+        .forEach((button) => {
+          button.addEventListener("click", function () {
             document
               .getElementById("new-contract-modal")
-              .classList.remove("hidden");
+              .classList.add("hidden");
           });
-
-        // Handle delete confirmation
-        document
-          .querySelectorAll("button:has(i.fa-trash)")
-          .forEach((button) => {
-            button.addEventListener("click", function () {
-              const deleteModal = document.getElementById(
-                "delete-confirm-modal"
-              );
-              deleteModal.classList.remove("hidden");
-
-              // Store the clicked button for later reference
-              deleteModal._deleteButton = this;
-            });
-          });
-
-        // Confirm delete action
-        document
-          .getElementById("confirm-delete")
-          .addEventListener("click", function () {
-            const deleteModal = document.getElementById("delete-confirm-modal");
-            const deleteButton = deleteModal._deleteButton;
-
-            // Here you would normally make an AJAX call to delete the record
-            // For this example, we'll just remove the table row
-            const row = deleteButton.closest("tr");
-            row.parentNode.removeChild(row);
-
-            deleteModal.classList.add("hidden");
-          });
-
-        // Hide modal when clicking cancel or outside
-        document
-          .querySelectorAll("#new-contract-modal button:not(:has(i))")
-          .forEach((button) => {
-            button.addEventListener("click", function () {
-              document
-                .getElementById("new-contract-modal")
-                .classList.add("hidden");
-            });
-          });
+        });
+    });
+  </script>
+  <script>
+    // Toggle sidebar
+    document
+      .getElementById("toggle-sidebar")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
       });
-    </script>
-  </body>
+
+    // Toggle user menu
+    document
+      .getElementById("user-menu-button")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("user-menu").classList.toggle("hidden");
+      });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
+  </script>
+</body>
+
 </html>
