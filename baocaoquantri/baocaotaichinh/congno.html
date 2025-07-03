@@ -434,16 +434,17 @@
 
       <main class="p-4">
         <!-- insert code here -->
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-lg font-bold text-gray-800">Quản lý công nợ</h2>
-          <div class="flex space-x-2">
-            <select class="text-sm border border-gray-300 rounded px-3 py-1">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+
+          <!-- Bộ lọc dropdown -->
+          <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+            <select class="w-full sm:w-auto text-sm border border-gray-300 rounded px-3 py-2">
               <option>Tất cả</option>
               <option selected>Đang nợ</option>
               <option>Đã thanh toán</option>
               <option>Quá hạn</option>
             </select>
-            <select class="text-sm border border-gray-300 rounded px-3 py-1">
+            <select class="w-full sm:w-auto text-sm border border-gray-300 rounded px-3 py-2">
               <option>Hôm nay</option>
               <option>Tuần này</option>
               <option selected>Tháng này</option>
@@ -529,6 +530,14 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div class="px-4 py-3 bg-gray-50 border-t flex items-center justify-between">
+            <div class="flex-1 flex justify-between sm:hidden">
+              <a href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+              <a href="#"
+                class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
+            </div>
             <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <p class="text-sm text-gray-700">
@@ -537,7 +546,7 @@
                   đến
                   <span class="font-medium">5</span>
                   của
-                  <span class="font-medium">12</span>
+                  <span class="font-medium">128</span>
                   kết quả
                 </p>
               </div>
@@ -545,32 +554,18 @@
                 <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                   <a href="#"
                     class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                    <span class="sr-only">Trước</span>
+                    <span class="sr-only">Previous</span>
                     <i class="fas fa-chevron-left"></i>
                   </a>
                   <a href="#" aria-current="page"
-                    class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                    1
-                  </a>
+                    class="z-10 bg-primary border-primary text-white relative inline-flex items-center px-4 py-2 border text-sm font-medium">1</a>
                   <a href="#"
-                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                    2
-                  </a>
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">2</a>
                   <a href="#"
-                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                    3
-                  </a>
-                  <span
-                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                    ...
-                  </span>
-                  <a href="#"
-                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                    8
-                  </a>
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">3</a>
                   <a href="#"
                     class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                    <span class="sr-only">Sau</span>
+                    <span class="sr-only">Next</span>
                     <i class="fas fa-chevron-right"></i>
                   </a>
                 </nav>
