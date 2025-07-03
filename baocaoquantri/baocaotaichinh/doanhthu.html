@@ -436,7 +436,7 @@
         <!-- <main class="w-full px-4 py-4 sm:px-6 sm:py-6"> -->
         <div class="bg-white rounded-lg shadow-sm p-3 sm:p-6 mb-4 sm:mb-6 border-l-4 border-indigo-500">
           <div class="mb-3 sm:mb-6">
-            <h1 class="text-xl sm:text-2xl font-bold">📊 Báo cáo doanh thu</h1>
+            <h1 class="text-xl sm:text-2xl font-bold">Báo cáo doanh thu</h1>
             <p class="text-xs sm:text-sm text-gray-500">Thống kê doanh thu theo thời gian và theo kênh bán hàng</p>
           </div>
 
@@ -507,52 +507,63 @@
                 </table>
 
               </div>
-              <div class="flex-1 flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-2 mt-2 sm:mt-4">
-                <div>
-                  <p class="text-xs sm:text-sm text-gray-700">
-                    Hiển thị
-                    <span class="font-medium">1</span>
-                    đến
-                    <span class="font-medium">5</span>
-                    của
-                    <span class="font-medium">12</span>
-                    kết quả
-                  </p>
+              <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div class="flex-1 flex justify-between sm:hidden">
+                  <a href="#"
+                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Trước
+                  </a>
+                  <a href="#"
+                    class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Sau
+                  </a>
                 </div>
-                <div>
-                  <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px text-xs sm:text-sm"
-                    aria-label="Pagination">
-                    <a href="#"
-                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                      <span class="sr-only">Trước</span>
-                      <i class="fas fa-chevron-left"></i>
-                    </a>
-                    <a href="#" aria-current="page"
-                      class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                      1
-                    </a>
-                    <a href="#"
-                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                      2
-                    </a>
-                    <a href="#"
-                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                      3
-                    </a>
-                    <!-- <span
-                          class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
-                          ...
-                        </span>
-                        <a href="#"
-                          class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                          8
-                        </a> -->
-                    <a href="#"
-                      class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                      <span class="sr-only">Sau</span>
-                      <i class="fas fa-chevron-right"></i>
-                    </a>
-                  </nav>
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                  <div>
+                    <p class="text-sm text-gray-700">
+                      Hiển thị
+                      <span class="font-medium">1</span>
+                      đến
+                      <span class="font-medium">10</span>
+                      của
+                      <span class="font-medium">78</span>
+                      kết quả
+                    </p>
+                  </div>
+                  <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <a href="#"
+                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Trước</span>
+                        <i class="fas fa-chevron-left"></i>
+                      </a>
+                      <a href="#" aria-current="page"
+                        class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        1
+                      </a>
+                      <a href="#"
+                        class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        2
+                      </a>
+                      <a href="#"
+                        class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        3
+                      </a>
+                      <span
+                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                        ...
+                      </span>
+                      <a href="#"
+                        class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        8
+                      </a>
+                      <a href="#"
+                        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <span class="sr-only">Sau</span>
+                        <i class="fas fa-chevron-right"></i>
+                      </a>
+                    </nav>
+                  </div>
                 </div>
               </div>
             </div>
@@ -606,23 +617,23 @@
       <!-- insert script here -->
 
 
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-          const sidebar = document.querySelector(".sidebar");
-    if (window.innerWidth < 768) {
-      sidebar.classList.add("collapsed");
-    }
-    // Toggle sidebar
-          document
-            .getElementById("toggle-sidebar")
-            .addEventListener("click", function () {
-              document.querySelector(".sidebar").classList.toggle("collapsed");
-            });
-          document
-            .getElementById("menu-btn")
-            .addEventListener("click", function () {
-              document.querySelector(".sidebar").classList.toggle("collapsed");
-            });
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+        const sidebar = document.querySelector(".sidebar");
+        if (window.innerWidth < 768) {
+          sidebar.classList.add("collapsed");
+        }
+        // Toggle sidebar
+        document
+          .getElementById("toggle-sidebar")
+          .addEventListener("click", function () {
+            document.querySelector(".sidebar").classList.toggle("collapsed");
+          });
+        document
+          .getElementById("menu-btn")
+          .addEventListener("click", function () {
+            document.querySelector(".sidebar").classList.toggle("collapsed");
+          });
 
         // Toggle user menu
         document
