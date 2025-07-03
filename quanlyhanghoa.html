@@ -53,6 +53,18 @@
         <tbody id="productTableBody" class="bg-white divide-y divide-gray-200"></tbody>
       </table>
     </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between mt-4">
+      <div class="text-sm text-gray-500">
+        Hiển thị <span id="startItem">1</span> đến <span id="endItem">8</span> của <span id="totalItems">0</span> sản phẩm
+      </div>
+      <div class="flex space-x-1">
+        <button id="prevPage" class="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50">&lt;</button>
+        <div id="pageNumbers" class="flex space-x-1"></div>
+        <button id="nextPage" class="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-50">&gt;</button>
+      </div>
+    </div>
   </div>
 
   <!-- Product Modal -->
@@ -182,24 +194,208 @@
 
 
   <script>
-    let products = [{
-      id: 1,
-      image: '',
-      name: 'Sản phẩm mẫu',
-      unit: 'Kg',
-      group: 'Thực phẩm',
-      type: 'Vật tư chính',
-      stockPrice: 50000,
-      stockAccount: '156',
-      costAccount: '632',
-      revenueAccount: '511',
-      minStock: 10,
-      maxStock: 100,
-      costPrice: 40000,
-      defaultPrice: 60000,
-      note: 'Sản phẩm demo',
-      active: true
-    }];
+    let products = [
+      {
+        id: 1,
+        image: '',
+        name: 'Sản phẩm mẫu',
+        unit: 'Kg',
+        group: 'Thực phẩm',
+        type: 'Vật tư chính',
+        stockPrice: 50000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 10,
+        maxStock: 100,
+        costPrice: 40000,
+        defaultPrice: 60000,
+        note: 'Sản phẩm demo',
+        active: true
+      },
+      {
+        id: 2,
+        image: '',
+        name: 'Gạo ST25',
+        unit: 'Kg',
+        group: 'Thực phẩm',
+        type: 'Lương thực',
+        stockPrice: 35000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 50,
+        maxStock: 500,
+        costPrice: 30000,
+        defaultPrice: 40000,
+        note: 'Gạo ngon nhất Việt Nam',
+        active: true
+      },
+      {
+        id: 3,
+        image: '',
+        name: 'Nước mắm Phú Quốc',
+        unit: 'Chai',
+        group: 'Gia vị',
+        type: 'Thực phẩm',
+        stockPrice: 80000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 20,
+        maxStock: 200,
+        costPrice: 60000,
+        defaultPrice: 90000,
+        note: 'Nước mắm nhĩ',
+        active: true
+      },
+      {
+        id: 4,
+        image: '',
+        name: 'Đường trắng',
+        unit: 'Kg',
+        group: 'Thực phẩm',
+        type: 'Gia vị',
+        stockPrice: 20000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 30,
+        maxStock: 300,
+        costPrice: 15000,
+        defaultPrice: 25000,
+        note: 'Đường tinh luyện',
+        active: true
+      },
+      {
+        id: 5,
+        image: '',
+        name: 'Cà phê Arabica',
+        unit: 'Kg',
+        group: 'Đồ uống',
+        type: 'Nguyên liệu',
+        stockPrice: 120000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 10,
+        maxStock: 100,
+        costPrice: 100000,
+        defaultPrice: 150000,
+        note: 'Cà phê hạt rang',
+        active: true
+      },
+      {
+        id: 6,
+        image: '',
+        name: 'Trà xanh',
+        unit: 'Hộp',
+        group: 'Đồ uống',
+        type: 'Thực phẩm',
+        stockPrice: 50000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 15,
+        maxStock: 150,
+        costPrice: 40000,
+        defaultPrice: 60000,
+        note: 'Trà túi lọc',
+        active: true
+      },
+      {
+        id: 7,
+        image: '',
+        name: 'Sữa đặc',
+        unit: 'Lon',
+        group: 'Sữa',
+        type: 'Thực phẩm',
+        stockPrice: 25000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 20,
+        maxStock: 200,
+        costPrice: 20000,
+        defaultPrice: 30000,
+        note: 'Sữa đặc có đường',
+        active: true
+      },
+      {
+        id: 8,
+        image: '',
+        name: 'Bột giặt OMO',
+        unit: 'Kg',
+        group: 'Hóa chất',
+        type: 'Vật tư',
+        stockPrice: 60000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 10,
+        maxStock: 100,
+        costPrice: 50000,
+        defaultPrice: 70000,
+        note: 'Bột giặt 3kg',
+        active: true
+      },
+      {
+        id: 9,
+        image: '',
+        name: 'Dầu ăn Neptune',
+        unit: 'Chai',
+        group: 'Thực phẩm',
+        type: 'Dầu thực vật',
+        stockPrice: 45000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 15,
+        maxStock: 150,
+        costPrice: 35000,
+        defaultPrice: 50000,
+        note: 'Dầu đậu nành',
+        active: true
+      },
+      {
+        id: 10,
+        image: '',
+        name: 'Mì gói Hảo Hảo',
+        unit: 'Thùng',
+        group: 'Thực phẩm',
+        type: 'Mì ăn liền',
+        stockPrice: 120000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 5,
+        maxStock: 50,
+        costPrice: 100000,
+        defaultPrice: 150000,
+        note: 'Thùng 30 gói',
+        active: true
+      },
+      {
+        id: 11,
+        image: '',
+        name: 'Bánh quy Cosy',
+        unit: 'Hộp',
+        group: 'Bánh kẹo',
+        type: 'Thực phẩm',
+        stockPrice: 35000,
+        stockAccount: '156',
+        costAccount: '632',
+        revenueAccount: '511',
+        minStock: 10,
+        maxStock: 100,
+        costPrice: 30000,
+        defaultPrice: 40000,
+        note: 'Bánh quy bơ',
+        active: true
+      }
+    ];
+    let currentPage = 1;
+    const itemsPerPage = 8;
     let editingId = null;
     let currentSort = { field: null, direction: 'asc' };
 
@@ -244,7 +440,60 @@ function updateSortIcons() {
 
     document.addEventListener('DOMContentLoaded', () => {
       renderProductTable();
+      setupPagination();
     });
+
+    function setupPagination() {
+      const pageNumbers = document.getElementById('pageNumbers');
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+      
+      function updatePagination() {
+        const totalPages = Math.ceil(products.length / itemsPerPage);
+        pageNumbers.innerHTML = '';
+        
+        for (let i = 1; i <= totalPages; i++) {
+          const pageBtn = document.createElement('button');
+          pageBtn.className = `px-3 py-1 border rounded ${currentPage === i ? 'bg-blue-500 text-white' : 'hover:bg-gray-100'}`;
+          pageBtn.textContent = i;
+          pageBtn.addEventListener('click', () => {
+            currentPage = i;
+            renderProductTable();
+            updatePagination();
+          });
+          pageNumbers.appendChild(pageBtn);
+        }
+        
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+        
+        // Update item count info
+        const startItem = (currentPage - 1) * itemsPerPage + 1;
+        const endItem = Math.min(currentPage * itemsPerPage, products.length);
+        document.getElementById('startItem').textContent = startItem;
+        document.getElementById('endItem').textContent = endItem;
+        document.getElementById('totalItems').textContent = products.length;
+      }
+      
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderProductTable();
+          updatePagination();
+        }
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(products.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderProductTable();
+          updatePagination();
+        }
+      });
+      
+      updatePagination();
+    }
 
     addProductBtn.addEventListener('click', () => {
       editingId = null;
@@ -291,8 +540,12 @@ function updateSortIcons() {
             });
         }
 
+        // Apply pagination
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const paginatedProducts = filtered.slice(startIndex, startIndex + itemsPerPage);
+        
         // Render bảng
-        filtered.forEach(product => {
+        paginatedProducts.forEach(product => {
             const row = document.createElement('tr');
             row.innerHTML = `
             <td class="px-6 py-4 whitespace-nowrap">

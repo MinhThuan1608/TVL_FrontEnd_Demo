@@ -17,7 +17,7 @@
       
       <div class="mb-4">
         <div class="relative w-[500px]">
-          <input type="text" id="searchInput" placeholder="Tìm kiếm nhân viên..." 
+          <input type="text" id="searchInput" placeholder="Tìm kiếm kho..." 
             class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <i class="fas fa-search text-gray-400"></i>
@@ -46,6 +46,22 @@
         </thead>
         <tbody id="warehouseTableBody" class="bg-white divide-y divide-gray-200"></tbody>
       </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between items-center mt-4">
+      <div class="text-sm text-gray-600">
+        Hiển thị <span id="startItem">1</span> đến <span id="endItem">8</span> của <span id="totalItems">0</span> kho
+      </div>
+      <div class="flex space-x-2">
+        <button id="prevPage" class="px-3 py-1 border rounded disabled:opacity-50" disabled>
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div id="pageNumbers" class="flex space-x-1"></div>
+        <button id="nextPage" class="px-3 py-1 border rounded disabled:opacity-50">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -132,6 +148,8 @@
     let currentSort = { field: null, direction: 'asc' };
     let warehouseToDelete = null;
     let currentWarehouseId = null;
+    let currentPage = 1;
+    const itemsPerPage = 8;
 
     const warehouseTableBody = document.getElementById('warehouseTableBody');
     const addWarehouseBtn = document.getElementById('addWarehouseBtn');
@@ -145,12 +163,15 @@
     const searchInput = document.getElementById('searchInput');
 
     document.addEventListener('DOMContentLoaded', () => {
-      warehouses.push({
-        id: 1,
-        name: 'Kho Tổng Hà Nội',
-        code: 'KHO001',
-        address: 'Số 123 Đường Láng, Đống Đa, Hà Nội'
-      });
+      // Add sample warehouses
+      for (let i = 1; i <= 5; i++) {
+        warehouses.push({
+          id: i,
+          name: `Kho TVL ${i}`,
+          code: `TVL0${i}`,
+          address: `Địa chỉ kho TVL ${i}`
+        });
+      }
       
       // Add sample shelf groups
       shelfGroups.push(
@@ -172,6 +193,22 @@
 
 
     function setupEventListeners() {
+      // Pagination buttons
+      document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderWarehouseTable();
+        }
+      });
+
+      document.getElementById('nextPage').addEventListener('click', () => {
+        const totalPages = Math.ceil(warehouses.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderWarehouseTable();
+        }
+      });
+
       // Warehouse row click handler
       document.getElementById('warehouseTableBody').addEventListener('click', (e) => {
         if (!e.target.closest('.edit-btn') && !e.target.closest('.delete-btn')) {
@@ -228,7 +265,36 @@
         w.name.toLowerCase().includes(keyword) || w.code.toLowerCase().includes(keyword)
       );
 
-      filtered.forEach(warehouse => {
+      // Update pagination info
+      const totalPages = Math.ceil(filtered.length / itemsPerPage);
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const endIdx = Math.min(startIdx + itemsPerPage, filtered.length);
+      const paginatedItems = filtered.slice(startIdx, endIdx);
+
+      document.getElementById('startItem').textContent = startIdx + 1;
+      document.getElementById('endItem').textContent = endIdx;
+      document.getElementById('totalItems').textContent = filtered.length;
+
+      // Render page numbers
+      const pageNumbers = document.getElementById('pageNumbers');
+      pageNumbers.innerHTML = '';
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `px-3 py-1 border rounded ${currentPage === i ? 'bg-blue-600 text-white' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.addEventListener('click', () => {
+          currentPage = i;
+          renderWarehouseTable();
+        });
+        pageNumbers.appendChild(pageBtn);
+      }
+
+      // Enable/disable prev/next buttons
+      document.getElementById('prevPage').disabled = currentPage === 1;
+      document.getElementById('nextPage').disabled = currentPage === totalPages;
+
+      // Render table rows
+      paginatedItems.forEach(warehouse => {
         const row = document.createElement('tr');
         row.className = 'hover:bg-gray-50 cursor-pointer';
         row.innerHTML = `
