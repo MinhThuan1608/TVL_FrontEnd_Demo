@@ -151,7 +151,7 @@
 <body class="bg-gray-50">
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <div class="sidebar bg-white shadow-md w-64 flex flex-col">
+    <div class="sidebar bg-white shadow-md w-64 flex flex-col collapsed md:thuan">
       <div class="p-4 flex items-center justify-between border-b">
         <div class="flex items-center">
           <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
@@ -318,7 +318,7 @@
                 <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                  <span class="nav-text">Tổng quan</span>
+                  <span class="nav-text">Báo cáo hàng ngày</span>
                 </a>
               </li>
             </ul>
@@ -485,7 +485,7 @@
         </div>
 
         <!-- Warehouse List -->
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="bg-white rounded-lg shadow overflow-auto">
           <div class="px-6 py-4 border-b border-gray-200">
             <h2 class="text-xl font-semibold text-gray-800">Danh sách các kho</h2>
             <p class="text-gray-600 text-sm">Tổng cộng 5 kho trong cụm</p>
@@ -493,7 +493,7 @@
 
           <!-- Table Header (Desktop) -->
           <div
-            class="hidden md:grid grid-cols-12 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider">
+            class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[500px]">
             <div class="col-span-4">Tên kho</div>
             <div class="col-span-2 text-center cursor-pointer"><span>Tổng KL<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(tấn)</span></span></div>
@@ -505,13 +505,13 @@
           </div>
 
           <!-- Warehouse Items -->
-          <div id="warehouseList" class="divide-y divide-gray-200">
+          <div id="warehouseList" class="divide-y divide-gray-200 min-w-[500px]">
             <!-- Warehouse items will be added here by JavaScript -->
           </div>
 
           <!-- Pagination -->
           <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-            <div class="text-sm text-gray-500">
+            <div class="hidden md:block text-sm text-gray-500">
               Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">5</span> của <span
                 class="font-medium">5</span> kho
             </div>
@@ -587,7 +587,7 @@
       const statusText = warehouse.status === 'active' ? 'Hoạt động' : 'Bảo trì';
 
       const warehouseItem = document.createElement('div');
-      warehouseItem.className = 'grid grid-cols-1 md:grid-cols-12 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer';
+      warehouseItem.className = 'grid grid-cols-12 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer';
       warehouseItem.innerHTML = `
                 <div class="col-span-4 mb-2 md:mb-0">
                     <div class="font-medium text-gray-900">${warehouse.name}</div>
