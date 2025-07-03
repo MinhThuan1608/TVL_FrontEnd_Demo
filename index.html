@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,79 +11,154 @@
         .gradient-bg {
             background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
             background-image: url('./logo6.jpg');
-            background-color: #374e5c; 
+            background-color: #374e5c;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-blend-mode: overlay; /* hoặc multiply, soft-light, screen, etc */
-            opacity: 0.85; /* độ mờ toàn bộ khối */
+            background-blend-mode: overlay;
+            /* hoặc multiply, soft-light, screen, etc */
+            opacity: 0.85;
+            /* độ mờ toàn bộ khối */
         }
-        .gradient-bg {
-            position: relative;
-            background-color: #174463; 
 
-        }
-        .gradient-bg1 {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
-        }
+        .gradient-bg {
+  position: relative;
+  background-color: #174463;
+}
+
+.gradient-bg1 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+}
+
 .gradient-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url('./logo6.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(9px);
-    opacity: 0.3;
-    z-index: 0;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('./logo6.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(9px);
+  opacity: 0.3;
+  z-index: 0;
 }
 
 .gradient-bg > * {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
 
-        .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .input-focus:focus {
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        .font-sans .min-h-screen .gradient-bg .flex img {
-               
-            width: 40px;       
-        }
-        .font-sans .min-h-screen .gradient-bg .mt-16{
-            margin-left: 25px;
-            color: #fdf8f8;
-        }
-        .font-sans .min-h-screen .gradient-bg .mt-16 p{
-            /* margin-left: 50px; */
-            color: #fdf8f8;
-            padding-top: 30px;
-            padding-left: 200px;
-        }
-        .hidden .flex{
-            margin-left: 330px;
-            padding-top: 400px; 
-        }
-         .font-sans .min-h-screen .gradient-bg .flex{
-            /* margin-top: 40px; */
-            padding-top: 230px;
-            padding-left: 100px;
-            justify-content: space-between;
+.card-shadow {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
 
-         }
+.input-focus:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Responsive Styles */
+.font-sans .min-h-screen .gradient-bg .flex img {
+  width: 40px;
+}
+
+.font-sans .min-h-screen .gradient-bg .mt-16 {
+  margin-left: 25px;
+  color: #fdf8f8;
+}
+
+.font-sans .min-h-screen .gradient-bg .mt-16 p {
+  color: #fdf8f8;
+  padding-top: 30px;
+  padding-left: 200px;
+}
+
+/* Đây là phần đang gây lỗi lớn */
+.hidden .flex {
+  margin-left: 330px;
+  padding-top: 400px;
+}
+
+.font-sans .min-h-screen .gradient-bg .flex {
+  padding-top: 230px;
+  padding-left: 100px;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Cho các item xuống hàng khi thiếu chỗ */
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+
+@media (max-width: 1024px) {
+  .font-sans .min-h-screen .gradient-bg .mt-16 p {
+    padding-left: 100px;
+    padding-top: 20px;
+  }
+
+  .hidden .flex {
+    margin-left: 100px;
+    padding-top: 200px;
+  }
+
+  .font-sans .min-h-screen .gradient-bg .flex {
+    padding-left: 50px;
+    padding-top: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .font-sans .min-h-screen .gradient-bg .mt-16 p {
+    padding-left: 30px;
+    padding-top: 10px;
+    font-size: 14px;
+  }
+
+  .hidden .flex {
+    margin-left: 0;
+    padding-top: 100px;
+    justify-content: center;
+  }
+
+  .font-sans .min-h-screen .gradient-bg .flex {
+    padding-left: 20px;
+    padding-top: 100px;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .font-sans .min-h-screen .gradient-bg .mt-16 {
+    margin-left: 10px;
+    text-align: center;
+  }
+
+  .font-sans .min-h-screen .gradient-bg .mt-16 p {
+    padding-left: 10px;
+    font-size: 12px;
+  }
+
+  .font-sans .min-h-screen .gradient-bg .flex img {
+    width: 30px;
+  }
+}
+
     </style>
 </head>
+
 <body class="font-sans bg-gray-50">
     <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Left Side - Branding and Info -->
@@ -92,16 +168,18 @@
                     <h1 class="text-6xl font-bold">Thorasen Vinama Logistics</h1>
                     <!-- <img class="logo" src="./logo.png" alt=""> -->
                 </div>
-                
+
                 <div class="mt-16 mb-8 text-center lg:text-left">
                     <h2 class="text-xl lg:text-1xl font-bold mb-"></h2>
-                    <p class="text-blue-100 text-1xl font-bold mb">"Với Thorasen Vinama Logistics, mỗi chuyến hàng không chỉ là vận chuyển
-                        <br> mà là một hành trình kết nối con người, quốc gia và giá trị bền vững."</p>
+                    <p class="text-blue-100 text-1xl font-bold mb">"Với Thorasen Vinama Logistics, mỗi chuyến hàng không
+                        chỉ là vận chuyển
+                        <br> mà là một hành trình kết nối con người, quốc gia và giá trị bền vững."
+                    </p>
                 </div>
             </div>
-                <div>
-                    <!-- <img src="./logo4.jpg" alt="" > -->
-                </div>
+            <div>
+                <!-- <img src="./logo4.jpg" alt="" > -->
+            </div>
             <div class="hidden lg:block relative">
                 <!-- <div class="flex space-x-4">
                     <div class="bg-blue-500 bg-opacity-30 p-4 rounded-lg animate-float">
@@ -115,12 +193,12 @@
                     </div>
                 </div> -->
             </div>
-            
+
             <div class="mt-8 text-sm text-blue-200">
-                
+
             </div>
         </div>
-        
+
         <!-- Right Side - Login Form -->
         <div class="lg:w-3/5 flex items-center justify-center p-10">
             <div class="w-full max-w-xl ">
@@ -129,20 +207,21 @@
                         <h2 class="text-3xl font-bold text-gray-800">Đăng Nhập</h2>
                         <!-- <p class="text-gray-600">Chào mừng trở lại</p> -->
                     </div>
-                    
+
                     <form id="loginForm" class="space-y-8 min-h-[400px]">
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Công ty</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Công
+                                ty</label>
                             <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-envelope text-gray-400"></i>
                                 </div>
-                                <input type="email" id="email" name="email" required 
-                                    class="pl-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus" 
+                                <input type="email" id="email" name="email" required
+                                    class="pl-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus"
                                     placeholder="your@company.com">
                             </div>
                         </div>
-                        
+
                         <div>
                             <div class="flex justify-between items-center mb-1">
                                 <label for="password" class="block text-sm font-medium text-gray-700">Mật Khẩu</label>
@@ -152,33 +231,36 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
-                                <input type="password" id="password" name="password" required 
-                                    class="pl-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus" 
+                                <input type="password" id="password" name="password" required
+                                    class="pl-10 w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-focus"
                                     placeholder="••••••••">
-                                <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600" id="togglePassword">
+                                <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                                    id="togglePassword">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div class="flex items-center">
-                            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <input id="remember-me" name="remember-me" type="checkbox"
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                             <label for="remember-me" class="ml-2 block text-sm text-gray-700">Lưu Thông Tin</label>
                         </div>
-                        
-                        <button type="submit" id="loginBtn" class="w-full gradient-bg1 text-white py-3 px-4 rounded-lg hover:opacity-90 transition duration-300 font-medium flex items-center justify-center">
+
+                        <button type="submit" id="loginBtn"
+                            class="w-full gradient-bg1 text-white py-3 px-4 rounded-lg hover:opacity-90 transition duration-300 font-medium flex items-center justify-center">
                             <span>Đăng Nhập</span>
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('loginBtn').addEventListener('click', function(e) {
+        document.getElementById('loginBtn').addEventListener('click', function (e) {
             e.preventDefault();
             // Handle login button click
             const email = document.getElementById('email').value;
@@ -192,10 +274,10 @@
 
 
         // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function() {
+        document.getElementById('togglePassword').addEventListener('click', function () {
             const passwordInput = document.getElementById('password');
             const icon = this.querySelector('i');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.remove('fa-eye');
@@ -206,35 +288,24 @@
                 icon.classList.add('fa-eye');
             }
         });
-        
+
         // Form submission
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
+
             // Here you would typically send the data to your server
             console.log('Login attempt with:', { email, password });
-            
+
             // Show a simple alert for demo purposes
             alert('Login functionality would be implemented here. Submitted: ' + email);
-            
-            // In a real application, you would:
-            // 1. Validate inputs
-            // 2. Send to authentication API
-            // 3. Handle response (redirect on success, show error on failure)//
-            //  3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)// 
-            // 3. Handle response (redirect on success, show error on failure)
-            
-            
+
+
+
         });
     </script>
 </body>
+
 </html>
