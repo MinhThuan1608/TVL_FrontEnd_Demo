@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Doanh thu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+
+<body class="bg-gray-100">
+  <main class="max-w-7xl mx-auto p-6">
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-indigo-500">
+      <div class="mb-6">
+        <h1 class="text-2xl font-bold">📊 Báo cáo doanh thu</h1>
+        <p class="text-sm text-gray-500">Thống kê doanh thu theo thời gian và theo kênh bán hàng</p>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Tổng doanh thu</p>
+          <h2 class="text-3xl font-bold text-green-600">1.200.000.000đ</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Doanh thu online</p>
+          <h2 class="text-3xl font-bold text-blue-600">650.000.000đ</h2>
+        </div>
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="text-sm text-gray-500">Doanh thu cửa hàng</p>
+          <h2 class="text-3xl font-bold text-yellow-600">550.000.000đ</h2>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="font-semibold mb-2">Doanh thu theo tháng</p>
+          <div class="relative h-72">
+            <canvas id="monthlyRevenueChart"></canvas>
+          </div>
+        </div>
+
+
+        <!-- Revenue Table -->
+        <div class="bg-white rounded-2xl shadow p-4">
+          <p class="font-semibold mb-4">Chi tiết doanh thu</p>
+          <div class="overflow-x-auto">
+            <table class="table-auto w-full text-sm">
+              <thead class="bg-gray-100">
+                <tr>
+                  <th class="p-2 text-left">Tháng</th>
+                  <th class="p-2 text-left">Online</th>
+                  <th class="p-2 text-left">Cửa hàng</th>
+                  <th class="p-2 text-left">Tổng</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="p-2">Tháng 5</td>
+                  <td class="p-2">200.000.000đ</td>
+                  <td class="p-2">180.000.000đ</td>
+                  <td class="p-2">380.000.000đ</td>
+                </tr>
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="p-2">Tháng 6</td>
+                  <td class="p-2">220.000.000đ</td>
+                  <td class="p-2">160.000.000đ</td>
+                  <td class="p-2">380.000.000đ</td>
+                </tr>
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="p-2">Tháng 7</td>
+                  <td class="p-2">230.000.000đ</td>
+                  <td class="p-2">210.000.000đ</td>
+                  <td class="p-2">440.000.000đ</td>
+                </tr>
+                <tr class="border-t hover:bg-gray-50">
+                  <td class="p-2">Tháng 8</td>
+                  <td class="p-2">250.000.000đ</td>
+                  <td class="p-2">290.000.000đ</td>
+                  <td class="p-2">410.000.000đ</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p class="text-sm text-gray-700">
+                  Hiển thị
+                  <span class="font-medium">1</span>
+                  đến
+                  <span class="font-medium">5</span>
+                  của
+                  <span class="font-medium">12</span>
+                  kết quả
+                </p>
+              </div>
+              <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                  <a href="#"
+                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Trước</span>
+                    <i class="fas fa-chevron-left"></i>
+                  </a>
+                  <a href="#" aria-current="page"
+                    class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    1
+                  </a>
+                  <a href="#"
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    2
+                  </a>
+                  <a href="#"
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    3
+                  </a>
+                  <span
+                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                    ...
+                  </span>
+                  <a href="#"
+                    class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    8
+                  </a>
+                  <a href="#"
+                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Sau</span>
+                    <i class="fas fa-chevron-right"></i>
+                  </a>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+
+  <script>
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: value => new Intl.NumberFormat('vi-VN').format(value)
+          }
+        }
+      }
+    };
+
+    new Chart(document.getElementById('monthlyRevenueChart'), {
+      type: 'line',
+      data: {
+        labels: ['Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8'],
+        datasets: [
+
+          {
+            label: 'Cho thuê kho',
+            data: [180000000, 160000000, 210000000, 500000000],
+            borderColor: '#facc15',
+            backgroundColor: 'rgba(250, 204, 21, 0.1)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      options: chartOptions
+    });
+
+  </script>
+</body>
+
+</html>
