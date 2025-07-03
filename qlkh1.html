@@ -261,12 +261,60 @@
     }
 
     .customer-table .flex {
-      margin-left: 1200px;
-      display: inline-flex;
+      /* margin-left: 150px; */
+      /* display: inline-flex; */
       gap: 8px;
-      /* Cách đều các nút */
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
       list-style: none;
       padding: 10px;
+    }
+     @media (max-width: 768px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      
+      .customer-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .customer-header input {
+        width: 100%;
+      }
+      
+      .form-popup {
+        width: 90%;
+        left: 5%;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .sidebar:not(.collapsed) {
+        width: 100%;
+        position: fixed;
+        z-index: 50;
+        height: 100%;
+      }
+      
+      .content {
+        margin-left: 0 !important;
+      }
+      
+      .sidebar.collapsed {
+        width: 60px;
+      }
+      
+      .customer-table h3 {
+        font-size: 1.1rem;
+      }
+      
+      .form-popup {
+        top: 20px;
+      }
     }
     
   </style>
@@ -592,9 +640,12 @@
                 <th>Thao tác</th>
               </tr>
             </thead>
+
             <tbody id="customerTable"></tbody>
+             
           </table>
-          <div id="pagination" class="flex"></div>
+            <div id="pagination" class="flex"></div>
+          
         </div>
 
 
