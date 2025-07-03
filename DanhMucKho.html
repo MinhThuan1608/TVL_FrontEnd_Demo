@@ -26,10 +26,12 @@
   <style>
     .sidebar {
       transition: all 0.3s ease;
+      z-index: 1000;
     }
 
     .sidebar.collapsed {
-      width: 70px;
+      width: 0px;
+      overflow: hidden;
     }
 
     .sidebar.collapsed .nav-text {
@@ -54,7 +56,7 @@
     }
 
     .sidebar.collapsed+.content {
-      margin-left: 10px;
+      margin-left: 0px;
     }
 
     .sidebar.collapsed #show-sidebar {
@@ -123,6 +125,17 @@
         opacity: 0.5;
       }
     }
+
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        width: 70px;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed+.content {
+        margin-left: 10px;
+      }
+    }
   </style>
   <!-- insert libs here -->
 
@@ -135,7 +148,7 @@
 <body class="bg-gray-50">
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <div class="sidebar bg-white shadow-md w-64 flex flex-col">
+    <div class="absolute md:static sidebar bg-white shadow-md w-64 flex flex-col collapsed md:thuan">
       <div class="p-4 flex items-center justify-between border-b">
         <div class="flex items-center">
           <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
@@ -302,7 +315,7 @@
                 <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                  <span class="nav-text">Tổng quan</span>
+                  <span class="nav-text">Báo cáo hàng ngày</span>
                 </a>
               </li>
             </ul>
@@ -381,6 +394,7 @@
     <!-- Main Content -->
     <div class="content flex-1 overflow-auto">
       <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+        <i class="fas fa-bars text-xl inline md:hidden" id="menu-btn"></i>
         <h1 class="text-xl font-semibold text-blue-800 uppercase">
           Quản lý kho
         </h1>
@@ -399,7 +413,7 @@
           <div>
             <div class="flex items-center cursor-pointer" id="user-menu-button">
               <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
-              <div class="nav-text">
+              <div class="hidden md:block nav-text">
                 <p class="text-sm font-medium text-gray-800">Admin</p>
                 <p class="text-xs text-gray-500">Quản trị hệ thống</p>
               </div>
@@ -957,6 +971,11 @@
     // Toggle sidebar
     document
       .getElementById("toggle-sidebar")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
+    document
+      .getElementById("menu-btn")
       .addEventListener("click", function () {
         document.querySelector(".sidebar").classList.toggle("collapsed");
       });

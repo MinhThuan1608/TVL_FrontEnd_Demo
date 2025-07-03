@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Cụm Kho</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .warehouse-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-2xl font-bold text-blue-800">CỤM KHO TVL 1</h1>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-orange-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Tổng số kho</p>
+                        <h3 class="text-2xl font-bold text-orange-600">5</h3>
+                    </div>
+                    <div class="bg-orange-100 p-3 rounded-full">
+                        <i class="fas fa-warehouse text-orange-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Tổng hàng</p>
+                        <h3 class="text-2xl font-bold text-blue-600">1,245.75 <span class="text-sm">tấn</span></h3>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-weight-hanging text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-red-600">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Hàng xá</p>
+                        <h3 class="text-2xl font-bold text-red-600">845.25 <span class="text-sm">tấn</span></h3>
+                    </div>
+                    <div class="bg-red-100 p-3 rounded-full">
+                        <i class="fas fa-wheat-awn text-red-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-600">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-gray-500 text-sm">Hàng bao</p>
+                        <h3 class="text-2xl font-bold text-green-600">400.50 <span class="text-sm">tấn</span></h3>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <i class="fas fa-boxes-stacked text-green-600 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warehouse List -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800">Danh sách các kho</h2>
+                <p class="text-gray-600 text-sm">Tổng cộng 5 kho trong cụm</p>
+            </div>
+
+            <!-- Table Header (Desktop) -->
+            <div
+                class="hidden md:grid grid-cols-12 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider">
+                <div class="col-span-4">Tên kho</div>
+                <div class="col-span-2 text-center cursor-pointer"><span>Tổng KL<i class="p-1 fas fa-sort"></i><br><span
+                            class="text-xs font-normal">(tấn)</span></span></div>
+                <div class="col-span-2 text-center cursor-pointer"><span>Hàng xá<i class="p-1 fas fa-sort"></i><br><span
+                            class="text-xs font-normal">(tấn)</span></span></div>
+                <div class="col-span-2 text-center cursor-pointer"><span>Hàng bao<i
+                            class="p-1 fas fa-sort"></i><br><span class="text-xs font-normal">(tấn)</span></span></div>
+                <div class="col-span-2 text-right cursor-pointer">Trạng thái</div>
+            </div>
+
+            <!-- Warehouse Items -->
+            <div id="warehouseList" class="divide-y divide-gray-200">
+                <!-- Warehouse items will be added here by JavaScript -->
+            </div>
+
+            <!-- Pagination -->
+            <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+                <div class="text-sm text-gray-500">
+                    Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">5</span> của <span
+                        class="font-medium">5</span> kho
+                </div>
+                <div class="flex space-x-2">
+                    <button class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 disabled" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="px-3 py-1 rounded-md bg-blue-600 text-white">
+                        1
+                    </button>
+                    <button class="px-3 py-1 rounded-md bg-gray-200 text-gray-700 disabled" disabled>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Warehouse data
+        const warehouses = [
+            {
+                name: "Kho A1",
+                totalWeight: 320.50,
+                bulkWeight: 250.75,
+                packagedWeight: 69.75,
+                status: "active",
+                capacity: 65
+            },
+            {
+                name: "Kho A2",
+                totalWeight: 280.25,
+                bulkWeight: 180.00,
+                packagedWeight: 100.25,
+                status: "active",
+                capacity: 56
+            },
+            {
+                name: "Kho B1",
+                totalWeight: 400.00,
+                bulkWeight: 300.50,
+                packagedWeight: 99.50,
+                status: "active",
+                capacity: 80
+            },
+            {
+                name: "Kho B2",
+                totalWeight: 145.00,
+                bulkWeight: 45.00,
+                packagedWeight: 100.00,
+                status: "maintenance",
+                capacity: 29
+            },
+            {
+                name: "Kho C1",
+                totalWeight: 100.00,
+                bulkWeight: 69.00,
+                packagedWeight: 31.00,
+                status: "active",
+                capacity: 20
+            }
+        ];
+
+        // Render warehouse list
+        const warehouseList = document.getElementById('warehouseList');
+
+        warehouses.forEach(warehouse => {
+            const statusClass = warehouse.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+            const statusText = warehouse.status === 'active' ? 'Hoạt động' : 'Bảo trì';
+
+            const warehouseItem = document.createElement('div');
+            warehouseItem.className = 'grid grid-cols-1 md:grid-cols-12 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer';
+            warehouseItem.innerHTML = `
+                <div class="col-span-4 mb-2 md:mb-0">
+                    <div class="font-medium text-gray-900">${warehouse.name}</div>
+                </div>
+                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
+                    <div class="font-medium text-sm text-center">${warehouse.totalWeight.toFixed(2)}</div>
+                </div>
+                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
+                    <div class="font-medium text-sm text-blue-600 text-center">${warehouse.bulkWeight.toFixed(2)}</div>
+                </div>
+                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
+                    <div class="font-medium text-sm text-purple-600 text-center">${warehouse.packagedWeight.toFixed(2)}</div>
+                </div>
+                <div class="col-span-2 md:text-right">
+                    <span class="px-2 py-1 text-xs rounded-full ${statusClass}">${statusText}</span>
+                </div>
+            `;
+            warehouseItem.onclick = function() {
+                window.location.href = `ChiTietKho.html`;
+            }
+
+            warehouseList.appendChild(warehouseItem);
+        });
+
+        // Add click event to warehouse items for mobile view
+        const warehouseItems = document.querySelectorAll('#warehouseList > div');
+        warehouseItems.forEach(item => {
+            item.addEventListener('click', function () {
+                if (window.innerWidth < 768) {
+                    this.classList.toggle('bg-gray-100');
+                    const details = this.querySelectorAll('div:not(:first-child)');
+                    details.forEach(detail => {
+                        detail.classList.toggle('hidden');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

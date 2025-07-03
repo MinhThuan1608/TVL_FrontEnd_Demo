@@ -166,7 +166,7 @@
                             <label for="remember-me" class="ml-2 block text-sm text-gray-700">Lưu Thông Tin</label>
                         </div>
                         
-                        <button type="submit" class="w-full gradient-bg1 text-white py-3 px-4 rounded-lg hover:opacity-90 transition duration-300 font-medium flex items-center justify-center">
+                        <button type="submit" id="loginBtn" class="w-full gradient-bg1 text-white py-3 px-4 rounded-lg hover:opacity-90 transition duration-300 font-medium flex items-center justify-center">
                             <span>Đăng Nhập</span>
                             <i class="fas fa-arrow-right ml-2"></i>
                         </button>
@@ -178,6 +178,19 @@
     </div>
 
     <script>
+        document.getElementById('loginBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Handle login button click
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (email && password && email === "user@gmail.com" && password === "123456") {
+                window.location.href = "QuanLyKho.html";
+            } else {
+                alert('Sai email hoặc mật khẩu.');
+            }
+        });
+
+
         // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');

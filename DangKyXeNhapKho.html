@@ -2,573 +2,937 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký xe vào kho</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .custom-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVL - Hệ thống quản lý kho bãi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#3b82f6",
+            secondary: "#64748b",
+            success: "#10b981",
+            danger: "#ef4444",
+            warning: "#f59e0b",
+            info: "#06b6d4",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .sidebar {
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
 
-        .section-title {
-            position: relative;
-            padding-left: 1rem;
-        }
+    .sidebar.collapsed {
+      width: 0px;
+      overflow: hidden;
+    }
 
-        .section-title:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #3b82f6;
-            border-radius: 2px;
-        }
+    .sidebar.collapsed .nav-text {
+      display: none;
+    }
 
-        .photo-upload {
-            border: 2px dashed #d1d5db;
-            transition: all 0.3s ease;
-        }
+    .sidebar.collapsed .logo-text {
+      display: none;
+    }
 
-        .photo-upload:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
+    .sidebar.collapsed>div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            /* Chiều rộng scrollbar */
-        }
+    .sidebar #show-sidebar {
+      display: none;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #73a7fc;
-            border-radius: 4px;
-            /* Màu nền */
-        }
+    .sidebar #close-sidebar {
+      display: inline;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            /* Màu của thanh kéo */
-            border-radius: 4px;
-        }
+    .sidebar.collapsed+.content {
+      margin-left: 0px;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-    </style>
+    .sidebar.collapsed #show-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed #close-sidebar {
+      display: none;
+    }
+
+    .sidebar.collapsed nav {
+      padding: 0.5rem;
+    }
+
+    .sidebar.collapsed nav li>a>i {
+      margin-right: 0;
+    }
+
+    .content {
+      transition: all 0.3s ease;
+    }
+
+    .table-container {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .chart-container {
+      height: 300px;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    #user-menu {
+      transition: all 0.2s ease;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        width: 70px;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed+.content {
+        margin-left: 10px;
+      }
+    }
+  </style>
+  <!-- insert libs here -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- insert libs here -->
+  <!-- insert style here -->
+  <style>
+    .custom-shadow {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .section-title {
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .section-title:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #3b82f6;
+      border-radius: 2px;
+    }
+
+    .photo-upload {
+      border: 2px dashed #d1d5db;
+      transition: all 0.3s ease;
+    }
+
+    .photo-upload:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      /* Chiều rộng scrollbar */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #73a7fc;
+      border-radius: 4px;
+      /* Màu nền */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #888;
+      /* Màu của thanh kéo */
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  </style>
+  <!-- insert style here -->
 </head>
 
 <body class="bg-gray-50">
+  <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <div class="flex flex-col fixed inset-y-0 left-0 w-64 bg-blue-800 text-white transform -translate-x-full transition-transform duration-200 ease-in-out z-50"
-        id="sidebar">
-        <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
-            <h1 class="text-lg font-bold">QUẢN LÝ KHO TVL</h1>
+    <div class="absolute md:static sidebar bg-white shadow-md w-64 flex flex-col collapsed md:thuan">
+      <div class="p-4 flex items-center justify-between border-b">
+        <div class="flex items-center">
+          <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
+          <span class="logo-text font-bold text-xl text-blue-800">WarehouseTVL</span>
         </div>
-        <nav class="mt-4 overflow-y-auto custom-scrollbar">
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Đăng ký xe</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhập kho</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản lý kho</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển trạng thái hàng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển kho</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Danh mục</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Kho</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhân viên</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Đơn vị tính</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xe</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hàng hóa</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý khách hàng</a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hợp đồng</a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Thanh toán</a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Danh mục cân</a>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản trị hệ thống</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý người dùng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý nhóm người dùng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý phân quyền</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Báo cáo quản trị</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo khách
-                        hàng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo công
-                        nợ</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Dashboard</a>
-                </div>
-            </div>
+        <button id="toggle-sidebar" class="text-gray-500 hover:text-gray-700">
+          <i id="close-sidebar" class="fas fa-chevron-left"></i>
+          <i id="show-sidebar" class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <nav class="p-4">
+          <!-- Đăng ký xe -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Đăng ký xe
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyDangKyXe.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý đăng ký xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeNhapKho.html"
+                  class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Nhập kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeXuatKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                  <span class="nav-text">Xuất kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+          <!-- Quản lý kho -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Kho bãi
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-exchange-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Danh mục -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Danh mục
+            </p>
+            <ul>
+              <li>
+                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-warehouse fa-fw mr-3"></i>
+                  <span class="nav-text">Kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucNhanVien.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user fa-fw mr-3"></i>
+                  <span class="nav-text">Nhân viên</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucDonVitinh.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                  <span class="nav-text">Đơn vị tính</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-truck fa-fw mr-3"></i>
+                  <span class="nav-text">Xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucHangHoa.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Hàng hóa</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Trạm cân</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Khách hàng -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Khách hàng
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKhachHang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý khách hàng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Hợp đồng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quản trị hệ thống -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Quản trị hệ thống
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý người dùng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý role</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tổng quan -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tổng quan
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Báo cáo hàng ngày</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tài chính -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tài chính
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Chi phí</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/congno.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Lợi nhuận</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tồn kho -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tồn kho
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo khách hàng</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </nav>
+      </div>
     </div>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm transition-all duration-200 ease-in-out z-50" id="header">
-        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <!-- Sidebar toggle button -->
-                <button class="text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleSidebar()">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                <h1 class="text-xl font-bold text-gray-800 uppercase">Đăng ký xe nhập kho</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="relative">
-                    <button class="text-gray-600 hover:text-gray-800">
-                        <i class="fas fa-bell text-xl"></i>
-                        <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                    </button>
-                </div>
-                <div class="flex items-center">
-                    <img class="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt="">
-                    <span class="ml-2 text-gray-700 font-medium">Nguyễn Văn Admin</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-200 ease-in-out z-50"
-        id="main-content">
-        <div class="">
-            <!-- Form Title -->
-            
-
-            <!-- Form Content -->
-            <div class="">
-                <!-- Thông tin xe và tài xế -->
-                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
-                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN XE VÀ TÀI XẾ</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="licensePlate" class="block text-sm font-medium text-gray-700 mb-1">Biển số
-                                xe</label>
-                            <input list="licensePlates" id="licensePlate" name="licensePlate"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
-
-                            <datalist id="licensePlates">
-                                <option value="29A-11111">
-                                <option value="29A-22222">
-                                <option value="29A-33333">
-                                <option value="29A-44444">
-                                <option value="29A-55555">
-                            </datalist>
-                        </div>
-                        <div>
-                            <label for="driverName" class="block text-sm font-medium text-gray-700 mb-1">Tên tài
-                                xế</label>
-                            <input list="driverNames" id="driverName" name="driverName"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
-
-                            <datalist id="driverNames">
-                                <option value="Nguyễn Văn A">
-                                <option value="Nguyễn Văn B">
-                                <option value="Nguyễn Văn C">
-                                <option value="Nguyễn Văn D">
-                                <option value="Nguyễn Văn E">
-                            </datalist>
-                        </div>
-                        <div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thông tin cân tại cảng -->
-                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
-                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN CÂN TẠI CẢNG</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Hình ảnh phiếu cân cảng</label>
-                            <div class="photo-upload rounded-lg p-4 text-center cursor-pointer">
-                                <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-sm text-gray-500">Nhấn để tải lên hình ảnh phiếu cân</p>
-                                <input type="file" id="portWeightImage" name="portWeightImage" class="hidden"
-                                    accept="image/*">
-                            </div>
-                        </div>
-                        <div>
-                            <label for="shipName" class="block text-sm font-medium text-gray-700 mb-1">Tên tàu</label>
-                            <input type="text" id="shipName" name="shipName"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="trailerNumber" class="block text-sm font-medium text-gray-700 mb-1">Số
-                                mooc</label>
-                            <input type="text" id="trailerNumber" name="trailerNumber"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="portWeightFull" class="block text-sm font-medium text-gray-700 mb-1">Cân xe hàng
-                                (kg)</label>
-                            <input type="number" id="portWeightFull" name="portWeightFull"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="portWeightEmpty" class="block text-sm font-medium text-gray-700 mb-1">Cân xe
-                                rỗng (kg)</label>
-                            <input type="number" id="portWeightEmpty" name="portWeightEmpty"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div class="">
-                            <label for="portWeightCargo" class="block text-sm font-medium text-gray-700 mb-1">Trọng
-                                lượng hàng (kg)</label>
-                            <input type="number" id="portWeightCargo" name="portWeightCargo"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                readonly>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Thông tin cân tại kho -->
-                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
-                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN CÂN TẠI KHO</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="warehouseWeightIn" class="block text-sm font-medium text-gray-700 mb-1">Trọng
-                                lượng xe vào (kg)</label>
-                            <input type="number" id="warehouseWeightIn" name="warehouseWeightIn"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="timeIn" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe vào</label>
-                            <input type="datetime-local" id="timeIn" name="timeIn"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="warehouseWeightOut" class="block text-sm font-medium text-gray-700 mb-1">Trọng
-                                lượng xe ra (kg)</label>
-                            <input type="number" id="warehouseWeightOut" name="warehouseWeightOut"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="timeOut" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe ra</label>
-                            <input type="datetime-local" id="timeOut" name="timeOut"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label for="warehouseWeightCargo" class="block text-sm font-medium text-gray-700 mb-1">Trọng
-                                lượng hàng (kg)</label>
-                            <input type="number" id="warehouseWeightCargo" name="warehouseWeightCargo"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                                readonly>
-                        </div>
-
-
-                        <div>
-                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
-                            <textarea id="notes" name="notes" rows="3"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Thông tin hàng hóa -->
-                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
-                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN HÀNG HÓA</h3>
-
-                    <!-- Danh sách hợp đồng -->
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Chọn hợp đồng</label>
-                        <div class="flex flex-wrap gap-2" id="contract-list">
-                            <!-- Các hợp đồng sẽ được thêm ở đây bằng JS -->
-                        </div>
-                        <button type="button" onclick="addContract()"
-                            class="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200">
-                            <i class="fas fa-plus mr-1"></i> Thêm hợp đồng
-                        </button>
-                    </div>
-
-                    <!-- Danh sách sản phẩm theo hợp đồng -->
-                    <div id="products-container">
-                        <!-- Các nhóm sản phẩm theo hợp đồng sẽ được thêm ở đây -->
-                    </div>
-                </div>
-
+    <div class="content flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+        <i class="fas fa-bars text-xl inline md:hidden" id="menu-btn"></i>
+        <h1 class="text-xl font-semibold text-blue-800 uppercase">
+          Đăng ký xe nhập kho
+        </h1>
+        <div class="flex item-right gap-4">
+          <div class="hidden md:flex items-center space-x-4">
+            <div class="relative">
+              <input type="text" placeholder="Tìm kiếm..."
+                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
+            <button class="p-2 text-gray-500 hover:text-gray-700">
+              <i class="fas fa-bell"></i>
+            </button>
+          </div>
 
-            <!-- Form Actions -->
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
-                <button type="button"
-                    class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Hủy bỏ
-                </button>
-                <button type="button" onclick="addTruckRegistration()"
-                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    Lưu thông tin
-                </button>
-                <button type="button"
-                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                    In phiếu cân
-                </button>
+          <div>
+            <div class="flex items-center cursor-pointer" id="user-menu-button">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
+              <div class="hidden md:block nav-text">
+                <p class="text-sm font-medium text-gray-800">Admin</p>
+                <p class="text-xs text-gray-500">Quản trị hệ thống</p>
+              </div>
+              <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
             </div>
+            <!-- Dropdown menu -->
+            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              <a href="./ChangePassword.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thay đổi
+                mật khẩu</a>
+              <a href="./index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+            </div>
+          </div>
         </div>
-    </main>
+      </header>
 
-    <script>
-        // Close sidebar when clicking outside
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.querySelector('[onclick="toggleSidebar()"]');
+      <main class="p-4">
+        <!-- insert code here -->
+        <div class="">
+          <!-- Form Title -->
 
-            // Check if click is outside sidebar and not on toggle button
-            if (!sidebar.contains(event.target) && event.target !== sidebarToggle && !sidebarToggle.contains(event.target)) {
-                sidebar.classList.add('-translate-x-full');
-            }
-        });
 
-        // Tính toán trọng lượng hàng tự động
-        document.getElementById('portWeightFull').addEventListener('input', calculatePortCargoWeight);
-        document.getElementById('portWeightEmpty').addEventListener('input', calculatePortCargoWeight);
-        document.getElementById('warehouseWeightIn').addEventListener('input', calculateWarehouseCargoWeight);
-        document.getElementById('warehouseWeightOut').addEventListener('input', calculateWarehouseCargoWeight);
+          <!-- Form Content -->
+          <div class="">
+            <!-- Thông tin xe và tài xế -->
+            <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+              <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN XE VÀ TÀI XẾ</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="licensePlate" class="block text-sm font-medium text-gray-700 mb-1">Biển số
+                    xe</label>
+                  <input list="licensePlates" id="licensePlate" name="licensePlate"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
 
-        function calculatePortCargoWeight() {
-            const full = parseFloat(document.getElementById('portWeightFull').value) || 0;
-            const empty = parseFloat(document.getElementById('portWeightEmpty').value) || 0;
-            const cargoWeight = full - empty;
-            document.getElementById('portWeightCargo').value = cargoWeight > 0 ? cargoWeight : 0;
-        }
+                  <datalist id="licensePlates">
+                    <option value="29A-11111">
+                    <option value="29A-22222">
+                    <option value="29A-33333">
+                    <option value="29A-44444">
+                    <option value="29A-55555">
+                  </datalist>
+                </div>
+                <div>
+                  <label for="driverName" class="block text-sm font-medium text-gray-700 mb-1">Tên tài
+                    xế</label>
+                  <input list="driverNames" id="driverName" name="driverName"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
 
-        function calculateWarehouseCargoWeight() {
-            const weightIn = parseFloat(document.getElementById('warehouseWeightIn').value) || 0;
-            const weightOut = parseFloat(document.getElementById('warehouseWeightOut').value) || 0;
-            const cargoWeight = weightIn - weightOut;
-            document.getElementById('warehouseWeightCargo').value = cargoWeight > 0 ? cargoWeight : 0;
-        }
+                  <datalist id="driverNames">
+                    <option value="Nguyễn Văn A">
+                    <option value="Nguyễn Văn B">
+                    <option value="Nguyễn Văn C">
+                    <option value="Nguyễn Văn D">
+                    <option value="Nguyễn Văn E">
+                  </datalist>
+                </div>
+                <div>
 
-        // Xử lý tải lên hình ảnh
-        const photoUpload = document.querySelector('.photo-upload');
-        const fileInput = document.getElementById('portWeightImage');
+                </div>
+              </div>
+            </div>
 
-        photoUpload.addEventListener('click', () => {
-            fileInput.click();
-        });
+            <!-- Thông tin cân tại cảng -->
+            <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+              <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN CÂN TẠI CẢNG</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Hình ảnh phiếu cân cảng</label>
+                  <div class="photo-upload rounded-lg p-4 text-center cursor-pointer">
+                    <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
+                    <p class="text-sm text-gray-500">Nhấn để tải lên hình ảnh phiếu cân</p>
+                    <input type="file" id="portWeightImage" name="portWeightImage" class="hidden" accept="image/*">
+                  </div>
+                </div>
+                <div>
+                  <label for="shipName" class="block text-sm font-medium text-gray-700 mb-1">Tên tàu</label>
+                  <input type="text" id="shipName" name="shipName"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="trailerNumber" class="block text-sm font-medium text-gray-700 mb-1">Số
+                    mooc</label>
+                  <input type="text" id="trailerNumber" name="trailerNumber"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="portWeightFull" class="block text-sm font-medium text-gray-700 mb-1">Cân xe hàng
+                    (kg)</label>
+                  <input type="number" id="portWeightFull" name="portWeightFull"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="portWeightEmpty" class="block text-sm font-medium text-gray-700 mb-1">Cân xe
+                    rỗng (kg)</label>
+                  <input type="number" id="portWeightEmpty" name="portWeightEmpty"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div class="">
+                  <label for="portWeightCargo" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                    lượng hàng (kg)</label>
+                  <input type="number" id="portWeightCargo" name="portWeightCargo"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    readonly>
+                </div>
 
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                const fileName = e.target.files[0].name;
-                photoUpload.innerHTML = `
+              </div>
+            </div>
+
+            <!-- Thông tin cân tại kho -->
+            <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+              <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN CÂN TẠI KHO</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="warehouseWeightIn" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                    lượng xe vào (kg)</label>
+                  <input type="number" id="warehouseWeightIn" name="warehouseWeightIn"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="timeIn" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe vào</label>
+                  <input type="datetime-local" id="timeIn" name="timeIn"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="warehouseWeightOut" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                    lượng xe ra (kg)</label>
+                  <input type="number" id="warehouseWeightOut" name="warehouseWeightOut"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="timeOut" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe ra</label>
+                  <input type="datetime-local" id="timeOut" name="timeOut"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                  <label for="warehouseWeightCargo" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                    lượng hàng (kg)</label>
+                  <input type="number" id="warehouseWeightCargo" name="warehouseWeightCargo"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    readonly>
+                </div>
+
+
+                <div>
+                  <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
+                  <textarea id="notes" name="notes" rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Thông tin hàng hóa -->
+            <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+              <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN HÀNG HÓA</h3>
+
+              <!-- Danh sách hợp đồng -->
+              <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Chọn hợp đồng</label>
+                <div class="flex flex-wrap gap-2" id="contract-list">
+                  <!-- Các hợp đồng sẽ được thêm ở đây bằng JS -->
+                </div>
+                <button type="button" onclick="addContract()"
+                  class="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200">
+                  <i class="fas fa-plus mr-1"></i> Thêm hợp đồng
+                </button>
+              </div>
+
+              <!-- Danh sách sản phẩm theo hợp đồng -->
+              <div id="products-container">
+                <!-- Các nhóm sản phẩm theo hợp đồng sẽ được thêm ở đây -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Form Actions -->
+          <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
+            <button type="button"
+              class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Hủy bỏ
+            </button>
+            <button type="button" onclick="addTruckRegistration()"
+              class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Lưu thông tin
+            </button>
+            <button type="button"
+              class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+              In phiếu cân
+            </button>
+          </div>
+        </div>
+        <!-- insert code here -->
+      </main>
+    </div>
+  </div>
+
+  <!-- insert script here -->
+  <script>
+    // Close sidebar when clicking outside
+    document.addEventListener('click', function (event) {
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.querySelector('[onclick="toggleSidebar()"]');
+
+      // Check if click is outside sidebar and not on toggle button
+      if (!sidebar.contains(event.target) && event.target !== sidebarToggle && !sidebarToggle.contains(event.target)) {
+        sidebar.classList.add('-translate-x-full');
+      }
+    });
+
+    // Tính toán trọng lượng hàng tự động
+    document.getElementById('portWeightFull').addEventListener('input', calculatePortCargoWeight);
+    document.getElementById('portWeightEmpty').addEventListener('input', calculatePortCargoWeight);
+    document.getElementById('warehouseWeightIn').addEventListener('input', calculateWarehouseCargoWeight);
+    document.getElementById('warehouseWeightOut').addEventListener('input', calculateWarehouseCargoWeight);
+
+    function calculatePortCargoWeight() {
+      const full = parseFloat(document.getElementById('portWeightFull').value) || 0;
+      const empty = parseFloat(document.getElementById('portWeightEmpty').value) || 0;
+      const cargoWeight = full - empty;
+      document.getElementById('portWeightCargo').value = cargoWeight > 0 ? cargoWeight : 0;
+    }
+
+    function calculateWarehouseCargoWeight() {
+      const weightIn = parseFloat(document.getElementById('warehouseWeightIn').value) || 0;
+      const weightOut = parseFloat(document.getElementById('warehouseWeightOut').value) || 0;
+      const cargoWeight = weightIn - weightOut;
+      document.getElementById('warehouseWeightCargo').value = cargoWeight > 0 ? cargoWeight : 0;
+    }
+
+    // Xử lý tải lên hình ảnh
+    const photoUpload = document.querySelector('.photo-upload');
+    const fileInput = document.getElementById('portWeightImage');
+
+    photoUpload.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        const fileName = e.target.files[0].name;
+        photoUpload.innerHTML = `
                     <i class="fas fa-check-circle text-3xl text-green-500 mb-2"></i>
                     <p class="text-sm text-gray-700">${fileName}</p>
                     <p class="text-xs text-gray-500">Nhấn để thay đổi</p>
                 `;
-            }
+      }
+    });
+
+    // Sidebar toggle function
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const header = document.getElementById('header');
+      const mainContent = document.getElementById('main-content');
+      sidebar.classList.toggle('md:translate-x-0');
+      header.classList.toggle('md:ml-64');
+      mainContent.classList.toggle('md:ml-64');
+    }
+
+    // Dữ liệu mẫu hợp đồng và sản phẩm
+    const contracts = [
+      {
+        id: 1, name: "HĐ-2023-001", products: [
+          { id: 1, name: "Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông", unit: "m3" },
+          { id: 2, name: "Gỗ sồi", unit: "m3" }
+        ]
+      },
+      {
+        id: 2, name: "HĐ-2023-002", products: [
+          { id: 3, name: "Xi măng", unit: "bao" },
+          { id: 4, name: "Cát xây dựng", unit: "m3" }
+        ]
+      },
+      {
+        id: 3, name: "HĐ-2023-003", products: [
+          { id: 5, name: "Sắt thép", unit: "kg" },
+          { id: 6, name: "Gạch ống", unit: "viên" }
+        ]
+      }
+    ];
+
+    // Thêm hợp đồng vào danh sách
+    function addContract(contractId = null) {
+      const contractList = document.getElementById('contract-list');
+      const productsContainer = document.getElementById('products-container');
+
+      // Tạo dropdown chọn hợp đồng
+      const select = document.createElement('select');
+      select.className = 'contract-select px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500';
+      select.onchange = function () { loadProducts(this); };
+
+      // Thêm option mặc định
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '';
+      defaultOption.textContent = '--- Chọn hợp đồng ---';
+      select.appendChild(defaultOption);
+
+      // Thêm các hợp đồng vào dropdown
+      contracts.forEach(contract => {
+        const option = document.createElement('option');
+        option.value = contract.id;
+        option.textContent = contract.name;
+        option.dataset.products = JSON.stringify(contract.products);
+        select.appendChild(option);
+      });
+
+      // Nếu có contractId, chọn hợp đồng đó
+      if (contractId) {
+        select.value = contractId;
+        loadProducts(select);
+      }
+
+      // Thêm vào danh sách
+      const div = document.createElement('div');
+      div.className = 'contract-item flex items-center gap-2 bg-gray-100 p-2 rounded';
+      div.appendChild(select);
+
+      // Nút xóa
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+      deleteBtn.className = 'delete-contract';
+      deleteBtn.onclick = function () {
+        div.remove();
+        console.log(`Đã xóa hợp đồng ID: ${contractId}`);
+        // Xóa phần sản phẩm tương ứng nếu có
+        const productGroup = document.getElementById(`products-${contractId}`);
+        if (productGroup) productGroup.remove();
+      };
+      div.appendChild(deleteBtn);
+
+      contractList.appendChild(div);
+    }
+
+    // Tải sản phẩm theo hợp đồng
+    function loadProducts(select) {
+      const contractId = select.value;
+      if (!contractId) return;
+
+      const productsContainer = document.getElementById('products-container');
+      const productGroupId = `products-${contractId}`;
+
+      // Xóa nhóm sản phẩm cũ nếu có
+      const oldGroup = document.getElementById(productGroupId);
+      if (oldGroup) oldGroup.remove();
+
+      // Lấy thông tin hợp đồng
+      const contract = contracts.find(c => c.id == contractId);
+      if (!contract) return;
+
+      // Tạo nhóm sản phẩm mới
+      const productGroup = document.createElement('table');
+      productGroup.id = productGroupId;
+      productGroup.className = 'product-group mb-6 p-4 border border-gray-200 rounded-lg';
+
+      // Tiêu đề nhóm
+      const title = document.createElement('h4');
+      title.className = 'font-medium text-gray-700 mb-3';
+      title.textContent = `Sản phẩm hợp đồng ${contract.name}`;
+      productGroup.appendChild(title);
+
+      // Danh sách sản phẩm
+      contract.products.forEach(product => {
+        const div = document.createElement('tr');
+        div.className = 'product-item mb-3';
+
+        const td1 = document.createElement('td');
+        // Label
+        const label = document.createElement('label');
+        label.htmlFor = `product-${contractId}-${product.id}`;
+        label.className = 'mr-2';
+        label.textContent = `${product.name} (${product.unit})`;
+        td1.appendChild(label);
+
+
+        const td2 = document.createElement('td');
+        // Số lượng
+        const qtyInput = document.createElement('input');
+        qtyInput.type = 'number';
+        qtyInput.name = `quantities[${contractId}][${product.id}]`;
+        qtyInput.placeholder = 'Số lượng';
+        qtyInput.className = 'ml-2 px-2 py-1 border border-gray-300 rounded w-24';
+        qtyInput.min = '0';
+        td2.appendChild(qtyInput);
+
+        div.appendChild(td1);
+        div.appendChild(td2);
+        productGroup.appendChild(div);
+      });
+
+      productsContainer.appendChild(productGroup);
+    }
+
+    // Đặt ngày mặc định cho các trường ngày tháng
+    document.addEventListener('DOMContentLoaded', () => {
+      const now = new Date();
+      const today = now.toISOString().substr(0, 10);
+      const timeString = now.toTimeString().substr(0, 5);
+
+      // Đặt giờ vào/ra mặc định là giờ hiện tại
+      document.getElementById('timeIn').value = `${today}T${timeString}`;
+      document.getElementById('timeOut').value = `${today}T${timeString}`;
+    });
+
+    // Hàm thêm đăng ký xe
+    function addTruckRegistration() {
+      const portWeightCargo = document.getElementById('portWeightCargo').value;
+      const warehouseWeightCargo = document.getElementById('warehouseWeightCargo').value;
+      if (portWeightCargo === '' || warehouseWeightCargo === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Vui lòng nhập đầy đủ thông tin cân xe và trọng lượng hàng.',
         });
-
-        // Sidebar toggle function
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const header = document.getElementById('header');
-            const mainContent = document.getElementById('main-content');
-            sidebar.classList.toggle('md:translate-x-0');
-            header.classList.toggle('md:ml-64');
-            mainContent.classList.toggle('md:ml-64');
-        }
-
-        // Dữ liệu mẫu hợp đồng và sản phẩm
-        const contracts = [
-            {
-                id: 1, name: "HĐ-2023-001", products: [
-                    { id: 1, name: "Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông", unit: "m3" },
-                    { id: 2, name: "Gỗ sồi", unit: "m3" }
-                ]
-            },
-            {
-                id: 2, name: "HĐ-2023-002", products: [
-                    { id: 3, name: "Xi măng", unit: "bao" },
-                    { id: 4, name: "Cát xây dựng", unit: "m3" }
-                ]
-            },
-            {
-                id: 3, name: "HĐ-2023-003", products: [
-                    { id: 5, name: "Sắt thép", unit: "kg" },
-                    { id: 6, name: "Gạch ống", unit: "viên" }
-                ]
-            }
-        ];
-
-        // Thêm hợp đồng vào danh sách
-        function addContract(contractId = null) {
-            const contractList = document.getElementById('contract-list');
-            const productsContainer = document.getElementById('products-container');
-
-            // Tạo dropdown chọn hợp đồng
-            const select = document.createElement('select');
-            select.className = 'contract-select px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500';
-            select.onchange = function () { loadProducts(this); };
-
-            // Thêm option mặc định
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = '--- Chọn hợp đồng ---';
-            select.appendChild(defaultOption);
-
-            // Thêm các hợp đồng vào dropdown
-            contracts.forEach(contract => {
-                const option = document.createElement('option');
-                option.value = contract.id;
-                option.textContent = contract.name;
-                option.dataset.products = JSON.stringify(contract.products);
-                select.appendChild(option);
-            });
-
-            // Nếu có contractId, chọn hợp đồng đó
-            if (contractId) {
-                select.value = contractId;
-                loadProducts(select);
-            }
-
-            // Thêm vào danh sách
-            const div = document.createElement('div');
-            div.className = 'contract-item flex items-center gap-2 bg-gray-100 p-2 rounded';
-            div.appendChild(select);
-
-            // Nút xóa
-            const deleteBtn = document.createElement('button');
-            deleteBtn.innerHTML = '<i class="fas fa-times text-red-500"></i>';
-            deleteBtn.className = 'delete-contract';
-            deleteBtn.onclick = function () {
-                div.remove();
-                console.log(`Đã xóa hợp đồng ID: ${contractId}`);
-                // Xóa phần sản phẩm tương ứng nếu có
-                const productGroup = document.getElementById(`products-${contractId}`);
-                if (productGroup) productGroup.remove();
-            };
-            div.appendChild(deleteBtn);
-
-            contractList.appendChild(div);
-        }
-
-        // Tải sản phẩm theo hợp đồng
-        function loadProducts(select) {
-            const contractId = select.value;
-            if (!contractId) return;
-
-            const productsContainer = document.getElementById('products-container');
-            const productGroupId = `products-${contractId}`;
-
-            // Xóa nhóm sản phẩm cũ nếu có
-            const oldGroup = document.getElementById(productGroupId);
-            if (oldGroup) oldGroup.remove();
-
-            // Lấy thông tin hợp đồng
-            const contract = contracts.find(c => c.id == contractId);
-            if (!contract) return;
-
-            // Tạo nhóm sản phẩm mới
-            const productGroup = document.createElement('table');
-            productGroup.id = productGroupId;
-            productGroup.className = 'product-group mb-6 p-4 border border-gray-200 rounded-lg';
-
-            // Tiêu đề nhóm
-            const title = document.createElement('h4');
-            title.className = 'font-medium text-gray-700 mb-3';
-            title.textContent = `Sản phẩm hợp đồng ${contract.name}`;
-            productGroup.appendChild(title);
-
-            // Danh sách sản phẩm
-            contract.products.forEach(product => {
-                const div = document.createElement('tr');
-                div.className = 'product-item mb-3';
-
-                const td1 = document.createElement('td');
-                // Label
-                const label = document.createElement('label');
-                label.htmlFor = `product-${contractId}-${product.id}`;
-                label.className = 'mr-2';
-                label.textContent = `${product.name} (${product.unit})`;
-                td1.appendChild(label);
-
-
-                const td2 = document.createElement('td');
-                // Số lượng
-                const qtyInput = document.createElement('input');
-                qtyInput.type = 'number';
-                qtyInput.name = `quantities[${contractId}][${product.id}]`;
-                qtyInput.placeholder = 'Số lượng';
-                qtyInput.className = 'ml-2 px-2 py-1 border border-gray-300 rounded w-24';
-                qtyInput.min = '0';
-                td2.appendChild(qtyInput);
-
-                div.appendChild(td1);
-                div.appendChild(td2);
-                productGroup.appendChild(div);
-            });
-
-            productsContainer.appendChild(productGroup);
-        }
-
-        // Đặt ngày mặc định cho các trường ngày tháng
-        document.addEventListener('DOMContentLoaded', () => {
-            const now = new Date();
-            const today = now.toISOString().substr(0, 10);
-            const timeString = now.toTimeString().substr(0, 5);
-
-            // Đặt giờ vào/ra mặc định là giờ hiện tại
-            document.getElementById('timeIn').value = `${today}T${timeString}`;
-            document.getElementById('timeOut').value = `${today}T${timeString}`;
+        return;
+      } else if (parseFloat(portWeightCargo) <= 0 || parseFloat(warehouseWeightCargo) <= 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Trọng lượng hàng không được nhỏ hơn hoặc bằng 0.',
         });
+        return;
+      } else if (Math.abs(parseFloat(portWeightCargo) - parseFloat(warehouseWeightCargo)) > 100) {
+        var warningMessage = 'Trọng lượng hàng tại cảng và kho quá chênh lệch.<br>'
+          + (parseFloat(portWeightCargo) > parseFloat(warehouseWeightCargo) ? 'Hàng tại kho nhẹ hơn hàng tại cảng ' : 'Hàng tại kho nặng hơn hàng tại cảng ')
+          + '<strong>' + Math.abs(parseFloat(portWeightCargo) - parseFloat(warehouseWeightCargo)) + '</strong>kg.<br>Bạn có chắc chắn muốn tiếp tục?';
+        Swal.fire({
+          icon: 'warning',
+          title: 'Cảnh báo',
+          html: warningMessage,
+          showCancelButton: true,
+          shơwConfirmButton: true,
+          confirmButtonText: 'Tiếp tục',
+          reverseButtons: true
+        });
+        return;
+      }
 
-        // Hàm thêm đăng ký xe
-        function addTruckRegistration() {
-            const portWeightCargo = document.getElementById('portWeightCargo').value;
-            const warehouseWeightCargo = document.getElementById('warehouseWeightCargo').value;
-            if (portWeightCargo === '' || warehouseWeightCargo === '') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: 'Vui lòng nhập đầy đủ thông tin cân xe và trọng lượng hàng.',
-                });
-                return;
-            } else if (parseFloat(portWeightCargo) <= 0 || parseFloat(warehouseWeightCargo) <= 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Lỗi',
-                    text: 'Trọng lượng hàng không được nhỏ hơn hoặc bằng 0.',
-                });
-                return;
-            } else if (Math.abs(parseFloat(portWeightCargo) - parseFloat(warehouseWeightCargo)) > 100) {
-                var warningMessage = 'Trọng lượng hàng tại cảng và kho quá chênh lệch.<br>'
-                 + (parseFloat(portWeightCargo)>parseFloat(warehouseWeightCargo)?'Hàng tại kho nhẹ hơn hàng tại cảng ':'Hàng tại kho nặng hơn hàng tại cảng ') 
-                 + '<strong>' + Math.abs(parseFloat(portWeightCargo) - parseFloat(warehouseWeightCargo)) + '</strong>kg.<br>Bạn có chắc chắn muốn tiếp tục?';
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Cảnh báo',
-                    html: warningMessage,
-                    showCancelButton: true,
-                    shơwConfirmButton: true,
-                    confirmButtonText: 'Tiếp tục',
-                    reverseButtons: true
-                });
-                return;
-            }
+    }
+  </script>
 
-        }
-    </script>
+  <!-- insert script here -->
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Toggle sidebar
+    document
+      .getElementById("toggle-sidebar")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
+    document
+      .getElementById("menu-btn")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
+
+    // Toggle user menu
+    document
+      .getElementById("user-menu-button")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("user-menu").classList.toggle("hidden");
+      });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
+  </script>
 </body>
 
 </html>
