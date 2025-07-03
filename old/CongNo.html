@@ -1309,7 +1309,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Toggle sidebar
+      const sidebar = document.querySelector(".sidebar");
+    if (window.innerWidth < 768) {
+      sidebar.classList.add("collapsed");
+    }
+    // Toggle sidebar
       document
         .getElementById("toggle-sidebar")
         .addEventListener("click", function () {

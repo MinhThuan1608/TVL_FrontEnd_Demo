@@ -150,7 +150,7 @@
 <body class="bg-gray-50">
   <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <div class="absolute md:static sidebar bg-white shadow-md w-64 flex flex-col collapsed md:thuan">
+    <div class="absolute md:static sidebar bg-white shadow-md w-64 flex flex-col ">
       <div class="p-4 flex items-center justify-between border-b">
         <div class="flex items-center">
           <img class="fas fa-warehouse text-primary text-2xl w-10" src="../../logo.png"></img>
@@ -608,7 +608,11 @@
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-          // Toggle sidebar
+          const sidebar = document.querySelector(".sidebar");
+    if (window.innerWidth < 768) {
+      sidebar.classList.add("collapsed");
+    }
+    // Toggle sidebar
           document
             .getElementById("toggle-sidebar")
             .addEventListener("click", function () {
