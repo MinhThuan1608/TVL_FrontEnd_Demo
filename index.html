@@ -88,10 +88,10 @@
 }
 
 /* Đây là phần đang gây lỗi lớn */
-.hidden .flex {
+/* .hidden .flex {
   margin-left: 330px;
   padding-top: 400px;
-}
+} */
 
 .font-sans .min-h-screen .gradient-bg .flex {
   padding-top: 230px;
@@ -100,61 +100,69 @@
   flex-wrap: wrap; /* Cho các item xuống hàng khi thiếu chỗ */
 }
 
+
+
 /* RESPONSIVE MEDIA QUERIES */
 
 @media (max-width: 1024px) {
-  .font-sans .min-h-screen .gradient-bg .mt-16 p {
-    padding-left: 100px;
-    padding-top: 20px;
+  /* Ẩn phần chữ giới thiệu */
+  body > div{
+    background-image: url(logo6.jpg);
+    background-size: cover;
+    background-position:center ;
+}
+  .font-sans .min-h-screen .gradient-bg .mt-16, .text-6xl {
+    display: none !important;
   }
 
-  .hidden .flex {
-    margin-left: 100px;
-    padding-top: 200px;
-  }
-
+  /* Căn lại form đăng nhập */
   .font-sans .min-h-screen .gradient-bg .flex {
-    padding-left: 50px;
-    padding-top: 150px;
+    padding-top: 100px;
+    justify-content: center;
+    padding-left: 0;
   }
 }
 
 @media (max-width: 768px) {
-  .font-sans .min-h-screen .gradient-bg .mt-16 p {
-    padding-left: 30px;
-    padding-top: 10px;
-    font-size: 14px;
-  }
-
-  .hidden .flex {
-    margin-left: 0;
-    padding-top: 100px;
-    justify-content: center;
-  }
-
-  .font-sans .min-h-screen .gradient-bg .flex {
-    padding-left: 20px;
-    padding-top: 100px;
-    flex-direction: column;
+  .gradient-bg {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .gradient-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url('./logo6.jpg'); /* hoặc ảnh nền của bạn */
+    background-size: cover;
+    background-position: center;
+    filter: blur(6px);
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  /* Ẩn phần chữ giới thiệu */
+  .gradient-bg .mt-16 {
+    display: none !important;
+  }
+
+  /* Form đăng nhập */
+  .gradient-bg .flex {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
   }
 }
 
-@media (max-width: 480px) {
-  .font-sans .min-h-screen .gradient-bg .mt-16 {
-    margin-left: 10px;
-    text-align: center;
-  }
 
-  .font-sans .min-h-screen .gradient-bg .mt-16 p {
-    padding-left: 10px;
-    font-size: 12px;
-  }
-
-  .font-sans .min-h-screen .gradient-bg .flex img {
-    width: 30px;
-  }
-}
 
     </style>
 </head>
@@ -162,7 +170,7 @@
 <body class="font-sans bg-gray-50">
     <div class="min-h-screen flex flex-col lg:flex-row">
         <!-- Left Side - Branding and Info -->
-        <div class="gradient-bg text-white lg:w-4/5 p-8 lg:p-12 flex flex-col justify-between">
+        <div class="hidden lg:block gradient-bg text-white lg:w-4/5 p-8 lg:p-12 flex flex-col justify-between">
             <div>
                 <div class="flex items-center mb-8">
                     <h1 class="text-6xl font-bold">Thorasen Vinama Logistics</h1>
@@ -201,7 +209,7 @@
 
         <!-- Right Side - Login Form -->
         <div class="lg:w-3/5 flex items-center justify-center p-10">
-            <div class="w-full max-w-xl ">
+            <div class="w-full max-w-xl mt-12 md:mt-[120px] " >
                 <div class="bg-white rounded-xl card-shadow p-8">
                     <div class="text-center mb-10">
                         <h2 class="text-3xl font-bold text-gray-800">Đăng Nhập</h2>
