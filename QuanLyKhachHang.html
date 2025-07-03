@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý khách hàng</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .custom-shadow {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+  <!-- Sidebar -->
+  <div class="flex flex-col fixed inset-y-0 left-0 w-64 bg-blue-800 text-white z-50" id="sidebar">
+    <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
+      <h1 class="text-lg font-bold">QUẢN LÝ KHO TVL</h1>
+    </div>
+    <nav class="mt-4 overflow-y-auto">
+      <div class="px-4 py-2">
+        <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Đăng ký xe</h3>
+        <div class="mt-2 space-y-1">
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhập kho</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
+        </div>
+      </div>
+      <div class="px-4 py-2">
+        <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản lý kho</h3>
+        <div class="mt-2 space-y-1">
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển trạng thái hàng</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển kho</a>
+        </div>
+      </div>
+      <div class="px-4 py-2">
+        <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Danh mục</h3>
+        <div class="mt-2 space-y-1">
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Kho</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhân viên</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Đơn vị tính</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xe</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hàng hóa</a>
+        </div>
+      </div>
+      <div class="px-4 py-2">
+        <a href="./qlkh1.html" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded"><span>Quản lý khách hàng</span></a>
+        <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hợp đồng</a>
+        <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Thanh toán</a>
+        <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Danh mục cân</a>
+      </div>
+      <div class="px-4 py-2">
+        <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản trị hệ thống</h3>
+        <div class="mt-2 space-y-1">
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý người dùng</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý nhóm người dùng</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý phân quyền</a>
+        </div>
+      </div>
+      <div class="px-4 py-2">
+        <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Báo cáo quản trị</h3>
+        <div class="mt-2 space-y-1">
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo khách hàng</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo công nợ</a>
+          <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Dashboard</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Content (quản lý khách hàng) -->
+  <div class="ml-64 p-8">
+    <title>Quản lý khách hàng</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background: #f9fafb;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .customer-header {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+    }
+
+    .customer-header input {
+      width: 300px;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .add-btn {
+      background-color: #1677ff;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .customer-table {
+      background-color: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    table th, table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #f0f0f0;
+      text-align: left;
+    }
+
+    .status.active {
+      background-color : rgb(16 185 129 );
+      color: #f7fcf9;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .edit-btn, .delete-btn {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .delete-btn { color: red; }
+    .edit-btn { color: #1677ff; }
+
+    .form-popup {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      width: 350px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 100px;
+      left: calc(50% - 175px);
+      z-index: 999;
+      border-radius: 8px;
+    }
+
+    .form-popup input, .form-popup select {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+    .form-popup button {
+      padding: 8px 12px;
+      margin-top: 10px;
+    }
+    .customer-table .fa{
+      font-size: 13px;
+      padding: 5px;
+    }
+    .customer-header .relative input{
+      padding-left: 35px;
+    }
+    .type-ca-nhan {
+    background-color: #1072c2;
+    color: #fafdff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: inline-block;
+  }
+
+  .type-doanh-nghiep {
+    background-color:rgb(241, 100, 17);
+    color: #fdfcfc;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: inline-block;
+  }
+  .customer-table .flex{
+    margin-left: 1200px;
+    display: inline-flex;
+    gap: 8px; /* Cách đều các nút */
+    list-style: none;
+    padding: 10px;
+  }
+  </style>
+</head>
+<body>
+
+  <h2><tr>QUẢN LÝ KHÁCH HÀNG</tr></h2>
+  <p>Quản lý thông tin khách hàng trong hệ thống</p>
+
+  <div class="customer-header">
+    <div class="relative">
+      <input type="text" placeholder="Tìm kiếm khách hàng..." class="pl-10 pr-4 py-2 border rounded" />
+      <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+    </div>
+
+    <button class="add-btn" onclick="openAddForm()">+ Thêm khách hàng</button>
+  </div>
+
+  <div class="customer-table">
+    <h3>Danh sách khách hàng</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>STT<i  class="fa fa-sort text-gray-500"></i></th>
+          <th>Mã khách hàng <i class="fa fa-sort text-gray-500"></i></th>
+          <th>Họ và tên <i class="fa fa-sort text-gray-500"></i></th>
+          <th>Số điện thoại<i class="fa fa-sort text-gray-500"></i></th>
+          <th>Email<i class="fa fa-sort text-gray-500"></i></th>
+          <th>Loại khách hàng<i class="fa fa-sort text-gray-500"></i></th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody id="customerTable"></tbody>
+    </table>
+     <div id="pagination" class="flex"></div>
+  </div>
+ 
+
+
+  <!-- Form thêm/sửa -->
+  <div id="customerForm" class="form-popup" style="display: none;">
+    <h3 id="formTitle">Thêm khách hàng</h3>
+    <form onsubmit="saveCustomer(); return false;">
+      <input type="hidden" id="customerId">
+      <input type="text" id="name" placeholder="Tên khách hàng" required>
+      <input type="text" id="phone" placeholder="Số điện thoại" required>
+      <input type="email" id="email" placeholder="Email" required>
+     <select id="type" onchange="updateSelectColor(this)" class="rounded px-3 py-2">
+        <option value="Cá nhân">Cá nhân</option>
+        <option value="Doanh nghiệp">Doanh nghiệp</option>
+     </select>
+
+      <br>
+      <button type="submit">Lưu</button>
+      <button type="button" onclick="closeForm()">Huỷ</button>
+    </form>
+  </div>
+
+  <script>
+    let customers = [
+      { id: 'KH001', name: 'Công ty TNHH ABC', phone: '0123456789', email: 'abc@company.com', type: 'Doanh nghiệp' },
+      { id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },
+      {id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },
+      { id: 'KH001', name: 'Công ty TNHH ABC', phone: '0123456789', email: 'abc@company.com', type: 'Doanh nghiệp' },
+      { id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },
+      {id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },
+      { id: 'KH001', name: 'Công ty TNHH ABC', phone: '0123456789', email: 'abc@company.com', type: 'Doanh nghiệp' },
+      { id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },
+      {id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },{ id: 'KH001', name: 'Công ty TNHH ABC', phone: '0123456789', email: 'abc@company.com', type: 'Doanh nghiệp' },
+      { id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' },
+      {id: 'KH002', name: 'Nguyễn Văn A', phone: '0987654321', email: 'nguyenvana@email.com', type: 'Cá nhân' }
+
+    ];
+
+    function renderTable() {
+      const tbody = document.getElementById("customerTable");
+      tbody.innerHTML = '';
+     customers.forEach((cus, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td> <!-- STT -->
+          <td>${cus.id}</td>
+          <td>${cus.name}</td>
+          <td>${cus.phone}</td>
+          <td>${cus.email}</td>
+          <td><span class="${cus.type === 'Cá nhân' ? 'type-ca-nhan' : 'type-doanh-nghiep'}">
+    ${cus.type} </span></td>
+
+          <td><span class="status active">Hoạt động</span></td>
+          <td>
+            <button class="edit-btn" onclick="editCustomer('${cus.id}')" title="Sửa">
+            <i class="fas fa-edit"></i>
+            </button>
+
+            <button class="delete-btn" onclick="deleteCustomer('${cus.id}')" title="Xoá">
+            <i class="fas fa-trash-alt" style="color: #E54646;"></i>
+
+          </button>
+
+          </td>`;
+        tbody.appendChild(tr);
+      });
+
+    }
+
+    function openAddForm() {
+      document.getElementById("formTitle").innerText = "Thêm khách hàng";
+      document.getElementById("customerForm").style.display = "block";
+      document.getElementById("customerId").value = '';
+      document.getElementById("name").value = '';
+      document.getElementById("phone").value = '';
+      document.getElementById("email").value = '';
+      document.getElementById("type").value = 'Cá nhân';
+    }
+
+    function editCustomer(id) {
+      const customer = customers.find(c => c.id === id);
+      if (customer) {
+        document.getElementById("formTitle").innerText = "Sửa khách hàng";
+        document.getElementById("customerForm").style.display = "block";
+        document.getElementById("customerId").value = customer.id;
+        document.getElementById("name").value = customer.name;
+        document.getElementById("phone").value = customer.phone;
+        document.getElementById("email").value = customer.email;
+        document.getElementById("type").value = customer.type;
+      }
+    }
+
+    function deleteCustomer(id) {
+      if (confirm("Bạn có chắc chắn muốn xoá khách hàng này?")) {
+        customers = customers.filter(c => c.id !== id);
+        renderTable();
+      }
+    }
+
+    function closeForm() {
+      document.getElementById("customerForm").style.display = "none";
+    }
+
+    function saveCustomer() {
+      const id = document.getElementById("customerId").value;
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const email = document.getElementById("email").value;
+      const type = document.getElementById("type").value;
+
+      if (id) {
+        const idx = customers.findIndex(c => c.id === id);
+        customers[idx] = { id, name, phone, email, type };
+      } else {
+        const newId = "KH" + String(customers.length + 1).padStart(3, "0");
+        customers.push({ id: newId, name, phone, email, type });
+      }
+
+      closeForm();
+      renderTable();
+    }
+    
+
+    let customersPerPage = 10;
+  let currentPage = 1;
+
+  function renderTable() {
+    const tbody = document.getElementById("customerTable");
+    tbody.innerHTML = '';
+
+    let start = (currentPage - 1) * customersPerPage;
+    let end = start + customersPerPage;
+    let currentCustomers = customers.slice(start, end);
+
+    currentCustomers.forEach((cus, index) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${start + index + 1}</td>
+        <td>${cus.id}</td>
+        <td>${cus.name}</td>
+        <td style="color:  #007BFF;">${cus.phone}</td>
+        <td style="color: #007BFF;">${cus.email}</td>
+        <td><span class="${cus.type === 'Cá nhân' ? 'type-ca-nhan' : 'type-doanh-nghiep'}">
+    ${cus.type} </span>
+        </td>
+
+        <td><span class="status active">Hoạt động</span></td>
+        <td>
+          <button class="edit-btn" onclick="editCustomer('${cus.id}')" title="Sửa">
+            <i class="fas fa-edit text-blue-500"></i>
+          </button>
+          <button class="delete-btn" onclick="deleteCustomer('${cus.id}')" title="Xoá">
+            <i class="fas fa-trash-alt text-red-400 hover:text-red-600"></i>
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+
+    renderPagination();
+  }
+
+  function renderPagination() {
+    const totalPages = Math.ceil(customers.length / customersPerPage);
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = '';
+
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement("button");
+    prevBtn.innerText = "‹";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.className = "px-3 py-1 border rounded hover:bg-gray-100";
+    prevBtn.onclick = () => {
+      currentPage--;
+      renderTable();
+    };
+    pagination.appendChild(prevBtn);
+
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.innerText = i;
+      pageBtn.className =
+        "px-3 py-1 border rounded hover:bg-gray-100 " +
+        (i === currentPage ? "bg-blue-500 text-white" : "");
+      pageBtn.onclick = () => {
+        currentPage = i;
+        renderTable();
+      };
+      pagination.appendChild(pageBtn);
+    }
+
+    const nextBtn = document.createElement("button");
+    nextBtn.innerText = "›";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.className = "px-3 py-1 border rounded hover:bg-gray-100";
+    nextBtn.onclick = () => {
+      currentPage++;
+      renderTable();
+    };
+    pagination.appendChild(nextBtn);
+  }
+  function updateSelectColor(select) {
+    // Xóa hết class cũ
+    select.classList.remove("option-ca-nhan", "option-doanh-nghiep");
+
+    // Thêm class tương ứng
+    if (select.value === "Cá nhân") {
+      select.classList.add("option-ca-nhan");
+    } else if (select.value === "Doanh nghiệp") {
+      select.classList.add("option-doanh-nghiep");
+    }
+  }
+
+  // Gọi khi trang load để cập nhật ngay nếu đã có sẵn giá trị
+  window.onload = function () {
+    const typeSelect = document.getElementById("type");
+    updateSelectColor(typeSelect);
+  };
+
+    // Khởi tạo bảng khi tải trang
+    window.onload = renderTable;
+  </script>
+  
+</body>
+</html>
+
+  </div>
+</body>
+</html>

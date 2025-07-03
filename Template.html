@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quản Lý Hợp Đồng Thuê Kho Bãi</title>
+  <title>TVL - Hệ thống quản lý kho bãi</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script>
@@ -108,6 +108,10 @@
       animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
+    #user-menu {
+      transition: all 0.2s ease;
+    }
+
     @keyframes pulse {
 
       0%,
@@ -120,6 +124,12 @@
       }
     }
   </style>
+  <!-- insert libs here -->
+
+  <!-- insert libs here -->
+  <!-- insert style here -->
+
+  <!-- insert style here -->
 </head>
 
 <body class="bg-gray-50">
@@ -145,13 +155,22 @@
             </p>
             <ul>
               <li>
-                <a href="./DangKyXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./QuanLyDangKyXe.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý đăng ký xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeNhapKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-down fa-fw mr-3"></i>
                   <span class="nav-text">Nhập kho</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./DangKyXeXuatKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-up fa-fw mr-3"></i>
                   <span class="nav-text">Xuất kho</span>
                 </a>
@@ -159,28 +178,17 @@
             </ul>
           </div>
 
+
           <!-- Quản lý kho -->
           <div class="mb-6">
             <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
-              Quản lý kho
+              Kho bãi
             </p>
             <ul>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./QuanLyKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-exchange-alt fa-fw mr-3"></i>
-                  <span class="nav-text">Chuyển trạng thái hàng</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-arrow-up fa-fw mr-3"></i>
-                  <span class="nav-text">Xuất kho</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-random fa-fw mr-3"></i>
-                  <span class="nav-text">Chuyển kho</span>
+                  <span class="nav-text">Quản lý kho</span>
                 </a>
               </li>
             </ul>
@@ -193,33 +201,42 @@
             </p>
             <ul>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-warehouse fa-fw mr-3"></i>
                   <span class="nav-text">Kho</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./DanhMucNhanVien.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-user fa-fw mr-3"></i>
                   <span class="nav-text">Nhân viên</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./DanhMucDonVitinh.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-balance-scale fa-fw mr-3"></i>
                   <span class="nav-text">Đơn vị tính</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-truck fa-fw mr-3"></i>
                   <span class="nav-text">Xe</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./DanhMucHangHoa.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-cubes fa-fw mr-3"></i>
                   <span class="nav-text">Hàng hóa</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Trạm cân</span>
                 </a>
               </li>
             </ul>
@@ -232,27 +249,22 @@
             </p>
             <ul>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./QuanLyKhachHang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-users fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý khách hàng</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-file-contract fa-fw mr-3"></i>
                   <span class="nav-text">Hợp đồng</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-money-check-alt fa-fw mr-3"></i>
-                  <span class="nav-text">Thanh toán</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-balance-scale fa-fw mr-3"></i>
-                  <span class="nav-text">Danh mục cân</span>
+                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
                 </a>
               </li>
             </ul>
@@ -265,67 +277,105 @@
             </p>
             <ul>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-user-cog fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý người dùng</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-users-cog fa-fw mr-3"></i>
-                  <span class="nav-text">Quản lý nhóm người dùng</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-shield-alt fa-fw mr-3"></i>
-                  <span class="nav-text">Quản lý phân quyền</span>
+                  <span class="nav-text">Quản lý role</span>
                 </a>
               </li>
             </ul>
           </div>
 
-          <!-- Báo cáo quản trị -->
+          <!-- Báo cáo tổng quan -->
           <div>
             <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
-              Báo cáo quản trị
+              Báo cáo tổng quan
             </p>
             <ul>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                  <span class="nav-text">Báo cáo tồn kho theo khách hàng</span>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tài chính -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tài chính
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                  <span class="nav-text">Báo cáo tồn kho theo công nợ</span>
+                  <span class="nav-text">Chi phí</span>
                 </a>
               </li>
               <li>
-                <a href="#" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="./baocaoquantri/baocaotaichinh/congno.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
-                  <span class="nav-text">Dashboard</span>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Lợi nhuận</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tồn kho -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tồn kho
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo khách hàng</span>
                 </a>
               </li>
             </ul>
           </div>
         </nav>
       </div>
-      <!-- <div class="p-4 border-t">
-          <div class="flex items-center">
-            <img
-              src="https://randomuser.me/api/portraits/men/32.jpg"
-              alt="User"
-              class="w-8 h-8 rounded-full mr-2"
-            />
-            <div class="nav-text">
-              <p class="text-sm font-medium text-gray-800">Admin</p>
-              <p class="text-xs text-gray-500">Quản trị hệ thống</p>
-            </div>
-          </div>
-        </div> -->
     </div>
 
     <!-- Main Content -->
@@ -335,7 +385,7 @@
           This is title of the page
         </h1>
         <div class="flex item-right gap-4">
-          <div class="flex items-center space-x-4">
+          <div class="hidden md:flex items-center space-x-4">
             <div class="relative">
               <input type="text" placeholder="Tìm kiếm..."
                 class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
@@ -347,12 +397,19 @@
           </div>
 
           <div>
-            <div class="flex items-center">
+            <div class="flex items-center cursor-pointer" id="user-menu-button">
               <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
               <div class="nav-text">
                 <p class="text-sm font-medium text-gray-800">Admin</p>
                 <p class="text-xs text-gray-500">Quản trị hệ thống</p>
               </div>
+              <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
+            </div>
+            <!-- Dropdown menu -->
+            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              <a href="./ChangePassword.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thay đổi
+                mật khẩu</a>
+              <a href="./index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
             </div>
           </div>
         </div>
@@ -366,6 +423,12 @@
     </div>
   </div>
 
+  <!-- insert script here -->
+
+
+  <!-- insert script here -->
+
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // Toggle sidebar
@@ -374,6 +437,19 @@
       .addEventListener("click", function () {
         document.querySelector(".sidebar").classList.toggle("collapsed");
       });
+
+    // Toggle user menu
+    document
+      .getElementById("user-menu-button")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("user-menu").classList.toggle("hidden");
+      });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
   </script>
 </body>
 
