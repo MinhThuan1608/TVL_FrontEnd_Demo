@@ -1,396 +1,728 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh mục cân</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .custom-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVL - Hệ thống quản lý kho bãi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#3b82f6",
+            secondary: "#64748b",
+            success: "#10b981",
+            danger: "#ef4444",
+            warning: "#f59e0b",
+            info: "#06b6d4",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .sidebar {
+      transition: all 0.3s ease;
+    }
 
-        .section-title {
-            position: relative;
-            padding-left: 1rem;
-        }
+    .sidebar.collapsed {
+      width: 70px;
+    }
 
-        .section-title:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #3b82f6;
-            border-radius: 2px;
-        }
+    .sidebar.collapsed .nav-text {
+      display: none;
+    }
 
-        .photo-upload {
-            border: 2px dashed #d1d5db;
-            transition: all 0.3s ease;
-        }
+    .sidebar.collapsed .logo-text {
+      display: none;
+    }
 
-        .photo-upload:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
-        
-        .cursor-not-allowed {
-            cursor: not-allowed;
-        }
+    .sidebar.collapsed>div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            /* Chiều rộng scrollbar */
-        }
+    .sidebar #show-sidebar {
+      display: none;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #73a7fc;
-            border-radius: 4px;
-            /* Màu nền */
-        }
+    .sidebar #close-sidebar {
+      display: inline;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            /* Màu của thanh kéo */
-            border-radius: 4px;
-        }
+    .sidebar.collapsed+.content {
+      margin-left: 10px;
+    }
 
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
+    .sidebar.collapsed #show-sidebar {
+      display: inline;
+    }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
+    .sidebar.collapsed #close-sidebar {
+      display: none;
+    }
 
-        .modal-content {
-            background-color: #fff;
-            margin: 2% auto;
-            padding: 1rem;
-            border-radius: 8px;
-            width: 95%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+    .sidebar.collapsed nav {
+      padding: 0.5rem;
+    }
 
-        @media (min-width: 640px) {
-            .modal-content {
-                padding: 1.5rem;
-                width: 90%;
-            }
-        }
+    .sidebar.collapsed nav li>a>i {
+      margin-right: 0;
+    }
 
-        @media (min-width: 1024px) {
-            .modal-content {
-                width: 80%;
-                max-width: 900px;
-            }
-        }
+    .content {
+      transition: all 0.3s ease;
+    }
 
-        .modal-content .space-y-4 {
-            min-width: 300px;
-        }
-    </style>
+    .table-container {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .chart-container {
+      height: 300px;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    #user-menu {
+      transition: all 0.2s ease;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+  </style>
+  <!-- insert libs here -->
+
+  <!-- insert libs here -->
+  <!-- insert style here -->
+  <style>
+    .custom-shadow {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .section-title {
+      position: relative;
+      padding-left: 1rem;
+    }
+
+    .section-title:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #3b82f6;
+      border-radius: 2px;
+    }
+
+    .photo-upload {
+      border: 2px dashed #d1d5db;
+      transition: all 0.3s ease;
+    }
+
+    .photo-upload:hover {
+      border-color: #3b82f6;
+      background-color: #f8fafc;
+    }
+
+    .cursor-not-allowed {
+      cursor: not-allowed;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+      /* Chiều rộng scrollbar */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #73a7fc;
+      border-radius: 4px;
+      /* Màu nền */
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #888;
+      /* Màu của thanh kéo */
+      border-radius: 4px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 2% auto;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 95%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 640px) {
+      .modal-content {
+        padding: 1.5rem;
+        width: 90%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .modal-content {
+        width: 80%;
+        max-width: 900px;
+      }
+    }
+
+    .modal-content .space-y-4 {
+      min-width: 300px;
+    }
+  </style>
+  <!-- insert style here -->
 </head>
 
 <body class="bg-gray-50">
+  <div class="flex h-screen overflow-hidden">
     <!-- Sidebar -->
-    <div class="flex flex-col fixed inset-y-0 left-0 w-64 bg-blue-800 text-white transform -translate-x-full transition-transform duration-200 ease-in-out z-50"
-        id="sidebar">
-        <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
-            <h1 class="text-lg font-bold">QUẢN LÝ KHO TVL</h1>
+    <div class="sidebar bg-white shadow-md w-64 flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b">
+        <div class="flex items-center">
+          <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
+          <span class="logo-text font-bold text-xl text-blue-800">WarehouseTVL</span>
         </div>
-        <nav class="mt-4 overflow-y-auto custom-scrollbar">
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Đăng ký xe</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhập kho</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản lý kho</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển trạng thái hàng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển kho</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Danh mục</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Kho</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhân viên</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Đơn vị tính</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xe</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hàng hóa</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý khách hàng</a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hợp đồng</a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Thanh toán</a>
-                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Danh mục cân</a>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản trị hệ thống</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý người dùng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý nhóm người dùng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý phân quyền</a>
-                </div>
-            </div>
-            <div class="px-4 py-2">
-                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Báo cáo quản trị</h3>
-                <div class="mt-2 space-y-1">
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo khách
-                        hàng</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo công
-                        nợ</a>
-                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Dashboard</a>
-                </div>
-            </div>
-        </nav>
-    </div>
+        <button id="toggle-sidebar" class="text-gray-500 hover:text-gray-700">
+          <i id="close-sidebar" class="fas fa-chevron-left"></i>
+          <i id="show-sidebar" class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <nav class="p-4">
+          <!-- Đăng ký xe -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Đăng ký xe
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyDangKyXe.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý đăng ký xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeNhapKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Nhập kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeXuatKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                  <span class="nav-text">Xuất kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm transition-all duration-200 ease-in-out z-50" id="header">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <!-- Sidebar toggle button -->
-                <button class="text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleSidebar()">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                <h1 class="text-xl font-semibold text-gray-900">Quản lý kho TVL</h1>
-            </div>
-            <div class="relative w-64">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <i class="fas fa-search text-gray-400"></i>
-                </div>
-                <input type="text" id="searchInput" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Tìm kiếm cân...">
-            </div>
-        </div>
-    </header>
+
+          <!-- Quản lý kho -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Kho bãi
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-exchange-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Danh mục -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Danh mục
+            </p>
+            <ul>
+              <li>
+                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-warehouse fa-fw mr-3"></i>
+                  <span class="nav-text">Kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucNhanVien.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user fa-fw mr-3"></i>
+                  <span class="nav-text">Nhân viên</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucDonVitinh.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                  <span class="nav-text">Đơn vị tính</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-truck fa-fw mr-3"></i>
+                  <span class="nav-text">Xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucHangHoa.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Hàng hóa</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucCan.html"
+                  class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Trạm cân</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Khách hàng -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Khách hàng
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKhachHang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý khách hàng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Hợp đồng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quản trị hệ thống -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Quản trị hệ thống
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý người dùng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý role</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tổng quan -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tổng quan
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tài chính -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tài chính
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Chi phí</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/congno.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Lợi nhuận</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tồn kho -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tồn kho
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo khách hàng</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:px-8 transition-all duration-200 ease-in-out z-50" id="main-content">
+    <div class="content flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+        <h1 class="text-xl font-semibold text-blue-800 uppercase">
+          Danh mục trạm cân
+        </h1>
+        <div class="flex item-right gap-4">
+          <div class="hidden md:flex items-center space-x-4">
+            <div class="relative">
+              <input type="text" placeholder="Tìm kiếm..."
+                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button class="p-2 text-gray-500 hover:text-gray-700">
+              <i class="fas fa-bell"></i>
+            </button>
+          </div>
+
+          <div>
+            <div class="flex items-center cursor-pointer" id="user-menu-button">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
+              <div class="nav-text">
+                <p class="text-sm font-medium text-gray-800">Admin</p>
+                <p class="text-xs text-gray-500">Quản trị hệ thống</p>
+              </div>
+              <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
+            </div>
+            <!-- Dropdown menu -->
+            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              <a href="./ChangePassword.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thay đổi
+                mật khẩu</a>
+              <a href="./index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="p-4">
+        <!-- insert code here -->
         <div class="bg-white rounded-lg shadow-md custom-shadow overflow-hidden">
-            <!-- Form Title -->
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-800">DANH MỤC CÂN ĐIỆN TỬ</h2>
+          <!-- Form Title -->
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">DANH MỤC CÂN ĐIỆN TỬ</h2>
+          </div>
+
+          <!-- Filter and Sort -->
+          <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex flex-wrap items-end gap-4">
+              <!-- Loại cân -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Loại cân</label>
+                <select id="scaleTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                  <option value="all">Tất cả loại cân</option>
+                  <option value="platform">Cân bàn</option>
+                  <option value="floor">Cân sàn</option>
+                </select>
+              </div>
+
+              <!-- Trạng thái -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
+                <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                  <option value="all">Tất cả trạng thái</option>
+                  <option value="active">Đang hoạt động</option>
+                  <option value="inactive">Không hoạt động</option>
+                </select>
+              </div>
+
+              <!-- Button Áp dụng với label giả để canh hàng -->
+              <div>
+                <label class="block text-sm font-medium text-transparent mb-1">Áp dụng</label>
+                <button id="applyFilter"
+                  class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm w-full">
+                  Áp dụng
+                </button>
+              </div>
             </div>
+          </div>
 
-            <!-- Filter and Sort -->
-            <div class="px-6 py-4 border-b border-gray-200">
-  <div class="flex flex-wrap items-end gap-4">
-    <!-- Loại cân -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Loại cân</label>
-      <select id="scaleTypeFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-        <option value="all">Tất cả loại cân</option>
-        <option value="platform">Cân bàn</option>
-        <option value="floor">Cân sàn</option>
-      </select>
-    </div>
+        </div>
 
-    <!-- Trạng thái -->
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
-      <select id="statusFilter" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
-        <option value="all">Tất cả trạng thái</option>
-        <option value="active">Đang hoạt động</option>
-        <option value="inactive">Không hoạt động</option>
-      </select>
-    </div>
+        <!-- Scales list -->
+        <div class="px-6 py-4 relative">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
+            id="scalesContainer">
+            <!-- Scales will be added here dynamically -->
+          </div>
 
-    <!-- Button Áp dụng với label giả để canh hàng -->
-    <div>
-      <label class="block text-sm font-medium text-transparent mb-1">Áp dụng</label>
-      <button id="applyFilter" class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm w-full">
-        Áp dụng
-      </button>
+          <!-- Buttons container -->
+          <div class="flex justify-end space-x-4 mt-6" id="actionButtons">  
+            <button id="addScaleBtn"
+              class="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm sm:text-base">
+              <i class="fas fa-plus mr-1 sm:mr-2"></i>Thêm cân mới
+            </button>
+          </div>
+        </div>
+        <!-- insert code here -->
+      </main>
     </div>
   </div>
-</div>
 
-                    </div>
-                </div>
-            </div>
+  <!-- Modal for scale settings -->
+  <div id="scaleModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+    <div class="modal-content bg-white rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
 
-            <!-- Scales list -->
-            <div class="px-6 py-4 relative">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6" id="scalesContainer">
-                    <!-- Scales will be added here dynamically -->
-                </div>
+      <!-- Header -->
+      <div class="flex justify-between items-center p-4 border-b">
+        <h3 class="text-lg font-semibold">Thiết lập cân</h3>
+        <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
 
-                <!-- Buttons container -->
-                <div class="flex justify-end space-x-4 mt-6" id="actionButtons">
-                    <button type="button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                        In phiếu cân
-                    </button>
-                    <button id="addScaleBtn" class="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm sm:text-base">
-                        <i class="fas fa-plus mr-1 sm:mr-2"></i>Thêm cân mới
-                    </button>
-                </div>
-            </div>
+      <!-- Content cuộn được -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-4">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tên cân</label>
+            <input type="text" id="scaleName" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Tải trọng tối đa (kg)</label>
+            <input type="number" id="maxLoad" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          </div>
         </div>
-    </main>
 
-    <!-- Modal for scale settings -->
-<div id="scaleModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
-  <div class="modal-content bg-white rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
-
-    <!-- Header -->
-    <div class="flex justify-between items-center p-4 border-b">
-      <h3 class="text-lg font-semibold">Thiết lập cân</h3>
-      <button id="closeModal" class="text-gray-500 hover:text-gray-700">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
-    <!-- Content cuộn được -->
-    <div class="flex-1 overflow-y-auto p-4 space-y-4">
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tên cân</label>
-          <input type="text" id="scaleName" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Độ chia nhỏ nhất (g)</label>
+          <input type="number" id="minDivision" class="w-full px-3 py-2 border border-gray-300 rounded-md">
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Tải trọng tối đa (kg)</label>
-          <input type="number" id="maxLoad" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Loại cân</label>
+          <select id="scaleType" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+            <option value="platform">Cân bàn</option>
+            <option value="floor">Cân sàn</option>
+          </select>
         </div>
-      </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Độ chia nhỏ nhất (g)</label>
-        <input type="number" id="minDivision" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Loại cân</label>
-        <select id="scaleType" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-          <option value="platform">Cân bàn</option>
-          <option value="floor">Cân sàn</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Hình ảnh cân</label>
-        <div class="photo-upload rounded-lg p-4 text-center cursor-pointer border border-dashed border-gray-300" id="scaleImageUpload">
-          <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
-          <p class="text-sm text-gray-500">Nhấn để tải lên hình ảnh cân</p>
-          <input type="file" id="scaleImageInput" class="hidden" accept="image/*">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Hình ảnh cân</label>
+          <div class="photo-upload rounded-lg p-4 text-center cursor-pointer border border-dashed border-gray-300"
+            id="scaleImageUpload">
+            <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
+            <p class="text-sm text-gray-500">Nhấn để tải lên hình ảnh cân</p>
+            <input type="file" id="scaleImageInput" class="hidden" accept="image/*">
+          </div>
         </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Cổng kết nối</label>
+          <input type="number" id="scalePort" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Tần suất cập nhật (giây)</label>
+          <input type="number" id="scaleInterval" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
+          <div class="flex items-center">
+            <input type="checkbox" id="scaleStatus"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+            <label for="scaleStatus" class="ml-2 block text-sm text-gray-700">Đang sử dụng</label>
+          </div>
+        </div>
+
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Cổng kết nối</label>
-        <input type="number" id="scalePort" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Tần suất cập nhật (giây)</label>
-        <input type="number" id="scaleInterval" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
-        <div class="flex items-center">
-          <input type="checkbox" id="scaleStatus" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-          <label for="scaleStatus" class="ml-2 block text-sm text-gray-700">Đang sử dụng</label>
+      <!-- Sticky Footer -->
+      <div class="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3">
+        <div class="flex justify-end gap-3">
+          <button id="cancelScale" type="button"
+            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-md shadow-sm">Hủy</button>
+          <button id="deleteScale" type="button"
+            class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm">Xóa</button>
+          <button id="saveScale" type="button"
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm">Lưu</button>
         </div>
       </div>
 
     </div>
-
-    <!-- Sticky Footer -->
-    <div class="sticky bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3">
-      <div class="flex justify-end gap-3">
-        <button id="cancelScale" type="button" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 border border-gray-300 rounded-md shadow-sm">Hủy</button>
-        <button id="deleteScale" type="button" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow-sm">Xóa</button>
-        <button id="saveScale" type="button" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm">Lưu</button>
-      </div>
-    </div>
-
   </div>
-</div>
 
+  <!-- insert script here -->
 
-    <script>
-        // Sample data for scales
-        let scales = [];
-        let currentScaleIndex = -1;
+  <script>
+    // Sample data for scales
+    let scales = [];
+    let currentScaleIndex = -1;
 
-        // DOM elements
-        const scalesContainer = document.getElementById('scalesContainer');
-        const scaleModal = document.getElementById('scaleModal');
-        const addScaleBtn = document.getElementById('addScaleBtn');
-        const closeModal = document.getElementById('closeModal');
-        const cancelScale = document.getElementById('cancelScale');
-        const saveScale = document.getElementById('saveScale');
-        const deleteScale = document.getElementById('deleteScale');
-        const scaleImageUpload = document.getElementById('scaleImageUpload');
-        const scaleImageInput = document.getElementById('scaleImageInput');
+    // DOM elements
+    const scalesContainer = document.getElementById('scalesContainer');
+    const scaleModal = document.getElementById('scaleModal');
+    const addScaleBtn = document.getElementById('addScaleBtn');
+    const closeModal = document.getElementById('closeModal');
+    const cancelScale = document.getElementById('cancelScale');
+    const saveScale = document.getElementById('saveScale');
+    const deleteScale = document.getElementById('deleteScale');
+    const scaleImageUpload = document.getElementById('scaleImageUpload');
+    const scaleImageInput = document.getElementById('scaleImageInput');
 
-        // Event listeners
-        addScaleBtn.addEventListener('click', () => {
-            currentScaleIndex = -1;
-            resetModal();
-            scaleModal.classList.remove('hidden');
-        });
+    // Event listeners
+    addScaleBtn.addEventListener('click', () => {
+      currentScaleIndex = -1;
+      resetModal();
+      scaleModal.classList.remove('hidden');
+    });
 
-        closeModal.addEventListener('click', () => {
-            scaleModal.classList.add('hidden');
-        });
+    closeModal.addEventListener('click', () => {
+      scaleModal.classList.add('hidden');
+    });
 
-        cancelScale.addEventListener('click', () => {
-            scaleModal.classList.add('hidden');
-        });
+    cancelScale.addEventListener('click', () => {
+      scaleModal.classList.add('hidden');
+    });
 
-        saveScale.addEventListener('click', saveScaleSettings);
-        deleteScale.addEventListener('click', deleteCurrentScale);
+    saveScale.addEventListener('click', saveScaleSettings);
+    deleteScale.addEventListener('click', deleteCurrentScale);
 
-        scaleImageUpload.addEventListener('click', () => {
-            scaleImageInput.click();
-        });
+    scaleImageUpload.addEventListener('click', () => {
+      scaleImageInput.click();
+    });
 
-        scaleImageInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                const fileName = e.target.files[0].name;
-                scaleImageUpload.innerHTML = `
+    scaleImageInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        const fileName = e.target.files[0].name;
+        scaleImageUpload.innerHTML = `
                     <i class="fas fa-check-circle text-3xl text-green-500 mb-2"></i>
                     <p class="text-sm text-gray-700">${fileName}</p>
                     <p class="text-xs text-gray-500">Nhấn để thay đổi</p>
                 `;
-            }
-        });
+      }
+    });
 
-        // Functions
-        function renderScales() {
-            scalesContainer.innerHTML = '';
-            
-            scales.forEach((scale, index) => {
-                const scaleCard = document.createElement('div');
-                scaleCard.className = 'bg-white rounded-lg shadow p-3 sm:p-4 cursor-pointer hover:shadow-md transition-shadow';
-                scaleCard.innerHTML = `
+    // Functions
+    function renderScales() {
+      scalesContainer.innerHTML = '';
+
+      scales.forEach((scale, index) => {
+        const scaleCard = document.createElement('div');
+        scaleCard.className = 'bg-white rounded-lg shadow p-3 sm:p-4 cursor-pointer hover:shadow-md transition-shadow';
+        scaleCard.innerHTML = `
                     <div class="aspect-square bg-gray-100 rounded-md mb-2 sm:mb-3 overflow-hidden relative">
-                        ${scale.image ? 
-                            `<img src="${scale.image}" alt="${scale.name}" class="w-full h-full object-cover">` : 
-                            `<div class="w-full h-full flex items-center justify-center text-gray-400">
+                        ${scale.image ?
+            `<img src="${scale.image}" alt="${scale.name}" class="w-full h-full object-cover">` :
+            `<div class="w-full h-full flex items-center justify-center text-gray-400">
                                 <i class="fas fa-weight-scale text-4xl"></i>
                             </div>`}
                         <div class="absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium ${scale.inUse ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
@@ -399,293 +731,184 @@
                     </div>
                     <h3 class="font-medium text-center">${scale.name}</h3>
                 `;
-                
-                scaleCard.addEventListener('click', () => {
-                    currentScaleIndex = index;
-                    loadScaleToModal(index);
-                    scaleModal.classList.remove('hidden');
-                });
-                
-                scalesContainer.appendChild(scaleCard);
-            });
-        }
 
-        function loadScaleToModal(index) {
-            const scale = scales[index];
-            document.getElementById('scaleName').value = scale.name;
-            document.getElementById('maxLoad').value = scale.maxLoad || '';
-            document.getElementById('minDivision').value = scale.minDivision || '';
-            document.getElementById('scaleType').value = scale.scaleType || 'platform';
-            document.getElementById('scalePort').value = scale.port;
-            document.getElementById('scaleInterval').value = scale.interval;
-            document.getElementById('scaleStatus').checked = scale.inUse || false;
-            
-            if (scale.image) {
-                scaleImageUpload.innerHTML = `
+        scaleCard.addEventListener('click', () => {
+          currentScaleIndex = index;
+          loadScaleToModal(index);
+          scaleModal.classList.remove('hidden');
+        });
+
+        scalesContainer.appendChild(scaleCard);
+      });
+    }
+
+    function loadScaleToModal(index) {
+      const scale = scales[index];
+      document.getElementById('scaleName').value = scale.name;
+      document.getElementById('maxLoad').value = scale.maxLoad || '';
+      document.getElementById('minDivision').value = scale.minDivision || '';
+      document.getElementById('scaleType').value = scale.scaleType || 'platform';
+      document.getElementById('scalePort').value = scale.port;
+      document.getElementById('scaleInterval').value = scale.interval;
+      document.getElementById('scaleStatus').checked = scale.inUse || false;
+
+      if (scale.image) {
+        scaleImageUpload.innerHTML = `
                     <i class="fas fa-check-circle text-3xl text-green-500 mb-2"></i>
                     <p class="text-sm text-gray-700">Hình ảnh đã tải lên</p>
                     <p class="text-xs text-gray-500">Nhấn để thay đổi</p>
                 `;
-            } else {
-                scaleImageUpload.innerHTML = `
+      } else {
+        scaleImageUpload.innerHTML = `
                     <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
                     <p class="text-sm text-gray-500">Nhấn để tải lên hình ảnh cân</p>
                 `;
-            }
-            
-            // Kích hoạt nút Xóa khi chỉnh sửa
-            deleteScale.disabled = false;
-            deleteScale.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
+      }
 
-        function resetModal() {
-            document.getElementById('scaleName').value = '';
-            document.getElementById('maxLoad').value = '';
-            document.getElementById('minDivision').value = '';
-            document.getElementById('scaleType').value = 'platform';
-            document.getElementById('scalePort').value = '';
-            document.getElementById('scaleInterval').value = '';
-            document.getElementById('scaleStatus').checked = true;
-            scaleImageUpload.innerHTML = `
+      // Kích hoạt nút Xóa khi chỉnh sửa
+      deleteScale.disabled = false;
+      deleteScale.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+
+    function resetModal() {
+      document.getElementById('scaleName').value = '';
+      document.getElementById('maxLoad').value = '';
+      document.getElementById('minDivision').value = '';
+      document.getElementById('scaleType').value = 'platform';
+      document.getElementById('scalePort').value = '';
+      document.getElementById('scaleInterval').value = '';
+      document.getElementById('scaleStatus').checked = true;
+      scaleImageUpload.innerHTML = `
                 <i class="fas fa-camera text-3xl text-gray-400 mb-2"></i>
                 <p class="text-sm text-gray-500">Nhấn để tải lên hình ảnh cân</p>
             `;
-            scaleImageInput.value = '';
-            
-            // Đảm bảo nút Xóa luôn hiển thị nhưng disabled khi thêm mới
-            deleteScale.disabled = true;
-            deleteScale.classList.add('opacity-50', 'cursor-not-allowed');
-        }
+      scaleImageInput.value = '';
 
-        function saveScaleSettings() {
-            const name = document.getElementById('scaleName').value;
-            const maxLoad = document.getElementById('maxLoad').value;
-            const minDivision = document.getElementById('minDivision').value;
-            const scaleType = document.getElementById('scaleType').value;
-            const port = document.getElementById('scalePort').value;
-            const interval = document.getElementById('scaleInterval').value;
-            
-            // Get image (simplified - in real app would need to handle file upload)
-            let image = null;
-            if (scaleImageInput.files.length > 0) {
-                image = URL.createObjectURL(scaleImageInput.files[0]);
-            } else if (currentScaleIndex >= 0 && scales[currentScaleIndex].image) {
-                image = scales[currentScaleIndex].image;
-            }
-            
-            const scale = {
-                name,
-                maxLoad,
-                minDivision,
-                scaleType,
-                port,
-                interval,
-                image,
-                inUse: document.getElementById('scaleStatus').checked
-            };
-            
-            if (currentScaleIndex >= 0) {
-                // Update existing scale
-                scales[currentScaleIndex] = scale;
-            } else {
-                // Add new scale
-                scales.push(scale);
-            }
-            
-            renderScales();
-            scaleModal.classList.add('hidden');
-        }
+      // Đảm bảo nút Xóa luôn hiển thị nhưng disabled khi thêm mới
+      deleteScale.disabled = true;
+      deleteScale.classList.add('opacity-50', 'cursor-not-allowed');
+    }
 
-        function deleteCurrentScale() {
-            if (currentScaleIndex >= 0) {
-                scales.splice(currentScaleIndex, 1);
-                renderScales();
-                scaleModal.style.display = 'none';
-            }
-        }
+    function saveScaleSettings() {
+      const name = document.getElementById('scaleName').value;
+      const maxLoad = document.getElementById('maxLoad').value;
+      const minDivision = document.getElementById('minDivision').value;
+      const scaleType = document.getElementById('scaleType').value;
+      const port = document.getElementById('scalePort').value;
+      const interval = document.getElementById('scaleInterval').value;
 
-        // Initialize with some sample data
-         scales = [
-            {
-                name: 'Cân điện tử 1',
-                maxLoad: '1000',
-                minDivision: '10',
-                scaleType: 'platform',
-                port: '8080',
-                interval: '5',
-                image: 'https://canthanhphat.com/wp-content/uploads/2017/08/can-dien-tu-lw258c..jpg',
-                inUse: true,
-            },
-            {
-                name: 'Cân điện tử 2',
-                maxLoad: '2000',
-                minDivision: '20',
-                scaleType: 'floor',
-                port: '8081',
-                interval: '10',
-                image: 'https://sieuthimasomavach.vn/upload/misc/0202_can-san_1462951257.jpg',
-                inUse: false
-            },
-            {
-                name: 'Cân điện tử 3',
-                maxLoad: '500',
-                minDivision: '5',
-                scaleType: 'hanging',
-                port: '8080',
-                interval: '5',
-                image:'https://thomay.com.vn/wp-content/uploads/2022/10/can-dien-tu-moc-cau-cao-cap.jpg',
-                inUse: true
-            },
-            {
-                name: 'Cân điện tử 4',
-                maxLoad: '3000',
-                minDivision: '50',
-                scaleType: 'conveyor',
-                port: '8080',
-                interval: '5',
-                image: 'https://canhoangthinh.vn/uploads/htscale_1573545560_331435_e9ae3550b67ca78d522c71d56336f1b9.jpg',
-                inUse: false
-            }
-        ];
+      // Get image (simplified - in real app would need to handle file upload)
+      let image = null;
+      if (scaleImageInput.files.length > 0) {
+        image = URL.createObjectURL(scaleImageInput.files[0]);
+      } else if (currentScaleIndex >= 0 && scales[currentScaleIndex].image) {
+        image = scales[currentScaleIndex].image;
+      }
 
-        // Initial render
+      const scale = {
+        name,
+        maxLoad,
+        minDivision,
+        scaleType,
+        port,
+        interval,
+        image,
+        inUse: document.getElementById('scaleStatus').checked
+      };
+
+      if (currentScaleIndex >= 0) {
+        // Update existing scale
+        scales[currentScaleIndex] = scale;
+      } else {
+        // Add new scale
+        scales.push(scale);
+      }
+
+      renderScales();
+      scaleModal.classList.add('hidden');
+    }
+
+    function deleteCurrentScale() {
+      if (currentScaleIndex >= 0) {
+        scales.splice(currentScaleIndex, 1);
         renderScales();
+        scaleModal.style.display = 'none';
+      }
+    }
 
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .custom-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
+    // Initialize with some sample data
+    scales = [
+      {
+        name: 'Cân điện tử 1',
+        maxLoad: '1000',
+        minDivision: '10',
+        scaleType: 'platform',
+        port: '8080',
+        interval: '5',
+        image: 'https://canthanhphat.com/wp-content/uploads/2017/08/can-dien-tu-lw258c..jpg',
+        inUse: true,
+      },
+      {
+        name: 'Cân điện tử 2',
+        maxLoad: '2000',
+        minDivision: '20',
+        scaleType: 'floor',
+        port: '8081',
+        interval: '10',
+        image: 'https://sieuthimasomavach.vn/upload/misc/0202_can-san_1462951257.jpg',
+        inUse: false
+      },
+      {
+        name: 'Cân điện tử 3',
+        maxLoad: '500',
+        minDivision: '5',
+        scaleType: 'hanging',
+        port: '8080',
+        interval: '5',
+        image: 'https://thomay.com.vn/wp-content/uploads/2022/10/can-dien-tu-moc-cau-cao-cap.jpg',
+        inUse: true
+      },
+      {
+        name: 'Cân điện tử 4',
+        maxLoad: '3000',
+        minDivision: '50',
+        scaleType: 'conveyor',
+        port: '8080',
+        interval: '5',
+        image: 'https://canhoangthinh.vn/uploads/htscale_1573545560_331435_e9ae3550b67ca78d522c71d56336f1b9.jpg',
+        inUse: false
+      }
+    ];
 
-        .section-title {
-            position: relative;
-            padding-left: 1rem;
-        }
+    // Initial render
+    renderScales();
 
-        .section-title:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #3b82f6;
-            border-radius: 2px;
-        }
+  </script>
+  <!-- insert script here -->
 
-        .photo-upload {
-            border: 2px dashed #d1d5db;
-            transition: all 0.3s ease;
-        }
 
-        .photo-upload:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
-    </script>
-    <script>
-        // Close sidebar when clicking outside
-        document.addEventListener('click', function (event) {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.querySelector('[onclick="toggleSidebar()"]');
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Toggle sidebar
+    document
+      .getElementById("toggle-sidebar")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
 
-            // Check if click is outside sidebar and not on toggle button
-            if (!sidebar.contains(event.target) && event.target !== sidebarToggle && !sidebarToggle.contains(event.target)) {
-                sidebar.classList.add('-translate-x-full');
-            }
-        });
+    // Toggle user menu
+    document
+      .getElementById("user-menu-button")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("user-menu").classList.toggle("hidden");
+      });
 
-        // Sidebar toggle function
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const header = document.getElementById('header');
-            const mainContent = document.getElementById('main-content');
-            sidebar.classList.toggle('-translate-x-full');
-            header.classList.toggle('md:ml-64');
-            mainContent.classList.toggle('md:ml-64');
-        }
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .custom-shadow {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .section-title {
-            position: relative;
-            padding-left: 1rem;
-        }
-
-        .section-title:before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background-color: #3b82f6;
-            border-radius: 2px;
-        }
-
-        .photo-upload {
-            border: 2px dashed #d1d5db;
-            transition: all 0.3s ease;
-        }
-
-        .photo-upload:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
-
-    </style>
-</head>
-<body class="bg-gray-50">
-        </div>
-    </main>
-
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
+    // Close menu when clicking outside
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
+  </script>
 </body>
+
 </html>
