@@ -26,10 +26,12 @@
   <style>
     .sidebar {
       transition: all 0.3s ease;
+      z-index: 1000;
     }
 
     .sidebar.collapsed {
-      width: 70px;
+      width: 0;
+      overflow: hidden;
     }
 
     .sidebar.collapsed .nav-text {
@@ -125,6 +127,16 @@
 
       50% {
         opacity: 0.5;
+      }
+    }
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        width: 70px;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed+.content {
+        margin-left: 10px;
       }
     }
   </style>
