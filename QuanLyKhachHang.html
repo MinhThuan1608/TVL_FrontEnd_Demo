@@ -26,10 +26,12 @@
   <style>
     .sidebar {
       transition: all 0.3s ease;
+      z-index: 1000;
     }
 
     .sidebar.collapsed {
-      width: 70px;
+      width: 0px;
+      overflow: hidden;
     }
 
     .sidebar.collapsed .nav-text {
@@ -261,21 +263,77 @@
     }
 
     .customer-table .flex {
-      margin-left: 1200px;
-      display: inline-flex;
+      /* margin-left: 150px; */
+      /* display: inline-flex; */
       gap: 8px;
-      /* Cách đều các nút */
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
       list-style: none;
       padding: 10px;
     }
+     @media (max-width: 768px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      
+      .customer-header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .customer-header input {
+        width: 100%;
+      }
+      
+      .form-popup {
+        width: 90%;
+        left: 5%;
+      }
+      .relative{
+      z-index: -1;
+    }
+    }
+    
+    @media (max-width: 640px) {
+      .sidebar:not(.collapsed) {
+        /* width: 0%; */
+        position: fixed;
+        z-index: 50;
+        height: 100%;
+      }
+      
+      .content {
+        margin-left: 0 !important;
+      }
+    
+      
+      .customer-table h3 {
+        font-size: 1.1rem;
+      }
+      
+      .form-popup {
+        top: 20px;
+      }
+      .relative{
+      z-index: -1;
+    }
+    }
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        width: 70px;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed+.content {
+        margin-left: 10px;
+      }
+    }
     
   </style>
-  <!-- insert libs here -->
 
-  <!-- insert libs here -->
-  <!-- insert style here -->
-
-  <!-- insert style here -->
 </head>
 
 <body class="bg-gray-50">
@@ -593,9 +651,12 @@
                 <th>Thao tác</th>
               </tr>
             </thead>
+
             <tbody id="customerTable"></tbody>
+             
           </table>
-          <div id="pagination" class="flex"></div>
+            <div id="pagination" class="flex"></div>
+          
         </div>
 
 
