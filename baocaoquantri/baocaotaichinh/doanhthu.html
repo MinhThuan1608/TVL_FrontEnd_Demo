@@ -433,111 +433,113 @@
 
       <main class="p-4">
         <!-- insert code here -->
-        <main class="max-w-7xl mx-auto p-6">
-          <div class="bg-white rounded-lg shadow-sm p-6 mb-6 border-l-4 border-indigo-500">
-            <div class="mb-6">
-              <h1 class="text-2xl font-bold">📊 Báo cáo doanh thu</h1>
-              <p class="text-sm text-gray-500">Thống kê doanh thu theo thời gian và theo kênh bán hàng</p>
+        <!-- <main class="w-full px-4 py-4 sm:px-6 sm:py-6"> -->
+        <div class="bg-white rounded-lg shadow-sm p-3 sm:p-6 mb-4 sm:mb-6 border-l-4 border-indigo-500">
+          <div class="mb-3 sm:mb-6">
+            <h1 class="text-xl sm:text-2xl font-bold">📊 Báo cáo doanh thu</h1>
+            <p class="text-xs sm:text-sm text-gray-500">Thống kê doanh thu theo thời gian và theo kênh bán hàng</p>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+            <div class="bg-white rounded-lg sm:rounded-2xl shadow p-2 sm:p-4">
+              <p class="text-xs sm:text-sm text-gray-500">Tổng doanh thu</p>
+              <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600">1.200.000.000đ</h2>
+            </div>
+            <div class="bg-white rounded-xl sm:rounded-2xl shadow p-3 sm:p-4">
+              <p class="text-xs sm:text-sm text-gray-500">Doanh thu online</p>
+              <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-600">650.000.000đ</h2>
+            </div>
+            <div class="bg-white rounded-xl sm:rounded-2xl shadow p-3 sm:p-4">
+              <p class="text-xs sm:text-sm text-gray-500">Doanh thu cửa hàng</p>
+              <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold text-yellow-600">550.000.000đ</h2>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-6">
+            <div class="bg-white rounded-lg sm:rounded-2xl shadow p-2 sm:p-4">
+              <p class="font-semibold text-sm sm:text-base mb-2">Doanh thu theo tháng</p>
+              <div class="relative h-48 sm:h-72">
+                <canvas id="monthlyRevenueChart"></canvas>
+              </div>
             </div>
 
-            <!-- KPI Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <div class="bg-white rounded-2xl shadow p-4">
-                <p class="text-sm text-gray-500">Tổng doanh thu</p>
-                <h2 class="text-3xl font-bold text-green-600">1.200.000.000đ</h2>
-              </div>
-              <div class="bg-white rounded-2xl shadow p-4">
-                <p class="text-sm text-gray-500">Doanh thu online</p>
-                <h2 class="text-3xl font-bold text-blue-600">650.000.000đ</h2>
-              </div>
-              <div class="bg-white rounded-2xl shadow p-4">
-                <p class="text-sm text-gray-500">Doanh thu cửa hàng</p>
-                <h2 class="text-3xl font-bold text-yellow-600">550.000.000đ</h2>
-              </div>
-            </div>
+            <!-- Revenue Table -->
+            <div class="bg-white rounded-lg sm:rounded-2xl shadow p-2 sm:p-4">
+              <p class="font-semibold text-sm sm:text-base mb-2 sm:mb-4">Chi tiết doanh thu</p>
+              <div class="overflow-x-auto">
+                <table class="min-w-full text-xs sm:text-sm whitespace-nowrap">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="p-2 text-left">Tháng</th>
+                      <th class="p-2 text-left">Online</th>
+                      <th class="p-2 text-left">Cửa hàng</th>
+                      <th class="p-2 text-left">Tổng</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="border-t hover:bg-gray-50">
+                      <td class="p-2">Tháng 5</td>
+                      <td class="p-2">200.000.000đ</td>
+                      <td class="p-2">180.000.000đ</td>
+                      <td class="p-2">380.000.000đ</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                      <td class="p-2">Tháng 6</td>
+                      <td class="p-2">220.000.000đ</td>
+                      <td class="p-2">160.000.000đ</td>
+                      <td class="p-2">380.000.000đ</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                      <td class="p-2">Tháng 7</td>
+                      <td class="p-2">230.000.000đ</td>
+                      <td class="p-2">210.000.000đ</td>
+                      <td class="p-2">440.000.000đ</td>
+                    </tr>
+                    <tr class="border-t hover:bg-gray-50">
+                      <td class="p-2">Tháng 8</td>
+                      <td class="p-2">250.000.000đ</td>
+                      <td class="p-2">290.000.000đ</td>
+                      <td class="p-2">410.000.000đ</td>
+                    </tr>
+                  </tbody>
+                </table>
 
-            <!-- Charts -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              <div class="bg-white rounded-2xl shadow p-4">
-                <p class="font-semibold mb-2">Doanh thu theo tháng</p>
-                <div class="relative h-72">
-                  <canvas id="monthlyRevenueChart"></canvas>
+              </div>
+              <div class="flex-1 flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-2 mt-2 sm:mt-4">
+                <div>
+                  <p class="text-xs sm:text-sm text-gray-700">
+                    Hiển thị
+                    <span class="font-medium">1</span>
+                    đến
+                    <span class="font-medium">5</span>
+                    của
+                    <span class="font-medium">12</span>
+                    kết quả
+                  </p>
                 </div>
-              </div>
-
-
-              <!-- Revenue Table -->
-              <div class="bg-white rounded-2xl shadow p-4">
-                <p class="font-semibold mb-4">Chi tiết doanh thu</p>
-                <div class="overflow-x-auto">
-                  <table class="table-auto w-full text-sm">
-                    <thead class="bg-gray-100">
-                      <tr>
-                        <th class="p-2 text-left">Tháng</th>
-                        <th class="p-2 text-left">Online</th>
-                        <th class="p-2 text-left">Cửa hàng</th>
-                        <th class="p-2 text-left">Tổng</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="border-t hover:bg-gray-50">
-                        <td class="p-2">Tháng 5</td>
-                        <td class="p-2">200.000.000đ</td>
-                        <td class="p-2">180.000.000đ</td>
-                        <td class="p-2">380.000.000đ</td>
-                      </tr>
-                      <tr class="border-t hover:bg-gray-50">
-                        <td class="p-2">Tháng 6</td>
-                        <td class="p-2">220.000.000đ</td>
-                        <td class="p-2">160.000.000đ</td>
-                        <td class="p-2">380.000.000đ</td>
-                      </tr>
-                      <tr class="border-t hover:bg-gray-50">
-                        <td class="p-2">Tháng 7</td>
-                        <td class="p-2">230.000.000đ</td>
-                        <td class="p-2">210.000.000đ</td>
-                        <td class="p-2">440.000.000đ</td>
-                      </tr>
-                      <tr class="border-t hover:bg-gray-50">
-                        <td class="p-2">Tháng 8</td>
-                        <td class="p-2">250.000.000đ</td>
-                        <td class="p-2">290.000.000đ</td>
-                        <td class="p-2">410.000.000đ</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                      <p class="text-sm text-gray-700">
-                        Hiển thị
-                        <span class="font-medium">1</span>
-                        đến
-                        <span class="font-medium">5</span>
-                        của
-                        <span class="font-medium">12</span>
-                        kết quả
-                      </p>
-                    </div>
-                    <div>
-                      <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                        <a href="#"
-                          class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                          <span class="sr-only">Trước</span>
-                          <i class="fas fa-chevron-left"></i>
-                        </a>
-                        <a href="#" aria-current="page"
-                          class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                          1
-                        </a>
-                        <a href="#"
-                          class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                          2
-                        </a>
-                        <a href="#"
-                          class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
-                          3
-                        </a>
-                        <!-- <span
+                <div>
+                  <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px text-xs sm:text-sm"
+                    aria-label="Pagination">
+                    <a href="#"
+                      class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                      <span class="sr-only">Trước</span>
+                      <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <a href="#" aria-current="page"
+                      class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                      1
+                    </a>
+                    <a href="#"
+                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                      2
+                    </a>
+                    <a href="#"
+                      class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                      3
+                    </a>
+                    <!-- <span
                           class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
                           ...
                         </span>
@@ -545,64 +547,63 @@
                           class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
                           8
                         </a> -->
-                        <a href="#"
-                          class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                          <span class="sr-only">Sau</span>
-                          <i class="fas fa-chevron-right"></i>
-                        </a>
-                      </nav>
-                    </div>
-                  </div>
+                    <a href="#"
+                      class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                      <span class="sr-only">Sau</span>
+                      <i class="fas fa-chevron-right"></i>
+                    </a>
+                  </nav>
                 </div>
               </div>
             </div>
-            <!-- insert code here -->
-        </main>
+          </div>
+          <!-- insert code here -->
+      </main>
 
 
-        <!-- insert script here -->
-        <script>
-          const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'top',
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  callback: value => new Intl.NumberFormat('vi-VN').format(value)
-                }
+      <!-- insert script here -->
+      <script>
+        const chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: value => new Intl.NumberFormat('vi-VN').format(value)
               }
             }
-          };
+          }
+        };
 
-          new Chart(document.getElementById('monthlyRevenueChart'), {
-            type: 'line',
-            data: {
-              labels: ['Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8'],
-              datasets: [
+        new Chart(document.getElementById('monthlyRevenueChart'), {
+          type: 'line',
+          data: {
+            labels: ['Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8'],
+            datasets: [
 
-                {
-                  label: 'Cho thuê kho',
-                  data: [180000000, 160000000, 210000000, 500000000],
-                  borderColor: '#facc15',
-                  backgroundColor: 'rgba(250, 204, 21, 0.1)',
-                  tension: 0.4,
-                  fill: true
-                }
-              ]
-            },
-            options: chartOptions
-          });
+              {
+                label: 'Cho thuê kho',
+                data: [180000000, 160000000, 210000000, 500000000],
+                borderColor: '#facc15',
+                backgroundColor: 'rgba(250, 204, 21, 0.1)',
+                tension: 0.4,
+                fill: true
+              }
+            ]
+          },
+          options: chartOptions
+        });
 
-        </script>
+      </script>
 
 
-        <!-- insert script here -->
+      <!-- insert script here -->
 
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -619,19 +620,19 @@
               document.querySelector(".sidebar").classList.toggle("collapsed");
             });
 
-          // Toggle user menu
-          document
-            .getElementById("user-menu-button")
-            .addEventListener("click", function (e) {
-              e.stopPropagation();
-              document.getElementById("user-menu").classList.toggle("hidden");
-            });
-
-          // Close menu when clicking outside
-          document.addEventListener('click', function () {
-            document.getElementById("user-menu").classList.add("hidden");
+        // Toggle user menu
+        document
+          .getElementById("user-menu-button")
+          .addEventListener("click", function (e) {
+            e.stopPropagation();
+            document.getElementById("user-menu").classList.toggle("hidden");
           });
-        </script>
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function () {
+          document.getElementById("user-menu").classList.add("hidden");
+        });
+      </script>
 </body>
 
 </html>

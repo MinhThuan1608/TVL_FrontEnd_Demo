@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>TVL - Hệ thống quản lý kho bãi</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -32,6 +32,13 @@
     .sidebar.collapsed {
       width: 0px;
       overflow: hidden;
+      transform: translateX(-100%);
+    }
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        transform: translateX(0);
+        width: 70px;
+      }
     }
 
     .sidebar.collapsed .nav-text {
@@ -394,7 +401,7 @@
 
     <!-- Main Content -->
     <div class="content flex-1 overflow-auto">
-      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] md:ml-4 rounded">
         <i class="fas fa-bars text-xl inline md:hidden" id="menu-btn"></i>
         <h1 class="text-xl font-semibold text-blue-800 uppercase">
           Quản lý role
@@ -438,17 +445,16 @@
               class="fas fa-add"></i> Thêm Role</button>
         </div>
 
-        <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
-          <table class="min-w-full text-sm table-fixed" id="roleList" style="table-layout: fixed">
+        <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 overflow-x-auto">
+          <table class="min-w-full text-sm table-fixed md:table-auto" id="roleList" style="table-layout: auto">
             <thead class="bg-gray-100 text-gray-500 border-b border-gray-200">
               <tr>
-                <th class="w-3/12 px-6 py-3 text-left font-medium cursor-pointer" onclick="sortTable(0)">Tên
+                <th class="px-4 md:px-6 py-3 text-left font-medium cursor-pointer" onclick="sortTable(0)">Tên
                   Role <i class="fas fa-sort"></i></th>
-                <th class="w-2/12 px-6 py-3 text-left font-medium cursor-pointer" onclick="sortTable(1)">Cấp
-                  trên <i class="fas fa-sort"></i></th>
-                <th class="w-2/12 px-6 py-3 text-center font-medium">Số người dùng</th>
-                <th class="w-2/12 px-6 py-3 text-center font-medium">Số quyền</th>
-                <th class="w-3/12 px-6 py-3 text-center font-medium">Thao tác</th>
+                <th class="px-4 py-3 text-left font-medium cursor-pointer" onclick="sortTable(1)">Cấp trên <i class="fas fa-sort"></i></th>
+                <th class="px-2 md:px-6 py-3 text-center font-medium">Người dùng</th>
+                <th class="px-6 py-3 text-center font-medium">Số quyền</th>
+                <th class="px-2 md:px-6 py-3 text-center font-medium">Thao tác</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-gray-50" id="roleTableBody"></tbody>
@@ -483,7 +489,7 @@
   <!-- insert script here -->
   <div id="roleModal"
     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 backdrop-blur-sm">
-    <div class="bg-gray-100 w-full max-w-6xl rounded-xl p-6 relative shadow-2xl border border-gray-300 text-gray-700">
+    <div class="bg-white w-full max-w-sm md:max-w-lg rounded-xl p-4 md:p-6 relative shadow-2xl border border-gray-300 text-gray-700 mx-4 max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal()"
         class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
       <h2 class="text-2xl font-semibold mb-4 text-gray-800" id="modalTitle">Thêm mới Role</h2>
@@ -501,7 +507,7 @@
         </select>
       </div>
 
-      <div class="overflow-x-auto border border-gray-300 rounded-xl bg-white">
+      <div class="overflow-x-auto border border-gray-300 rounded-xl bg-white max-w-full">
         <table class="min-w-full text-sm">
           <thead class="bg-gray-200 text-gray-700">
             <tr>
@@ -880,11 +886,11 @@
         const tr = document.createElement("tr");
         tr.className = "hover:bg-gray-100 transition-colors";
         tr.innerHTML = `
-            <td class="w-3/12 px-6 py-4 font-semibold text-gray-800 truncate">${name}</td>
-            <td class="w-2/12 px-6 py-4 truncate">${data.parent || '-'}</td>
-            <td class="w-2/12 px-6 py-4 text-center">${userCount}</td>
-            <td class="w-2/12 px-6 py-4 text-center truncate">${permissionSummary}</td>
-            <td class="w-3/12 px-6 py-4 text-center whitespace-nowrap">
+            <td class="px-4 md:px-6 py-4 font-semibold text-gray-800 truncate">${name}</td>
+            <td class="px-4 py-4 truncate">${data.parent || '-'}</td>
+            <td class="px-2 md:px-6 py-4 text-center">${userCount}</td>
+            <td class="px-6 py-4 text-center truncate">${permissionSummary}</td>
+            <td class="px-2 md:px-6 py-4 text-center whitespace-nowrap">
             <button class="text-blue-600 hover:text-blue-900 mr-1.5" onclick="viewRole('${name}')"><i class="fas fa-eye"></i></button>
             ${name !== 'Super Admin' ? `<button class="text-yellow-600 hover:text-yellow-900 edit-btn mr-1.5" onclick="editRole('${name}')"><i class="fas fa-edit"></i></button>` : ''}
             ${name !== 'Super Admin' ? `<button class="text-red-600 hover:text-red-900 delete-btn" onclick="deleteRole('${name}')"><i class="fas fa-trash"></i></button>` : ''}
