@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVL - Hệ thống quản lý kho bãi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#3b82f6",
+            secondary: "#64748b",
+            success: "#10b981",
+            danger: "#ef4444",
+            warning: "#f59e0b",
+            info: "#06b6d4",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .sidebar {
+      transition: all 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      width: 70px;
+    }
+
+    .sidebar.collapsed .nav-text {
+      display: none;
+    }
+
+    .sidebar.collapsed .logo-text {
+      display: none;
+    }
+
+    .sidebar.collapsed>div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .sidebar #show-sidebar {
+      display: none;
+    }
+
+    .sidebar #close-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed+.content {
+      margin-left: 10px;
+    }
+
+    .sidebar.collapsed #show-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed #close-sidebar {
+      display: none;
+    }
+
+    .sidebar.collapsed nav {
+      padding: 0.5rem;
+    }
+
+    .sidebar.collapsed nav li>a>i {
+      margin-right: 0;
+    }
+
+    .content {
+      transition: all 0.3s ease;
+    }
+
+    .table-container {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .chart-container {
+      height: 300px;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    #user-menu {
+      transition: all 0.2s ease;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .password-toggle {
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .form-container {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+    }
+
+    .input-field:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+
+    .fas {
+      margin: 10px;
+    }
+
+    .passwordForm .relative .eye {
+      padding: 15px
+    }
+  </style>
+  <!-- insert libs here -->
+
+  <!-- insert libs here -->
+  <!-- insert style here -->
+
+  <!-- insert style here -->
+</head>
+
+<body class="bg-gray-50">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="sidebar bg-white shadow-md w-64 flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b">
+        <div class="flex items-center">
+          <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
+          <span class="logo-text font-bold text-xl text-blue-800">WarehouseTVL</span>
+        </div>
+        <button id="toggle-sidebar" class="text-gray-500 hover:text-gray-700">
+          <i id="close-sidebar" class="fas fa-chevron-left"></i>
+          <i id="show-sidebar" class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <nav class="p-4">
+          <!-- Đăng ký xe -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Đăng ký xe
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyDangKyXe.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý đăng ký xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeNhapKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Nhập kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DangKyXeXuatKho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                  <span class="nav-text">Xuất kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+          <!-- Quản lý kho -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Kho bãi
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-exchange-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Danh mục -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Danh mục
+            </p>
+            <ul>
+              <li>
+                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-warehouse fa-fw mr-3"></i>
+                  <span class="nav-text">Kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucNhanVien.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user fa-fw mr-3"></i>
+                  <span class="nav-text">Nhân viên</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucDonVitinh.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                  <span class="nav-text">Đơn vị tính</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-truck fa-fw mr-3"></i>
+                  <span class="nav-text">Xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucHangHoa.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Hàng hóa</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Trạm cân</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Khách hàng -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Khách hàng
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKhachHang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý khách hàng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Hợp đồng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quản trị hệ thống -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Quản trị hệ thống
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý người dùng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý role</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tổng quan -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tổng quan
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tài chính -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tài chính
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Chi phí</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/congno.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Lợi nhuận</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tồn kho -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tồn kho
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo khách hàng</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+
+    <div class="content flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+        <h1 class="text-xl font-semibold text-blue-800 uppercase">
+          Đổi mật khẩu
+        </h1>
+        <div class="flex item-right gap-4">
+          <div class="hidden md:flex items-center space-x-4">
+            <div class="relative">
+              <input type="text" placeholder="Tìm kiếm..."
+                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+              <i class="fas fa-search absolute left-2 bottom-1 text-gray-400"></i>
+            </div>
+            <button class="p-2 text-gray-500 hover:text-gray-700">
+              <i class="fas fa-bell"></i>
+            </button>
+          </div>
+
+          <div>
+            <div class="flex items-center cursor-pointer" id="user-menu-button">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
+              <div class="nav-text">
+                <p class="text-sm font-medium text-gray-800">Admin</p>
+                <p class="text-xs text-gray-500">Quản trị hệ thống</p>
+              </div>
+              <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
+            </div>
+            <!-- Dropdown menu -->
+            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              <a href="./ChangePassword.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thay đổi
+                mật khẩu</a>
+              <a href="./index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="p-4">
+        <!-- insert code here -->
+
+            <div class="form-container w-full max-w-md rounded-2xl shadow-2xl overflow-hidden mx-auto">
+            <div class="p-8 bg-white/90 backdrop-blur-sm">
+              <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-blue-600 mb-2">Đổi Mật Khẩu</h1>
+                <p class="text-gray-600">Bảo mật tài khoản của bạn bằng mật khẩu mới</p>
+              </div>
+
+              <form id="passwordForm" class="space-y-6">
+                <div class="relative">
+                  <label for="currentPassword" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu hiện
+                    tại</label>
+                  <input type="password" id="currentPassword"
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none transition"
+                    placeholder="Nhập mật khẩu hiện tại" required>
+                  <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('currentPassword', this)"></i>
+                </div>
+
+                <div class="relative">
+                  <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">Mật khẩu mới</label>
+                  <input type="password" id="newPassword"
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none transition"
+                    placeholder="Nhập mật khẩu mới" required>
+                  <i id="eye" class="fas fa-eye-slash password-toggle"
+                    onclick="togglePassword('newPassword', this)"></i>
+                  <div class="text-xs mt-1 text-gray-500">Phải có ít nhất 8 ký tự</div>
+                </div>
+
+                <div class="relative">
+                  <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Xác nhận mật khẩu
+                    mới</label>
+                  <input type="password" id="confirmPassword"
+                    class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none transition"
+                    placeholder="Nhập lại mật khẩu mới" required>
+                  <i class="fas fa-eye-slash password-toggle" onclick="togglePassword('confirmPassword', this)"></i>
+                </div>
+
+                <div class="flex items-center">
+                  <input type="checkbox" id="terms" class="mr-2" required>
+                  <label for="terms" class="text-sm text-gray-600">Tôi hiểu rằng việc thay đổi mật khẩu sẽ khiến tôi
+                    đăng xuất
+                    khỏi tất cả các thiết bị</label>
+                </div>
+
+                <button type="submit"
+                  class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Cập
+                  Nhật Mật Khẩu
+                </button>
+              </form>
+            </div>
+
+            <div class="bg-blue-50 p-4 text-center">
+              <p class="text-sm text-gray-600">
+                <i class="fas fa-shield-alt text-blue-500 mr-1"></i>
+                An ninh của bạn là quan trọng đối với chúng tôi
+              </p>
+            </div>
+          </div>
+          <!-- insert code here -->
+      </main>
+    </div>
+  </div>
+
+  <!-- insert script here -->
+  <script>
+    function togglePassword(fieldId, icon) {
+      const field = document.getElementById(fieldId);
+      if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      } else {
+        field.type = 'password';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      }
+    }
+
+    document.getElementById('passwordForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Simple validation
+      if (newPassword.length < 8) {
+        alert('New password must be at least 8 characters');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        alert('New passwords do not match');
+        return;
+      }
+
+      // Here you would typically send the data to a server
+      alert('Password changed successfully!');
+      this.reset();
+    });
+  </script>
+
+  <!-- insert script here -->
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Toggle sidebar
+    document
+      .getElementById("toggle-sidebar")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
+
+    // Toggle user menu
+    document
+      .getElementById("user-menu-button")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("user-menu").classList.toggle("hidden");
+      });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
+  </script>
+</body>
+
+</html>
