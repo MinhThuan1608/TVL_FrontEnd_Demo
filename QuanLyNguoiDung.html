@@ -32,12 +32,15 @@
     select[multiple] option {
       padding: 8px 12px;
     }
+
     .sidebar {
       transition: all 0.3s ease;
+      z-index: 1000;
     }
 
     .sidebar.collapsed {
-      width: 70px;
+      width: 0px;
+      overflow: hidden;
     }
 
     .sidebar.collapsed .nav-text {
@@ -62,7 +65,7 @@
     }
 
     .sidebar.collapsed+.content {
-      margin-left: 10px;
+      margin-left: 0px;
     }
 
     .sidebar.collapsed #show-sidebar {
@@ -123,6 +126,7 @@
         opacity: 0.5;
       }
     }
+
     .user-avatar {
       width: 40px;
       height: 40px;
@@ -168,6 +172,17 @@
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        width: 70px;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed+.content {
+        margin-left: 10px;
       }
     }
   </style>
@@ -468,10 +483,10 @@
         <!-- Action Bar -->
         <div class="bg-white rounded-lg shadow-sm p-4 mb-6 flex flex-wrap justify-between items-center">
           <div class="relative w-120">
-              <input type="text" placeholder="Tìm kiếm..."
-                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-[400px]" />
-              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-            </div>
+            <input type="text" placeholder="Tìm kiếm..."
+              class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-[400px]" />
+            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+          </div>
           <div class="flex items-center space-x-2 mb-2 sm:mb-0">
             <span class="text-sm text-gray-600 mr-2">Hiển thị:</span>
             <select class="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -1565,12 +1580,6 @@
       });
       window.addEventListener("click", (e) => {
         if (e.target === deleteModal) deleteModal.classList.add("hidden");
-      });
-
-      // ====== SIDEBAR TOGGLE ======
-      const toggleSidebar = document.getElementById("toggle-sidebar");
-      toggleSidebar && toggleSidebar.addEventListener("click", () => {
-        document.querySelector(".sidebar").classList.toggle("collapsed");
       });
 
     });
