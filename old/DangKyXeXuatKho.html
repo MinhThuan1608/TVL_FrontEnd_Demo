@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký xe vào kho</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .section-title {
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-title:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #3b82f6;
+            border-radius: 2px;
+        }
+
+        .photo-upload {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            /* Chiều rộng scrollbar */
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #73a7fc;
+            border-radius: 4px;
+            /* Màu nền */
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #888;
+            /* Màu của thanh kéo */
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <div class="flex flex-col fixed inset-y-0 left-0 w-64 bg-blue-800 text-white transform -translate-x-full transition-transform duration-200 ease-in-out z-50"
+        id="sidebar">
+        <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
+            <h1 class="text-lg font-bold">QUẢN LÝ KHO TVL</h1>
+        </div>
+        <nav class="mt-4 overflow-y-auto custom-scrollbar">
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Đăng ký xe</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhập kho</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
+                </div>
+            </div>
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản lý kho</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển trạng thái hàng</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xuất kho</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Chuyển kho</a>
+                </div>
+            </div>
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Danh mục</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Kho</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Nhân viên</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Đơn vị tính</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Xe</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hàng hóa</a>
+                </div>
+            </div>
+            <div class="px-4 py-2">
+                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý khách hàng</a>
+                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Hợp đồng</a>
+                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Thanh toán</a>
+                <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Danh mục cân</a>
+            </div>
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Quản trị hệ thống</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý người dùng</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý nhóm người dùng</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Quản lý phân quyền</a>
+                </div>
+            </div>
+            <div class="px-4 py-2">
+                <h3 class="text-xs font-semibold text-blue-300 uppercase tracking-wider">Báo cáo quản trị</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo khách
+                        hàng</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Báo cáo tồn kho theo công
+                        nợ</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-blue-700 rounded">Dashboard</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm transition-all duration-200 ease-in-out z-50" id="header">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <!-- Sidebar toggle button -->
+                <button class="text-gray-600 hover:text-gray-800 focus:outline-none" onclick="toggleSidebar()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <h1 class="text-xl font-bold text-gray-800 uppercase">Đăng ký xe xuất kho</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                    </button>
+                </div>
+                <div class="flex items-center">
+                    <img class="h-8 w-8 rounded-full"
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt="">
+                    <span class="ml-2 text-gray-700 font-medium">Nguyễn Văn Admin</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 transition-all duration-200 ease-in-out z-50"
+        id="main-content">
+        <div class="">
+            <!-- Form Title -->
+            
+
+            <!-- Form Content -->
+            <div class="">
+                <!-- Thông tin xe và tài xế -->
+                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN XE VÀ TÀI XẾ</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="licensePlate" class="block text-sm font-medium text-gray-700 mb-1">Biển số
+                                xe</label>
+                            <input list="licensePlates" id="licensePlate" name="licensePlate"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+
+                            <datalist id="licensePlates">
+                                <option value="29A-11111">
+                                <option value="29A-22222">
+                                <option value="29A-33333">
+                                <option value="29A-44444">
+                                <option value="29A-55555">
+                            </datalist>
+                        </div>
+                        <div>
+                            <label for="driverName" class="block text-sm font-medium text-gray-700 mb-1">Tên tài
+                                xế</label>
+                            <input list="driverNames" id="driverName" name="driverName"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+
+                            <datalist id="driverNames">
+                                <option value="Nguyễn Văn A">
+                                <option value="Nguyễn Văn B">
+                                <option value="Nguyễn Văn C">
+                                <option value="Nguyễn Văn D">
+                                <option value="Nguyễn Văn E">
+                            </datalist>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Thông tin cân tại kho -->
+                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN CÂN TẠI KHO</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="warehouseWeightIn" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                                lượng xe vào (kg)</label>
+                            <input type="number" id="warehouseWeightIn" name="warehouseWeightIn"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="timeIn" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe vào</label>
+                            <input type="datetime-local" id="timeIn" name="timeIn"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="warehouseWeightOut" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                                lượng xe ra (kg)</label>
+                            <input type="number" id="warehouseWeightOut" name="warehouseWeightOut"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="timeOut" class="block text-sm font-medium text-gray-700 mb-1">Giờ xe ra</label>
+                            <input type="datetime-local" id="timeOut" name="timeOut"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="warehouseWeightCargo" class="block text-sm font-medium text-gray-700 mb-1">Trọng
+                                lượng hàng (kg)</label>
+                            <input type="number" id="warehouseWeightCargo" name="warehouseWeightCargo"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                                readonly>
+                        </div>
+
+
+                        <div>
+                            <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
+                            <textarea id="notes" name="notes" rows="3"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Thông tin hàng hóa -->
+                <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN HÀNG HÓA</h3>
+
+                    <!-- Danh sách hợp đồng -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Chọn hợp đồng</label>
+                        <div class="flex flex-wrap gap-2" id="contract-list">
+                            <!-- Các hợp đồng sẽ được thêm ở đây bằng JS -->
+                        </div>
+                        <button type="button" onclick="addContract()"
+                            class="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200">
+                            <i class="fas fa-plus mr-1"></i> Thêm hợp đồng
+                        </button>
+                    </div>
+
+                    <!-- Danh sách sản phẩm theo hợp đồng -->
+                    <div id="products-container">
+                        <!-- Các nhóm sản phẩm theo hợp đồng sẽ được thêm ở đây -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Form Actions -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
+                <button type="button"
+                    class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Hủy bỏ
+                </button>
+                <button type="button"
+                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Lưu thông tin
+                </button>
+                <button type="button"
+                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    In phiếu cân
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+
+        // Tính toán trọng lượng hàng tự động
+        document.getElementById('warehouseWeightIn').addEventListener('input', calculateWarehouseCargoWeight);
+        document.getElementById('warehouseWeightOut').addEventListener('input', calculateWarehouseCargoWeight);
+
+        function calculateWarehouseCargoWeight() {
+            const weightIn = parseFloat(document.getElementById('warehouseWeightIn').value) || 0;
+            const weightOut = parseFloat(document.getElementById('warehouseWeightOut').value) || 0;
+            const cargoWeight = weightOut - weightIn;
+            document.getElementById('warehouseWeightCargo').value = cargoWeight > 0 ? cargoWeight : 0;
+        }
+
+        // Sidebar toggle function
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const header = document.getElementById('header');
+            const mainContent = document.getElementById('main-content');
+            sidebar.classList.toggle('md:translate-x-0');
+            header.classList.toggle('md:ml-64');
+            mainContent.classList.toggle('md:ml-64');
+        }
+
+        // Dữ liệu mẫu hợp đồng và sản phẩm
+        const contracts = [
+            {
+                id: 1, name: "HĐ-2023-001", products: [
+                    { id: 1, name: "Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông", unit: "m3" },
+                    { id: 2, name: "Gỗ sồi", unit: "m3" }
+                ]
+            },
+            {
+                id: 2, name: "HĐ-2023-002", products: [
+                    { id: 3, name: "Xi măng", unit: "bao" },
+                    { id: 4, name: "Cát xây dựng", unit: "m3" }
+                ]
+            },
+            {
+                id: 3, name: "HĐ-2023-003", products: [
+                    { id: 5, name: "Sắt thép", unit: "kg" },
+                    { id: 6, name: "Gạch ống", unit: "viên" }
+                ]
+            }
+        ];
+
+        // Thêm hợp đồng vào danh sách
+        function addContract(contractId = null) {
+            const contractList = document.getElementById('contract-list');
+            const productsContainer = document.getElementById('products-container');
+
+            // Tạo dropdown chọn hợp đồng
+            const select = document.createElement('select');
+            select.className = 'contract-select px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500';
+            select.onchange = function () { loadProducts(this); };
+
+            // Thêm option mặc định
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '--- Chọn hợp đồng ---';
+            select.appendChild(defaultOption);
+
+            // Thêm các hợp đồng vào dropdown
+            contracts.forEach(contract => {
+                const option = document.createElement('option');
+                option.value = contract.id;
+                option.textContent = contract.name;
+                option.dataset.products = JSON.stringify(contract.products);
+                select.appendChild(option);
+            });
+
+            // Nếu có contractId, chọn hợp đồng đó
+            if (contractId) {
+                select.value = contractId;
+                loadProducts(select);
+            }
+
+            // Thêm vào danh sách
+            const div = document.createElement('div');
+            div.className = 'contract-item flex items-center gap-2 bg-gray-100 p-2 rounded';
+            div.appendChild(select);
+
+            // Nút xóa
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = '<i class="fas fa-times text-red-500"></i>';
+            deleteBtn.className = 'delete-contract';
+            deleteBtn.onclick = function () {
+                div.remove();
+                console.log(`Đã xóa hợp đồng ID: ${contractId}`);
+                // Xóa phần sản phẩm tương ứng nếu có
+                const productGroup = document.getElementById(`products-${contractId}`);
+                if (productGroup) productGroup.remove();
+            };
+            div.appendChild(deleteBtn);
+
+            contractList.appendChild(div);
+        }
+
+        // Tải sản phẩm theo hợp đồng
+        function loadProducts(select) {
+            const contractId = select.value;
+            if (!contractId) return;
+
+            const productsContainer = document.getElementById('products-container');
+            const productGroupId = `products-${contractId}`;
+
+            // Xóa nhóm sản phẩm cũ nếu có
+            const oldGroup = document.getElementById(productGroupId);
+            if (oldGroup) oldGroup.remove();
+
+            // Lấy thông tin hợp đồng
+            const contract = contracts.find(c => c.id == contractId);
+            if (!contract) return;
+
+            // Tạo nhóm sản phẩm mới
+            const productGroup = document.createElement('table');
+            productGroup.id = productGroupId;
+            productGroup.className = 'product-group mb-6 p-4 border border-gray-200 rounded-lg';
+
+            // Tiêu đề nhóm
+            const title = document.createElement('h4');
+            title.className = 'font-medium text-gray-700 mb-3';
+            title.textContent = `Sản phẩm hợp đồng ${contract.name}`;
+            productGroup.appendChild(title);
+
+            // Danh sách sản phẩm
+            contract.products.forEach(product => {
+                const div = document.createElement('tr');
+                div.className = 'product-item mb-3';
+
+                const td1 = document.createElement('td');
+                // Label
+                const label = document.createElement('label');
+                label.htmlFor = `product-${contractId}-${product.id}`;
+                label.className = 'mr-2';
+                label.textContent = `${product.name} (${product.unit})`;
+                td1.appendChild(label);
+
+
+                const td2 = document.createElement('td');
+                // Số lượng
+                const qtyInput = document.createElement('input');
+                qtyInput.type = 'number';
+                qtyInput.name = `quantities[${contractId}][${product.id}]`;
+                qtyInput.placeholder = 'Số lượng';
+                qtyInput.className = 'ml-2 px-2 py-1 border border-gray-300 rounded w-24';
+                qtyInput.min = '0';
+                td2.appendChild(qtyInput);
+
+                div.appendChild(td1);
+                div.appendChild(td2);
+                productGroup.appendChild(div);
+            });
+
+            productsContainer.appendChild(productGroup);
+        }
+
+        // Đặt ngày mặc định cho các trường ngày tháng
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            const today = now.toISOString().substr(0, 10);
+            const timeString = now.toTimeString().substr(0, 5);
+
+            // Đặt giờ vào/ra mặc định là giờ hiện tại
+            document.getElementById('timeIn').value = `${today}T${timeString}`;
+            document.getElementById('timeOut').value = `${today}T${timeString}`;
+        });
+
+    </script>
+</body>
+
+</html>
