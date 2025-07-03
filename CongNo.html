@@ -916,14 +916,14 @@
                     <div class="space-y-4">
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label for="paymentDate" class="block text-sm font-medium text-gray-700 mb-1">Ngày thanh
+                          <label for="paymentDate" class="block text-sm font-medium text-gray-700 mb-1 text-left md:text-left">Ngày thanh
                             toán</label>
                           <input type="date" id="paymentDate"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                             value="" />
                         </div>
                         <div>
-                          <label for="paymentAmount" class="block text-sm font-medium text-gray-700 mb-1">Số tiền
+                          <label for="paymentAmount" class="block text-sm font-medium text-gray-700 mb-1 text-left md:text-left">Số tiền
                             (₫)</label>
                           <div class="relative">
                             <input type="text" id="paymentAmount"
@@ -937,7 +937,7 @@
                       </div>
 
                       <div>
-                        <label for="paymentMethod" class="block text-sm font-medium text-gray-700 mb-1">Phương thức
+                        <label for="paymentMethod" class="block text-sm font-medium text-gray-700 mb-1 text-left md:text-left">Phương thức
                           thanh toán</label>
                         <select id="paymentMethod"
                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
@@ -947,18 +947,18 @@
                       </div>
 
                       <div>
-                        <label for="paymentNote" class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
+                        <label for="paymentNote" class="block text-sm font-medium text-gray-700 mb-1 text-left md:text-left">Ghi chú</label>
                         <textarea id="paymentNote" rows="2"
                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                           placeholder="Nhập ghi chú (nếu có)"></textarea>
                       </div>
 
                       <div>
-                        <label for="invoiceFile" class="block text-sm font-medium text-gray-700 mb-1">Hóa đơn cấn trừ
+                        <label for="invoiceFile" class="block text-sm font-medium text-gray-700 mb-1 text-left md:text-left">Hóa đơn cấn trừ
                           công nợ</label>
                         <input type="file" id="invoiceFile" accept=".pdf,.jpg,.jpeg,.png"
                           class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" />
-                        <p class="mt-1 text-xs text-gray-500">
+                        <p class="mt-1 text-xs text-gray-500 text-left md:text-left">
                           Chấp nhận file PDF, JPG, PNG (tối đa 5MB)
                         </p>
                       </div>
