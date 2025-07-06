@@ -226,7 +226,7 @@
                 </a>
               </li>
               <li>
-                <a href="./DangKyXeNhapKho.html"
+                <a href="./nhapkho.html"
                   class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-down fa-fw mr-3"></i>
                   <span class="nav-text">Nhập kho</span>
@@ -619,21 +619,63 @@
             <div class="mb-8 bg-white rounded-lg shadow-md custom-shadow overflow-hidden px-6 py-4">
               <h3 class="text-lg font-medium text-gray-800 mb-4 section-title">THÔNG TIN HÀNG HÓA</h3>
 
-              <!-- Danh sách hợp đồng -->
+              <!-- Chọn khách hàng -->
               <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Chọn hợp đồng</label>
-                <div class="flex flex-wrap gap-2" id="contract-list">
-                  <!-- Các hợp đồng sẽ được thêm ở đây bằng JS -->
-                </div>
-                <button type="button" onclick="addContract()"
-                  class="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200">
-                  <i class="fas fa-plus mr-1"></i> Thêm hợp đồng
-                </button>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Chọn khách hàng</label>
+                <select id="customer-select"
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  onchange="loadCustomerContracts()">
+                  <option value="">-- Chọn khách hàng --</option>
+                  <!-- Danh sách khách hàng sẽ được thêm bằng JS -->
+                </select>
               </div>
 
-              <!-- Danh sách sản phẩm theo hợp đồng -->
-              <div id="products-container">
-                <!-- Các nhóm sản phẩm theo hợp đồng sẽ được thêm ở đây -->
+              <!-- Chọn hợp đồng -->
+              <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Chọn hợp đồng</label>
+                <select id="contract-select"
+                  class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                  disabled onchange="loadContractProducts()">
+                  <option value="">-- Chọn hợp đồng --</option>
+                  <!-- Danh sách hợp đồng sẽ được thêm bằng JS -->
+                </select>
+              </div>
+
+              <!-- Bảng sản phẩm -->
+              <div class="mb-4">
+                <div class="flex justify-between items-center mb-2">
+                  <h4 class="text-sm font-medium text-gray-700">Danh sách hàng hóa</h4>
+                  <button type="button" id="add-product-btn"
+                    class="px-3 py-1 bg-blue-100 text-blue-700 rounded-md text-sm hover:bg-blue-200" disabled>
+                    <i class="fas fa-plus mr-1"></i> Thêm hàng hóa
+                  </button>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sản
+                          phẩm</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Loại
+                          hàng</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Đơn vị
+                          tính</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Số
+                          lượng</th>
+                        <th scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao
+                          tác</th>
+                      </tr>
+                    </thead>
+                    <tbody id="product-table-body" class="bg-white divide-y divide-gray-200">
+                      <!-- Các hàng sản phẩm sẽ được thêm vào đây -->
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
 
@@ -662,16 +704,6 @@
 
   <!-- insert script here -->
   <script>
-    // Close sidebar when clicking outside
-    document.addEventListener('click', function (event) {
-      const sidebar = document.getElementById('sidebar');
-      const sidebarToggle = document.querySelector('[onclick="toggleSidebar()"]');
-
-      // Check if click is outside sidebar and not on toggle button
-      if (!sidebar.contains(event.target) && event.target !== sidebarToggle && !sidebarToggle.contains(event.target)) {
-        sidebar.classList.add('-translate-x-full');
-      }
-    });
 
     // Tính toán trọng lượng hàng tự động
     document.getElementById('portWeightFull').addEventListener('input', calculatePortCargoWeight);
@@ -712,148 +744,211 @@
       }
     });
 
-    // Sidebar toggle function
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const header = document.getElementById('header');
-      const mainContent = document.getElementById('main-content');
-      sidebar.classList.toggle('md:translate-x-0');
-      header.classList.toggle('md:ml-64');
-      mainContent.classList.toggle('md:ml-64');
-    }
-
-    // Dữ liệu mẫu hợp đồng và sản phẩm
-    const contracts = [
-      {
-        id: 1, name: "HĐ-2023-001", products: [
-          { id: 1, name: "Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông Gỗ thông", unit: "m3" },
-          { id: 2, name: "Gỗ sồi", unit: "m3" }
-        ]
-      },
-      {
-        id: 2, name: "HĐ-2023-002", products: [
-          { id: 3, name: "Xi măng", unit: "bao" },
-          { id: 4, name: "Cát xây dựng", unit: "m3" }
-        ]
-      },
-      {
-        id: 3, name: "HĐ-2023-003", products: [
-          { id: 5, name: "Sắt thép", unit: "kg" },
-          { id: 6, name: "Gạch ống", unit: "viên" }
-        ]
-      }
+    // Sample data for demonstration
+    const customers = [
+      { id: 1, name: "Công ty A" },
+      { id: 2, name: "Công ty B" },
+      { id: 3, name: "Công ty C" }
     ];
 
-    // Thêm hợp đồng vào danh sách
-    function addContract(contractId = null) {
-      const contractList = document.getElementById('contract-list');
-      const productsContainer = document.getElementById('products-container');
+    const contracts = {
+      1: [
+        { id: 101, name: "HĐ-001/2023", customerId: 1 },
+        { id: 102, name: "HĐ-002/2023", customerId: 1 }
+      ],
+      2: [
+        { id: 201, name: "HĐ-003/2023", customerId: 2 }
+      ],
+      3: [
+        { id: 301, name: "HĐ-004/2023", customerId: 3 },
+        { id: 302, name: "HĐ-005/2023", customerId: 3 }
+      ]
+    };
 
-      // Tạo dropdown chọn hợp đồng
-      const select = document.createElement('select');
-      select.className = 'contract-select px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500';
-      select.onchange = function () { loadProducts(this); };
+    const products = {
+      101: [
+        { id: 1001, name: "Xi măng", type: "hàng bao", unit: "bao", quantity: 1000 },
+        { id: 1002, name: "Cát", type: "hàng xá", unit: "m3", quantity: 500 }
+      ],
+      102: [
+        { id: 1003, name: "Sắt thép", type: "hàng bao", unit: "kg", quantity: 2000 }
+      ],
+      201: [
+        { id: 2001, name: "Gạch", type: "hàng bao", unit: "viên", quantity: 5000 }
+      ],
+      301: [
+        { id: 3001, name: "Gỗ", type: "hàng xá", unit: "m3", quantity: 300 }
+      ],
+      302: [
+        { id: 3002, name: "Sơn", type: "hàng bao", unit: "thùng", quantity: 200 }
+      ]
+    };
 
-      // Thêm option mặc định
-      const defaultOption = document.createElement('option');
-      defaultOption.value = '';
-      defaultOption.textContent = '--- Chọn hợp đồng ---';
-      select.appendChild(defaultOption);
-
-      // Thêm các hợp đồng vào dropdown
-      contracts.forEach(contract => {
+    // Initialize customer dropdown
+    function initCustomers() {
+      const select = document.getElementById('customer-select');
+      customers.forEach(customer => {
         const option = document.createElement('option');
-        option.value = contract.id;
-        option.textContent = contract.name;
-        option.dataset.products = JSON.stringify(contract.products);
+        option.value = customer.id;
+        option.textContent = customer.name;
         select.appendChild(option);
       });
-
-      // Nếu có contractId, chọn hợp đồng đó
-      if (contractId) {
-        select.value = contractId;
-        loadProducts(select);
-      }
-
-      // Thêm vào danh sách
-      const div = document.createElement('div');
-      div.className = 'contract-item flex items-center gap-2 bg-gray-100 p-2 rounded';
-      div.appendChild(select);
-
-      // Nút xóa
-      const deleteBtn = document.createElement('button');
-      deleteBtn.innerHTML = '<i class="fas fa-times text-red-500"></i>';
-      deleteBtn.className = 'delete-contract';
-      deleteBtn.onclick = function () {
-        div.remove();
-        console.log(`Đã xóa hợp đồng ID: ${contractId}`);
-        // Xóa phần sản phẩm tương ứng nếu có
-        const productGroup = document.getElementById(`products-${contractId}`);
-        if (productGroup) productGroup.remove();
-      };
-      div.appendChild(deleteBtn);
-
-      contractList.appendChild(div);
     }
 
-    // Tải sản phẩm theo hợp đồng
-    function loadProducts(select) {
-      const contractId = select.value;
+    // Load contracts for selected customer
+    function loadCustomerContracts() {
+      const customerId = document.getElementById('customer-select').value;
+      const contractSelect = document.getElementById('contract-select');
+
+      // Reset contract select
+      contractSelect.innerHTML = '<option value="">-- Chọn hợp đồng --</option>';
+      contractSelect.disabled = !customerId;
+      document.getElementById('add-product-btn').disabled = true;
+      document.getElementById('product-table-body').innerHTML = '';
+
+      if (customerId) {
+        const customerContracts = contracts[customerId] || [];
+        customerContracts.forEach(contract => {
+          const option = document.createElement('option');
+          option.value = contract.id;
+          option.textContent = contract.name;
+          contractSelect.appendChild(option);
+        });
+      }
+    }
+
+    // Load products for selected contract
+    function loadContractProducts() {
+      const contractId = document.getElementById('contract-select').value;
+      document.getElementById('add-product-btn').disabled = !contractId;
+      document.getElementById('product-table-body').innerHTML = '';
+    }
+
+    // Track added product IDs
+    const addedProductIds = new Set();
+
+    // Add product to table
+    function addProductToTable() {
+      const contractId = document.getElementById('contract-select').value;
       if (!contractId) return;
 
-      const productsContainer = document.getElementById('products-container');
-      const productGroupId = `products-${contractId}`;
+      const contractProducts = products[contractId] || [];
+      if (contractProducts.length === 0) return;
 
-      // Xóa nhóm sản phẩm cũ nếu có
-      const oldGroup = document.getElementById(productGroupId);
-      if (oldGroup) oldGroup.remove();
+      // // Filter out already added products
+      // const availableProducts = contractProducts.filter(p => !addedProductIds.has(p.id));
+      // if (availableProducts.length === 0) {
+      //   Swal.fire('Thông báo', 'Tất cả sản phẩm đã được thêm', 'info');
+      //   return;
+      // }
 
-      // Lấy thông tin hợp đồng
-      const contract = contracts.find(c => c.id == contractId);
-      if (!contract) return;
+      // Show product selection dialog with multi-select
+      Swal.fire({
+        title: 'Chọn sản phẩm',
+        html: `
+          <div class="max-h-60 overflow-y-auto">
+            ${contractProducts.map(product => `
+              <div class="flex items-center mb-2">
+                <input type="checkbox" id="product-${product.id}" value="${product.id}" class="mr-2" 
+                  ${addedProductIds.has(product.id) ? 'checked' : ''} 
+                  ${addedProductIds.has(product.id) ? '' : ''}>
+                <label for="product-${product.id}">${product.name}</label>
+              </div>
+            `).join('')}
+          </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Thêm',
+        cancelButtonText: 'Hủy',
+        preConfirm: () => {
+          const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
+          if (checkedBoxes.length === 0) {
+            Swal.showValidationMessage('Vui lòng chọn ít nhất 1 sản phẩm');
+            return false;
+          }
+          return Array.from(checkedBoxes).map(box => box.value);
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const tableBody = document.getElementById('product-table-body');
 
-      // Tạo nhóm sản phẩm mới
-      const productGroup = document.createElement('table');
-      productGroup.id = productGroupId;
-      productGroup.className = 'product-group mb-6 p-4 border border-gray-200 rounded-lg';
+          // First get all product IDs from the dialog
+          const allProductIds = contractProducts.map(p => p.id);
+          const selectedProductIds = result.value.map(id => parseInt(id));
 
-      // Tiêu đề nhóm
-      const title = document.createElement('h4');
-      title.className = 'font-medium text-gray-700 mb-3';
-      title.textContent = `Sản phẩm hợp đồng ${contract.name}`;
-      productGroup.appendChild(title);
+          // Clear and rebuild the table based on selections
+          tableBody.innerHTML = '';
+          addedProductIds.clear();
 
-      // Danh sách sản phẩm
-      contract.products.forEach(product => {
-        const div = document.createElement('tr');
-        div.className = 'product-item mb-3';
+          // Add selected products to table
+          contractProducts.forEach(product => {
+            if (selectedProductIds.includes(product.id)) {
+              const row = document.createElement('tr');
 
-        const td1 = document.createElement('td');
-        // Label
-        const label = document.createElement('label');
-        label.htmlFor = `product-${contractId}-${product.id}`;
-        label.className = 'mr-2';
-        label.textContent = `${product.name} (${product.unit})`;
-        td1.appendChild(label);
+              row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">${product.name}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="border rounded px-2 py-1 product-type" onchange="updateUnitOptions(this)">
+                    <option value="hàng xá" ${product.type === 'hàng xá' ? 'selected' : ''}>Hàng xá</option>
+                    <option value="hàng bao" ${product.type === 'hàng bao' ? 'selected' : ''}>Hàng bao</option>
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <select class="border rounded px-2 py-1 product-unit">
+                    ${product.type === 'hàng bao'
+                  ? `<option value="bao jumbo 1 tấn">Bao jumbo 1 tấn</option>
+                         <option value="bao 100kg">Bao 100kg</option>
+                         <option value="bao 50kg">Bao 50kg</option>`
+                  : `<option value="tấn">Tấn</option>
+                         <option value="kg">Kg</option>`}
+                  </select>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <input type="number" class="border rounded px-2 py-1 w-20" value="1" min="1" max="${product.quantity}">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <button onclick="removeProduct(this, ${product.id})" class="text-red-500 hover:text-red-700">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              `;
 
-
-        const td2 = document.createElement('td');
-        // Số lượng
-        const qtyInput = document.createElement('input');
-        qtyInput.type = 'number';
-        qtyInput.name = `quantities[${contractId}][${product.id}]`;
-        qtyInput.placeholder = 'Số lượng';
-        qtyInput.className = 'ml-2 px-2 py-1 border border-gray-300 rounded w-24';
-        qtyInput.min = '0';
-        td2.appendChild(qtyInput);
-
-        div.appendChild(td1);
-        div.appendChild(td2);
-        productGroup.appendChild(div);
+              tableBody.appendChild(row);
+              addedProductIds.add(product.id);
+            }
+          });
+        }
       });
-
-      productsContainer.appendChild(productGroup);
     }
+
+    // Update unit options when product type changes
+    function updateUnitOptions(selectElement) {
+      const row = selectElement.closest('tr');
+      const unitSelect = row.querySelector('.product-unit');
+      const isBulk = selectElement.value === 'hàng xá';
+
+      unitSelect.innerHTML = isBulk
+        ? `<option value="tấn">Tấn</option>
+           <option value="kg">Kg</option>`
+        : `<option value="bao jumbo 1 tấn">Bao jumbo 1 tấn</option>
+           <option value="bao 100kg">Bao 100kg</option>
+           <option value="bao 50kg">Bao 50kg</option>`;
+    }
+
+    // Remove product from table and selected products
+    function removeProduct(button, productId) {
+      button.closest('tr').remove();
+      addedProductIds.delete(productId);
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function () {
+      initCustomers();
+      addedProductIds.clear();
+
+      // Event listeners
+      document.getElementById('add-product-btn').addEventListener('click', addProductToTable);
+    });
 
     // Đặt ngày mặc định cho các trường ngày tháng
     document.addEventListener('DOMContentLoaded', () => {
@@ -893,7 +988,7 @@
           title: 'Cảnh báo',
           html: warningMessage,
           showCancelButton: true,
-          shơwConfirmButton: true,
+          showConfirmButton: true,
           confirmButtonText: 'Tiếp tục',
           reverseButtons: true
         });
