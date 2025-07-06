@@ -202,15 +202,13 @@
                 </a>
               </li>
               <li>
-                <a href="./DangKyXeNhapKho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/nhapkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-down fa-fw mr-3"></i>
                   <span class="nav-text">Nhập kho</span>
                 </a>
               </li>
               <li>
-                <a href="./DangKyXeXuatKho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/xuatkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-up fa-fw mr-3"></i>
                   <span class="nav-text">Xuất kho</span>
                 </a>
@@ -539,19 +537,19 @@
           <div
             class="grid grid-cols-24 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[800px]">
             <div class="col-span-2">Loại</div>
-            <div class="col-span-5 text-left cursor-pointer"><span>Hợp đồng<i class="p-1 fas fa-sort"></i></span>
+            <div class="col-span-2 text-left cursor-pointer"><span>Hợp đồng<i class="p-1 fas fa-sort"></i></span>
             </div>
             <div class="col-span-3 text-center">Vào lúc<i class="p-1 fas fa-sort"></i></div>
-            <div class="col-span-2 text-center cursor-pointer"><span>Xe vào<i class="p-1 fas fa-sort"></i><br><span
+            <div class="col-span-3 text-center cursor-pointer"><span>Xe vào<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(kg)</span></span></div>
             <div class="col-span-3 text-center">Ra lúc<i class="p-1 fas fa-sort"></i></div>
-            <div class="col-span-2 text-center cursor-pointer"><span>Xe ra<i class="p-1 fas fa-sort"></i><br><span
+            <div class="col-span-3 text-center cursor-pointer"><span>Xe ra<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(kg)</span></span></div>
             <div class="col-span-2 text-center cursor-pointer"><span>Tại cảng<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(kg)</span></span></div>
             <div class="col-span-3 text-center cursor-pointer"><span>Lượng hàng<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(kg)</span></span></div>
-            <div class="col-span-2 text-right cursor-pointer">Thao tác</div>
+            <div class="col-span-3 text-right cursor-pointer">Thao tác</div>
           </div>
 
           <!-- Warehouse Items -->
@@ -644,7 +642,7 @@
       },
       {
         type: "Nhập kho",
-        contract: ["HD002", "HD002A", "HD002B"],
+        contract: ["HD002"],
         inTime: "02/07/2025 10:00",
         inWeight: 20000.00,
         outTime: "02/07/2025 10:30",
@@ -688,7 +686,7 @@
     const truckRegistratorList = document.getElementById('truckRegistratorList');
 
     truckRegistrations.forEach(truckRegistration => {
-      const typeClass = truckRegistration.type === 'Nhập kho' ? 'bg-blue-600' : 'bg-green-600';
+      const typeClass = truckRegistration.type === 'Nhập kho' ? 'bg-blue-600' : truckRegistration.type === 'Xuất kho' ? 'bg-green-600' : 'bg-gray-600';
       let contractText = truckRegistration.contract.join('</a>, <a href="#" class="text-blue-600 hover:underline text-sm">');
       contractText = `<a href="#" class="text-blue-600 hover:underline text-sm">${contractText}</a>`;
       const portWeight = truckRegistration.portWeight ? truckRegistration.portWeight.toLocaleString('en-US') : '_';
@@ -700,12 +698,15 @@
         warningClass = 'hover:bg-gray-50';
       }
 
-      const detailsLink = truckRegistration.type === 'Nhập kho' ? 'DangKyXeNhapKhoDetails.html' : 'DangKyXeXuatKhoDetails.html';
+      const detailsLink = truckRegistration.type === 'Nhập kho' ? 'DangKyXeNhapKhoDetails.html' : truckRegistration.type === 'Xuất kho' ? 'DangKyXeXuatKhoDetails.html': 'DangKyXeChuaRoDetails.html';
 
       const warningLabel = document.createElement('p');
       warningLabel.className = 'text-red-600 text-xs italic text-right';
       warningLabel.textContent = warningText;
       const registration = document.createElement('div');
+      registration.onclick = function () {
+        window.location.href = detailsLink;
+      };
       const bounder = document.createElement('div');
       registration.className = 'grid grid-cols-24 px-6 py-4 transition-colors rounded cursor-pointer rigisteration-item min-w-[800] ' + warningClass;
       registration.innerHTML = `
@@ -715,19 +716,19 @@
                           >${truckRegistration.type}</span>
                     </div>
                 </div>
-                <div class="col-span-5 mb-2 md:mb-0">
+                <div class="col-span-2 mb-2 md:mb-0">
                     <div class="font-medium text-gray-900">${contractText}</div>
                 </div>
                 <div class="col-span-3 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-center">${truckRegistration.inTime}</div>
                 </div>
-                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
+                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-blue-600 text-center">${truckRegistration.inWeight.toLocaleString('en-US')}</div>
                 </div>
                 <div class="col-span-3 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-center">${truckRegistration.outTime}</div>
                 </div>
-                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
+                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-blue-600 text-center">${truckRegistration.outWeight.toLocaleString('en-US')}</div>
                 </div>
                 <div class="col-span-2 mb-2 md:mb-0 md:text-right">
@@ -736,8 +737,8 @@
                 <div class="col-span-3 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-purple-600 text-center">${truckRegistration.totalWeight.toLocaleString('en-US')}</div>
                 </div>
-                <div class="col-span-2 md:text-right">
-                    <span class="flex space-x-3 justify-end px-2 py-1 text-xm rounded-full">
+                <div class="col-span-3 md:text-right">
+                    <span class="flex space-x-3 justify-end items-center px-2 py-1 text-xm rounded-full">
                         <a href="${detailsLink}"><i class="fas fa-eye text-blue-600 hover:text-blue-900"></i></a>
                         <a href="${detailsLink}"><i class="fas fa-edit text-yellow-600 hover:text-yellow-900"></i></a>
                         <i class="fas fa-trash text-red-600 hover:text-red-900"></i>

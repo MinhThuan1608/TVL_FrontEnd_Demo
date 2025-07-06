@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TVL - Hệ thống quản lý kho bãi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#3b82f6",
+            secondary: "#64748b",
+            success: "#10b981",
+            danger: "#ef4444",
+            warning: "#f59e0b",
+            info: "#06b6d4",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .sidebar {
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar.collapsed {
+      width: 0px;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed .nav-text {
+      display: none;
+    }
+
+    .sidebar.collapsed .logo-text {
+      display: none;
+    }
+
+    .sidebar.collapsed>div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .sidebar #show-sidebar {
+      display: none;
+    }
+
+    .sidebar #close-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed+.content {
+      margin-left: 0px;
+    }
+
+    .sidebar.collapsed #show-sidebar {
+      display: inline;
+    }
+
+    .sidebar.collapsed #close-sidebar {
+      display: none;
+    }
+
+    .sidebar.collapsed nav {
+      padding: 0.5rem;
+    }
+
+    .sidebar.collapsed nav li>a>i {
+      margin-right: 0;
+    }
+
+    .content {
+      transition: all 0.3s ease;
+    }
+
+    .table-container {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .chart-container {
+      height: 300px;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    #user-menu {
+      transition: all 0.2s ease;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .sidebar.collapsed {
+        width: 70px;
+        overflow: hidden;
+      }
+
+      .sidebar.collapsed+.content {
+        margin-left: 10px;
+      }
+    }
+  </style>
+  <!-- insert libs here -->
+
+  <!-- insert libs here -->
+  <!-- insert style here -->
+  <style>
+    .form-container {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .form-container:hover {
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal {
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .table-row:hover {
+      background-color: #f8fafc;
+    }
+  </style>
+  <!-- insert style here -->
+</head>
+
+<body class="bg-gray-50">
+  <div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="absolute md:static sidebar bg-white shadow-md w-64 flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b">
+        <div class="flex items-center">
+          <img class="fas fa-warehouse text-primary text-2xl w-10" src="logo.png"></img>
+          <span class="logo-text font-bold text-xl text-blue-800">WarehouseTVL</span>
+        </div>
+        <button id="toggle-sidebar" class="text-gray-500 hover:text-gray-700">
+          <i id="close-sidebar" class="fas fa-chevron-left"></i>
+          <i id="show-sidebar" class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <nav class="p-4">
+          <!-- Đăng ký xe -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Đăng ký xe
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyDangKyXe.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý đăng ký xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./nhapkho.html"
+                  class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <span class="nav-text">Nhập kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./xuatkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-arrow-up fa-fw mr-3"></i>
+                  <span class="nav-text">Xuất kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+          <!-- Quản lý kho -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Kho bãi
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-exchange-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý kho</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Danh mục -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Danh mục
+            </p>
+            <ul>
+              <li>
+                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-warehouse fa-fw mr-3"></i>
+                  <span class="nav-text">Kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucNhanVien.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user fa-fw mr-3"></i>
+                  <span class="nav-text">Nhân viên</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucDonVitinh.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-balance-scale fa-fw mr-3"></i>
+                  <span class="nav-text">Đơn vị tính</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-truck fa-fw mr-3"></i>
+                  <span class="nav-text">Xe</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucHangHoa.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Hàng hóa</span>
+                </a>
+              </li>
+              <li>
+                <a href="./DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                  <span class="nav-text">Trạm cân</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Khách hàng -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Khách hàng
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyKhachHang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý khách hàng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Hợp đồng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quản trị hệ thống -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Quản trị hệ thống
+            </p>
+            <ul>
+              <li>
+                <a href="./QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý người dùng</span>
+                </a>
+              </li>
+              <li>
+                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý role</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tổng quan -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tổng quan
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotongquan/baocaohangngay.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Báo cáo hàng ngày</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tài chính -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tài chính
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tổng quan</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Chi phí</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/congno.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <span class="nav-text">Lợi nhuận</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Báo cáo tồn kho -->
+          <div>
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Báo cáo tồn kho
+            </p>
+            <ul>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo kho</span>
+                </a>
+              </li>
+              <li>
+                <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo khách hàng</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content flex-1 overflow-auto">
+      <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
+        <i class="fas fa-bars text-xl inline md:hidden" id="menu-btn"></i>
+        <h1 class="text-xl font-semibold text-blue-800 uppercase">
+          PHIẾU NHẬP KHO
+        </h1>
+        <div class="flex item-right gap-4">
+          <div class="hidden md:flex items-center space-x-4">
+            <div class="relative">
+              <input type="text" placeholder="Tìm kiếm..."
+                class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" />
+              <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            </div>
+            <button class="p-2 text-gray-500 hover:text-gray-700">
+              <i class="fas fa-bell"></i>
+            </button>
+          </div>
+
+          <div>
+            <div class="flex items-center cursor-pointer" id="user-menu-button">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2" />
+              <div class="hidden md:block nav-text">
+                <p class="text-sm font-medium text-gray-800">Admin</p>
+                <p class="text-xs text-gray-500">Quản trị hệ thống</p>
+              </div>
+              <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs"></i>
+            </div>
+            <!-- Dropdown menu -->
+            <div id="user-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+              <a href="./ChangePassword.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Thay đổi
+                mật khẩu</a>
+              <a href="./index.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Đăng xuất</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="p-4">
+        <!-- insert code here -->
+        <div class="container mx-auto px-4 py-4">
+
+          <!-- Form 1: Document Information -->
+          <div class="form-container bg-white rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Thông tin</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div>
+                <label for="docDate" class="block text-sm font-medium text-gray-700 mb-1">Ngày chứng từ</label>
+                <input type="date" id="docDate"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" value="2025-07-02">
+              </div>
+              <div>
+                <label for="docNumber" class="block text-sm font-medium text-gray-700 mb-1">Số chứng từ</label>
+                <input type="text" id="docNumber" value="NK-001"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div>
+                <label for="companyCode" class="block text-sm font-medium text-gray-700 mb-1">Mã công ty</label>
+                <select id="companyCode"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">--Chọn mã công ty--</option>
+                  <option value="CtyA" selected>Cty A</option>
+                  <option value="CtyB">Cty B</option>
+                  <option value="CtyC">Cty C</option>
+                  <option value="CtyD">Cty D</option>
+                </select>
+              </div>
+              <div>
+                <label for="contractCode" class="block text-sm font-medium text-gray-700 mb-1">Mã hợp đồng</label>
+                <select id="contractCode"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">--Chọn hợp đồng--</option>
+                  <option value="HD-001">Hợp đồng số 001</option>
+                  <option value="HD-002" selected>Hợp đồng số 002</option>
+                  <option value="HD-003">Hợp đồng số 003</option>
+                  <option value="HD-004">Hợp đồng số 004</option>
+                </select>
+              </div>
+              <div>
+                <label for="truckRegistration" class="block text-sm font-medium text-gray-700 mb-1">Đăng ký xe</label>
+                <select id="truckRegistration"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">--Chọn đăng ký xe--</option>
+                  <option value="HD-001" selected>Truck-drive-001/05/07/25</option>
+                  <option value="HD-002">Truck-drive-002/05/07/25</option>
+                  <option value="HD-003">Truck-drive-003/05/07/25</option>
+                  <option value="HD-004">Truck-drive-004/05/07/25</option>
+                </select>
+              </div>
+              <div>
+                <label for="contactPerson" class="block text-sm font-medium text-gray-700 mb-1">Người giao dịch</label>
+                <input type="text" id="contactPerson" value="Nguyễn Văn A"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div class="md:col-span-2 lg:col-span-3">
+                <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
+                <input type="text" id="address" value="123 Đường ABC, phường 1, TP.HCM"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+              <div class="md:col-span-2 lg:col-span-3">
+                <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
+                <textarea id="notes" rows="3" 
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form 2: Inventory Items -->
+          <div class="form-container bg-white rounded-lg p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-semibold text-gray-800 border-b pb-2">Nhập kho</h2>
+              <button id="addItemBtn"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center transition-colors">
+                <i class="fas fa-plus mr-2"></i> Thêm vật tư
+              </button>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Kho
+                        <i class="fas fa-sort ml-1"></i>
+                      </div>
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Mã vật tư
+                        <i class="fas fa-sort ml-1"></i>
+                      </div>
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Tên vật tư
+                        <i class="fas fa-sort ml-1"></i>
+                      </div>
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Đơn vị
+                        <i class="fas fa-sort ml-1"></i>
+                      </div>
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <div class="flex items-center">
+                        Số lượng
+                        <i class="fas fa-sort ml-1"></i>
+                      </div>
+                    </th>
+                    <th scope="col"
+                      class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="itemTableBody" class="bg-white divide-y divide-gray-200">
+                  <tr class="table-row">
+                    <td class="px-6 py-4 whitespace-nowrap">TVL01</td>
+                    <td class="px-6 py-4 whitespace-nowrap">VT-1001</td>
+                    <td class="px-6 py-4 whitespace-nowrap">Phân đạm</td>
+                    <td class="px-6 py-4 whitespace-nowrap">tấn</td>
+                    <td class="px-6 py-4 whitespace-nowrap">500</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button class="edit-btn text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="delete-btn text-red-600 hover:text-red-800 mr-3">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="px-6 py-4 whitespace-nowrap">TVL02</td>
+                    <td class="px-6 py-4 whitespace-nowrap">VT-2005</td>
+                    <td class="px-6 py-4 whitespace-nowrap">Phân hữu cơ</td>
+                    <td class="px-6 py-4 whitespace-nowrap">tấn</td>
+                    <td class="px-6 py-4 whitespace-nowrap">100</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button class="edit-btn text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="delete-btn text-red-600 hover:text-red-800 mr-3">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+              <button id="submitBtn"
+                class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md transition-colors">
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="confirmDeleteModal"
+          class="modal fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-800">Xác nhận xóa</h3>
+              <button id="closeDeleteModalBtn" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <p class="mb-6">Bạn có chắc chắn muốn xóa mục này?</p>
+            <div class="flex justify-end space-x-3">
+              <button id="cancelDeleteBtn"
+                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
+                Hủy
+              </button>
+              <button id="confirmDeleteBtn"
+                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                Xóa
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Item Modal -->
+        <div id="addItemModal"
+          class="modal fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-lg font-semibold text-gray-800">Thêm vật tư mới</h3>
+              <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+
+            <div class="space-y-4">
+              <div>
+                <label for="warehouse" class="block text-sm font-medium text-gray-700 mb-1">Kho</label>
+                <select id="warehouse"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">--Chọn kho--</option>
+                  <option value="TVL1">Kho TVL1</option>
+                  <option value="TVL2">Kho TVL2</option>
+                  <option value="BCC2">Kho BCC2</option>
+                  <option value="BCC3">Kho BCC3</option>
+                  <option value="BCC5">Kho BCC5</option>
+                </select>
+              </div>
+              <div>
+                <label for="itemCode" class="block text-sm font-medium text-gray-700 mb-1">Vật tư</label>
+                <select id="itemCode"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">--Chọn vật tư--</option>
+                  <option value="DAM">Phân đạm</option>
+                  <option value="HUUCO">Phân hữu cơ</option>
+                  <option value="LAN">Phân lân</option>
+                  <option value="KALI">Phân Kali</option>
+                  <option value="NPK">Phân NPK</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="unit" class="block text-sm font-medium text-gray-700 mb-1">Đơn vị tính</label>
+                <select id="unit"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">Chọn đơn vị</option>
+                  <option value="kg">Kg</option>
+                  <option value="ton">Tấn</option>
+                  <option value="box">Bao jumbo 1 tấn</option>
+                  <option value="piece">Bao 100kg</option>
+                </select>
+              </div>
+              <div>
+                <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Số lượng</label>
+                <input type="number" id="quantity"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
+            </div>
+
+            <div class="mt-6 flex justify-end space-x-3">
+              <button id="cancelAddBtn"
+                class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
+                Hủy
+              </button>
+              <button id="confirmAddBtn"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                Thêm
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- insert code here -->
+      </main>
+    </div>
+  </div>
+
+  <!-- insert script here -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let currentEditingRow = null;
+      // DOM Elements
+      const addItemBtn = document.getElementById('addItemBtn');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const cancelAddBtn = document.getElementById('cancelAddBtn');
+      const confirmAddBtn = document.getElementById('confirmAddBtn');
+      const addItemModal = document.getElementById('addItemModal');
+      const itemTableBody = document.getElementById('itemTableBody');
+      const submitBtn = document.getElementById('submitBtn');
+
+      // Modal toggle function
+      function toggleModal() {
+        addItemModal.classList.toggle('active');
+      }
+
+      // Event Listeners
+      addItemBtn.addEventListener('click', toggleModal);
+      closeModalBtn.addEventListener('click', toggleModal);
+      cancelAddBtn.addEventListener('click', function () {
+        currentEditingRow = null;
+        document.querySelector('#addItemModal h3').textContent = 'Thêm vật tư mới';
+        document.getElementById('confirmAddBtn').textContent = 'Thêm vật tư';
+        toggleModal();
+      });
+
+      // Add/edit item handler
+      confirmAddBtn.addEventListener('click', function () {
+        const isEditing = currentEditingRow !== null;
+        const warehouse = document.getElementById('warehouse').value;
+        const itemCode = document.getElementById('itemCode').value;
+        const itemName = document.getElementById('itemCode').options[document.getElementById('itemCode').selectedIndex].text;
+        const unit = document.getElementById('unit').value;
+        const quantity = document.getElementById('quantity').value;
+
+        if (!warehouse || !itemCode || !itemName || !unit || !quantity) {
+          alert('Vui lòng điền đầy đủ thông tin');
+          return;
+        }
+
+        // Clear "no items" message if it exists
+        if (itemTableBody.querySelector('td[colspan="6"]')) {
+          itemTableBody.innerHTML = '';
+        }
+
+        if (isEditing) {
+          // Update existing row
+          const cells = currentEditingRow.cells;
+          cells[0].textContent = warehouse;
+          cells[1].textContent = itemCode;
+          cells[2].textContent = itemName;
+          cells[3].textContent = unit;
+          cells[4].textContent = quantity;
+
+          // Reset edit mode
+          currentEditingRow = null;
+          document.querySelector('#addItemModal h3').textContent = 'Thêm vật tư mới';
+          document.getElementById('confirmAddBtn').textContent = 'Thêm vật tư';
+        } else {
+          // Create new row
+          const newRow = document.createElement('tr');
+          newRow.className = 'table-row';
+          newRow.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">${warehouse}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${itemCode}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${itemName}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${unit}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${quantity}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <button class="edit-btn text-blue-600 hover:text-blue-800">
+                              <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="delete-btn text-red-600 hover:text-red-800 mr-3">
+                              <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+
+          itemTableBody.appendChild(newRow);
+        }
+
+        // Clear form
+        document.getElementById('warehouse').value = '';
+        document.getElementById('itemCode').value = '';
+        document.getElementById('unit').value = '';
+        document.getElementById('quantity').value = '';
+
+        toggleModal();
+      });
+
+      // Delete confirmation modal elements
+      const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+      const closeDeleteModalBtn = document.getElementById('closeDeleteModalBtn');
+      const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+      const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+      let rowToDelete = null;
+
+      // Delete or Edit item (event delegation)
+      itemTableBody.addEventListener('click', function (e) {
+        if (e.target.closest('.delete-btn')) {
+          rowToDelete = e.target.closest('tr');
+          confirmDeleteModal.classList.add('active');
+        }
+
+        if (e.target.closest('.edit-btn')) {
+          currentEditingRow = e.target.closest('tr');
+          const cells = currentEditingRow.cells;
+
+          // Fill modal with existing data
+          document.getElementById('warehouse').value = cells[0].textContent;
+          document.getElementById('itemCode').value = cells[1].textContent;
+          document.getElementById('unit').value = cells[3].textContent;
+          document.getElementById('quantity').value = cells[4].textContent;
+
+          // Change modal title and button text
+          document.querySelector('#addItemModal h3').textContent = 'Chỉnh sửa vật tư';
+          document.getElementById('confirmAddBtn').textContent = 'Cập nhật';
+
+          toggleModal();
+        }
+      });
+
+      // Delete confirmation handlers
+      closeDeleteModalBtn.addEventListener('click', () => confirmDeleteModal.classList.remove('active'));
+      cancelDeleteBtn.addEventListener('click', () => confirmDeleteModal.classList.remove('active'));
+      confirmDeleteBtn.addEventListener('click', function () {
+        if (rowToDelete) {
+          rowToDelete.remove();
+          rowToDelete = null;
+
+          // Show "no items" message if table is empty
+          if (itemTableBody.children.length === 0) {
+            itemTableBody.innerHTML = `
+                            <tr class="text-center py-4">
+                                <td colspan="6" class="px-6 py-4 text-gray-500">Chưa có vật tư nào</td>
+                            </tr>
+                        `;
+          }
+          confirmDeleteModal.classList.remove('active');
+        }
+      });
+
+      // Submit form
+      submitBtn.addEventListener('click', function () {
+        const docDate = document.getElementById('docDate').value;
+        const docNumber = document.getElementById('docNumber').value;
+
+        if (!docDate || !docNumber) {
+          alert('Vui lòng điền ít nhất Ngày chứng từ và Số chứng từ');
+          return;
+        }
+
+        if (itemTableBody.querySelector('td[colspan="6"]')) {
+          alert('Vui lòng thêm ít nhất một vật tư');
+          return;
+        }
+
+        // In a real app, you would submit the data to a server here
+        alert('Đã xong');
+        console.log('Form submitted');
+      });
+    });
+  </script>
+
+  <!-- insert script here -->
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const sidebar = document.querySelector(".sidebar");
+    if (window.innerWidth < 768) {
+      sidebar.classList.add("collapsed");
+    }
+    // Toggle sidebar
+    document
+      .getElementById("toggle-sidebar")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
+    document
+      .getElementById("menu-btn")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("collapsed");
+      });
+
+    // Toggle user menu
+    document
+      .getElementById("user-menu-button")
+      .addEventListener("click", function (e) {
+        e.stopPropagation();
+        document.getElementById("user-menu").classList.toggle("hidden");
+      });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
+  </script>
+</body>
+
+</html>
