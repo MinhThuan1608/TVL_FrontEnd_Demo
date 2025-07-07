@@ -19,6 +19,10 @@
             warning: "#f59e0b",
             info: "#06b6d4",
           },
+          gridTemplateColumns: {
+            16: 'repeat(16, minmax(0, 1fr))',
+            24: 'repeat(24, minmax(0, 1fr))',
+          }
         },
       },
     };
@@ -525,17 +529,19 @@
 
           <!-- Table Header (Desktop) -->
           <div
-            class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[500px]">
-            <div class="col-span-2">Tên kho</div>
+            class="grid grid-cols-16 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[500px]">
+            <div class="col-span-3">Tên kho</div>
             <div class="col-span-2 text-center cursor-pointer"><span>Tổng sức chứa<i
                   class="p-1 fas fa-sort"></i><br><span class="text-xs font-normal">(tấn)</span></span></div>
             <div class="col-span-2 text-center cursor-pointer"><span>Tổng KL<i class="p-1 fas fa-sort"></i><br><span
+                  class="text-xs font-normal">(tấn)</span></span></div>
+            <div class="col-span-2 text-center cursor-pointer"><span>Còn lại<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(tấn)</span></span></div>
             <div class="col-span-2 text-center cursor-pointer"><span>Hàng xá<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(tấn)</span></span></div>
             <div class="col-span-2 text-center cursor-pointer"><span>Hàng bao<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(tấn)</span></span></div>
-            <div class="col-span-1 text-right cursor-pointer">Trạng thái</div>
+            <div class="col-span-2 text-center cursor-pointer">Trạng thái</div>
             <div class="col-span-1 text-right cursor-pointer">Thao tác</div>
           </div>
 
@@ -633,9 +639,9 @@
       const statusText = warehouse.status === 'active' ? 'Hoạt động' : 'Bảo trì';
 
       const warehouseItem = document.createElement('div');
-      warehouseItem.className = 'grid grid-cols-12 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer';
+      warehouseItem.className = 'grid grid-cols-16 px-6 py-4 hover:bg-gray-50 transition-colors cursor-pointer';
       warehouseItem.innerHTML = `
-                <div class="col-span-2 mb-2 md:mb-0">
+                <div class="col-span-3 mb-2 md:mb-0">
                     <div class="font-medium text-gray-900">${warehouse.name}</div>
                 </div>
                 <div class="col-span-2 mb-2 md:mb-0 md:text-right">
@@ -645,12 +651,15 @@
                     <div class="font-medium text-sm text-center" data-weight="total-${index}">${warehouse.totalWeight.toFixed(2)}</div>
                 </div>
                 <div class="col-span-2 mb-2 md:mb-0 md:text-right">
+                    <div class="font-medium text-sm text-center text-green-600" data-weight="remain-${index}">${(warehouse.totalCapacity - warehouse.totalWeight).toFixed(2)}</div>
+                </div>
+                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-blue-600 text-center data-weight="bulk-${index}"">${warehouse.bulkWeight.toFixed(2)}</div>
                 </div>
                 <div class="col-span-2 mb-2 md:mb-0 md:text-right">
                     <div class="font-medium text-sm text-purple-600 text-center" data-weight="packaged-${index}">${warehouse.packagedWeight.toFixed(2)}</div>
                 </div>
-                <div class="col-span-1 md:text-right">
+                <div class="col-span-2 md:text-center">
                     <span class="px-2 py-1 text-xs rounded-full ${statusClass}">${statusText}</span>
                 </div>
                 <div class="col-span-1 md:text-right">
