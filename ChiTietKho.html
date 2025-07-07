@@ -19,6 +19,11 @@
             warning: "#f59e0b",
             info: "#06b6d4",
           },
+          zIndex: {
+            '60': '60',
+            '1001': '1001',
+            'max': '9999',
+          },
         },
       },
     };
@@ -138,7 +143,7 @@
     }
   </style>
   <!-- insert libs here -->
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- insert libs here -->
   <!-- insert style here -->
   <style>
@@ -201,22 +206,20 @@
             </p>
             <ul>
               <li>
-                <a href="./QuanLyDangKyXe.html"
+                <a href="/QuanLyDangKyXe.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <i class="fas fa-truck-fast fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý đăng ký xe</span>
                 </a>
               </li>
               <li>
-                <a href="/nhapkho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/nhapkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-down fa-fw mr-3"></i>
                   <span class="nav-text">Nhập kho</span>
                 </a>
               </li>
               <li>
-                <a href="/xuatkho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/xuatkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-up fa-fw mr-3"></i>
                   <span class="nav-text">Xuất kho</span>
                 </a>
@@ -232,7 +235,8 @@
             </p>
             <ul>
               <li>
-                <a href="./QuanLyKho.html" class="flex items-center p-2 hover:bg-gray-100 rounded-lg bg-blue-50 text-blue-600">
+                <a href="/QuanLyKho.html"
+                  class="flex items-center p-2 hover:bg-gray-100 rounded-lg bg-blue-50 text-blue-600">
                   <i class="fas fa-exchange-alt fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý kho</span>
                 </a>
@@ -247,41 +251,41 @@
             </p>
             <ul>
               <li>
-                <a href="./DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/DanhMucKho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-warehouse fa-fw mr-3"></i>
                   <span class="nav-text">Kho</span>
                 </a>
               </li>
               <li>
-                <a href="./DanhMucNhanVien.html"
+                <a href="/DanhMucNhanVien.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-user fa-fw mr-3"></i>
                   <span class="nav-text">Nhân viên</span>
                 </a>
               </li>
               <li>
-                <a href="./DanhMucDonVitinh.html"
+                <a href="/DanhMucDonVitinh.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-balance-scale fa-fw mr-3"></i>
                   <span class="nav-text">Đơn vị tính</span>
                 </a>
               </li>
               <li>
-                <a href="./DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/DanhMucXe.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-truck fa-fw mr-3"></i>
                   <span class="nav-text">Xe</span>
                 </a>
               </li>
               <li>
-                <a href="./DanhMucHangHoa.html"
+                <a href="/DanhMucHangHoa.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-cubes fa-fw mr-3"></i>
                   <span class="nav-text">Hàng hóa</span>
                 </a>
               </li>
               <li>
-                <a href="./DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-cubes fa-fw mr-3"></i>
+                <a href="/DanhMucCan.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-weight-hanging fa-fw mr-3"></i>
                   <span class="nav-text">Trạm cân</span>
                 </a>
               </li>
@@ -295,51 +299,52 @@
             </p>
             <ul>
               <li>
-                <a href="./QuanLyKhachHang.html"
+                <a href="/QuanLyKhachHang.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-users fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý khách hàng</span>
                 </a>
               </li>
+            </ul>
+          </div>
+
+          <!-- Hợp đồng - Thanh toán -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Hợp đồng - Thanh toán
+            </p>
+            <ul>
               <li>
-                <a href="./QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/QuanLyHopDong.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-file-contract fa-fw mr-3"></i>
                   <span class="nav-text">Hợp đồng</span>
                 </a>
               </li>
               <li>
-                <a href="./CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-file-contract fa-fw mr-3"></i>
+                <a href="/tonghopdoanhthutheokhachhang.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-hand-holding-dollar fa-fw mr-3"></i>
+                  <span class="nav-text">Doanh thu theo KH</span>
+                </a>
+              </li>
+              <li>
+                <a href="/CongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-money-check-dollar fa-fw mr-3"></i>
                   <span class="nav-text">Công nợ</span>
                 </a>
               </li>
+              <li>
+                <a href="/ChiTietCongNo.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-credit-card fa-fw mr-3"></i>
+                  <span class="nav-text">Công nợ theo KH</span>
+                </a>
+              </li>
             </ul>
           </div>
 
-          <!-- Quản trị hệ thống -->
-          <div class="mb-6">
-            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
-              Quản trị hệ thống
-            </p>
-            <ul>
-              <li>
-                <a href="./QuanLyNguoiDung.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-user-cog fa-fw mr-3"></i>
-                  <span class="nav-text">Quản lý người dùng</span>
-                </a>
-              </li>
-              <li>
-                <a href="./quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-users-cog fa-fw mr-3"></i>
-                  <span class="nav-text">Quản lý role</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+          
 
           <!-- Báo cáo tổng quan -->
-          <div>
+          <div class="mb-6">
             <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
               Báo cáo tổng quan
             </p>
@@ -355,7 +360,7 @@
           </div>
 
           <!-- Báo cáo tài chính -->
-          <div>
+          <div class="mb-6">
             <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
               Báo cáo tài chính
             </p>
@@ -363,35 +368,35 @@
               <li>
                 <a href="./baocaoquantri/baocaotaichinh/tongquan.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <i class="fas fa-gauge fa-fw mr-3"></i>
                   <span class="nav-text">Tổng quan</span>
                 </a>
               </li>
               <li>
                 <a href="./baocaoquantri/baocaotaichinh/chiphi.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <i class="fas fa-chart-line fa-fw mr-3"></i>
                   <span class="nav-text">Chi phí</span>
                 </a>
               </li>
               <li>
                 <a href="./baocaoquantri/baocaotaichinh/congno.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <i class="fas fa-file-invoice-dollar fa-fw mr-3"></i>
                   <span class="nav-text">Công nợ</span>
                 </a>
               </li>
               <li>
                 <a href="./baocaoquantri/baocaotaichinh/doanhthu.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <i class="fas fa-piggy-bank fa-fw mr-3"></i>
                   <span class="nav-text">Doanh thu</span>
                 </a>
               </li>
               <li>
                 <a href="./baocaoquantri/baocaotaichinh/loinhuan.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-tachometer-alt fa-fw mr-3"></i>
+                  <i class="fas fa-sack-dollar fa-fw mr-3"></i>
                   <span class="nav-text">Lợi nhuận</span>
                 </a>
               </li>
@@ -399,7 +404,7 @@
           </div>
 
           <!-- Báo cáo tồn kho -->
-          <div>
+          <div class="mb-6">
             <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
               Báo cáo tồn kho
             </p>
@@ -407,15 +412,37 @@
               <li>
                 <a href="./baocaoquantri/baocaotonkho/tonkhotheokho.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
+                  <i class="fas fa-house-chimney-window fa-fw mr-3"></i>
                   <span class="nav-text">Tồn kho theo kho</span>
                 </a>
               </li>
               <li>
                 <a href="./baocaoquantri/baocaotonkho/tonkhotheokhachhang.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-clipboard-list fa-fw mr-3"></i>
-                  <span class="nav-text">Tồn kho theo khách hàng</span>
+                  <i class="fas fa-person-shelter fa-fw mr-3"></i>
+                  <span class="nav-text">Tồn kho theo KH</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quản trị hệ thống -->
+          <div class="mb-6">
+            <p class="text-xs uppercase text-blue-500 font-semibold mb-2 nav-text">
+              Quản trị hệ thống
+            </p>
+            <ul>
+              <li>
+                <a href="/QuanLyNguoiDung.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-user-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý người dùng</span>
+                </a>
+              </li>
+              <li>
+                <a href="/quanlyrole.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  <i class="fas fa-users-cog fa-fw mr-3"></i>
+                  <span class="nav-text">Quản lý role</span>
                 </a>
               </li>
             </ul>
@@ -465,7 +492,19 @@
       <main class="p-4">
         <!-- insert code here -->
         <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-orange-500">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-gray-500 text-sm">Tổng sức chứa</p>
+                <h3 class="text-2xl font-bold text-orange-600">500 <span class="text-sm">tấn</span></h3>
+              </div>
+              <div class="bg-orange-100 p-3 rounded-full">
+                <i class="fas fa-warehouse text-orange-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
           <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
             <div class="flex justify-between items-start">
               <div>
@@ -516,7 +555,21 @@
                 class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
               <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
-            <div class="hidden md:block gap-2 w-full md:w-auto">
+            <div class="hidden md:flex gap-5 w-full md:w-auto">
+              <div class="flex items-center justify-end gap-5">
+                <label for="viewDate" class="block text-sm font-medium text-gray-700 mb-1">Đơn vị tính</label>
+                <select id="unitSelector"
+                  class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="ton">Tấn</option>
+                  <option value="quintal">Tạ</option>
+                  <option value="kg">Kg</option>
+                </select>
+              </div>
+              <div class="flex items-center justify-end gap-5">
+                <label for="viewDate" class="block text-sm font-medium text-gray-700 mb-1">Ngày xem</label>
+                <input type="date" id="viewDate" value="XK-002"
+                  class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+              </div>
               <select
                 class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option>Tất cả chủ hàng</option>
@@ -548,7 +601,8 @@
                     Loại hàng</th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer text-center">
-                    Trọng lượng (tấn)<i class="p-1 fas fa-sort"></i></th>
+                    Trọng lượng <br><span class="text-xs font-normal unit-text">(tấn)</span><i
+                      class="p-1 fas fa-sort"></i></th>
                   <th scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Loại bao</th>
@@ -577,7 +631,8 @@
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Hàng
                       xá</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">50.00</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center" data-weight="weight-0">50.00
+                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button onclick="openPackModal('Nguyễn Văn A', 'Phân bón NPK ABC', 50)"
@@ -610,7 +665,8 @@
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Hàng
                       bao</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">20.00</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center" data-weight="weight-1">20.00
+                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Jumbo 1 tấn</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button onclick="openTransferModal('Nguyễn Văn A', 'Phân bón NPK ABC', 20, 'Hàng bao')"
@@ -639,7 +695,8 @@
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Hàng
                       bao</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">10.00</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center" data-weight="weight-2">10.00
+                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Bao 100kg</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button onclick="openTransferModal('Nguyễn Văn A', 'Phân bón NPK ABC', 10, 'Hàng bao')"
@@ -668,7 +725,8 @@
                       class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Hàng
                       xá</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">67.34</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center" data-weight="weight-3">67.34
+                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button onclick="openPackModal('Nguyễn Văn B', 'Phân kali', 67.34)"
@@ -734,7 +792,7 @@
   </div>
 
   <!-- Pack Modal -->
-  <div id="packModal" class="modal modal-hidden fixed inset-0 overflow-y-auto z-50">
+  <div id="packModal" class="modal modal-hidden fixed inset-0 overflow-y-auto z-1001">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -755,19 +813,32 @@
                 <p class="text-sm text-gray-500" id="packModalDescription">Vui lòng nhập thông tin đóng
                   bao cho hàng xá.</p>
 
-                <div class="mt-4">
-                  <label for="packWeight" class="block text-sm font-medium text-gray-700">Khối lượng
-                    cần đóng bao (tấn)</label>
-                  <input type="number" step="0.01" id="packWeight"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-0 md:gap-4">
+                  <div class="mt-4 col-span-3">
+                    <label for="packWeight" class="block text-sm font-medium text-gray-700">Khối lượng
+                      cần đóng bao</label>
+                    <input type="number" step="0.01" id="packWeight"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                  </div>
+
+                  <div class="mt-4 col-span-1">
+                    <label for="packWeight" class="block text-sm font-medium text-gray-700">Đơn vị tính</label>
+                    <select id="packUnit"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                      <option value="ton">Tấn</option>
+                      <option value="quintal">Tạ</option>
+                      <option value="kg">Kg</option>
+                    </select>
+                  </div>
                 </div>
+
 
                 <div class="mt-4">
                   <label for="packType" class="block text-sm font-medium text-gray-700">Loại
                     bao</label>
                   <select id="packType"
                     class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    <option value="jumbo">Bao jumbo 1 tấn</option>
+                    <option value="jumbo 1 tấn">Bao jumbo 1 tấn</option>
                     <option value="50kg">Bao 50kg</option>
                     <option value="100kg">Bao 100kg</option>
                   </select>
@@ -791,7 +862,7 @@
   </div>
 
   <!-- Transfer Modal -->
-  <div id="transferModal" class="modal modal-hidden fixed inset-0 overflow-y-auto z-50">
+  <div id="transferModal" class="modal modal-hidden fixed inset-0 overflow-y-auto z-1001">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -812,11 +883,23 @@
                 <p class="text-sm text-gray-500" id="transferModalDescription">Vui lòng nhập thông tin
                   chuyển hàng.</p>
 
-                <div class="mt-4">
-                  <label for="transferWeight" class="block text-sm font-medium text-gray-700">Khối
-                    lượng cần chuyển (tấn)</label>
-                  <input type="number" step="0.01" id="transferWeight"
-                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-0 md:gap-4">
+                  <div class="mt-4 col-span-3">
+                    <label for="transferWeight" class="block text-sm font-medium text-gray-700">Khối
+                      lượng cần chuyển</label>
+                    <input type="number" step="0.01" id="transferWeight"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                  </div>
+
+                  <div class="mt-4 col-span-1">
+                    <label for="packWeight" class="block text-sm font-medium text-gray-700">Đơn vị tính</label>
+                    <select id="transferUnit"
+                      class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                      <option value="ton">Tấn</option>
+                      <option value="quintal">Tạ</option>
+                      <option value="kg">Kg</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div class="mt-4">
@@ -864,6 +947,50 @@
   <!-- insert script here -->
 
   <script>
+
+    // Original values storage
+    const originalValues = {};
+    document.querySelectorAll('td[data-weight]').forEach(cell => {
+      originalValues[cell.dataset.weight] = parseFloat(cell.textContent);
+    });
+
+    unitSelector.addEventListener('change', function () {
+      const selectedUnit = this.value;
+      document.querySelectorAll('.unit-text').forEach(el => {
+        el.textContent = `(${selectedUnit === 'ton' ? 'tấn' : selectedUnit === 'quintal' ? 'tạ' : 'kg'})`;
+      });
+
+      // Convert all weight values
+      Object.keys(originalValues).forEach(key => {
+        const cell = document.querySelector(`td[data-weight="${key}"]`);
+        let convertedValue = originalValues[key];
+
+        switch (selectedUnit) {
+          case 'quintal': // 1 tấn = 10 tạ
+            convertedValue *= 10;
+            break;
+          case 'kg': // 1 tấn = 1000 kg
+            convertedValue *= 1000;
+            break;
+          // 'ton' is default (no conversion)
+        }
+
+        cell.textContent = formatNumber(convertedValue);
+      });
+    });
+
+    const formatNumber = (num) => {
+      return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 2
+      }).format(num);
+    };
+
+    // Set today's date as default for the viewDate input
+    const viewDate = document.getElementById('viewDate');
+    const today = new Date().toISOString().split('T')[0];
+    viewDate.value = today;
+
     // Current selected item for packing/transfer
     let currentItem = null;
 
@@ -933,21 +1060,24 @@
     function confirmPack() {
       const weight = parseFloat(document.getElementById('packWeight').value);
       const packType = document.getElementById('packType').value;
+      const packUnit = document.getElementById('packUnit').value;
 
       if (!weight || weight <= 0 || weight > currentItem.weight) {
-        alert('Vui lòng nhập khối lượng hợp lệ');
+        Swal.fire({
+          title: 'Cảnh báo',
+          text: 'Vui lòng nhập khối lượng hợp lệ',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
         return;
       }
 
-      // In a real app, you would send this data to the server
-      console.log('Đóng bao:', {
-        owner: currentItem.owner,
-        product: currentItem.product,
-        weight,
-        packType
+      Swal.fire({
+        title: 'Đóng bao thành công',
+        text: `Đã đóng ${weight} ${packUnit} ${currentItem.product} vào bao ${packType}`,
+        icon: 'success',
+        confirmButtonText: 'OK'
       });
-
-      alert(`Đã xác nhận đóng ${weight} tấn ${currentItem.product} vào bao ${packType}`);
       closeModal('packModal');
     }
 
@@ -956,28 +1086,34 @@
       const weight = parseFloat(document.getElementById('transferWeight').value);
       const warehouseGroup = document.getElementById('warehouseGroup').value;
       const targetWarehouse = document.getElementById('targetWarehouse').value;
+      const transferUnit = document.getElementById('transferUnit').value;
 
       if (!weight || weight <= 0 || weight > currentItem.weight) {
-        alert('Vui lòng nhập khối lượng hợp lệ');
+        Swal.fire({
+          title: 'Cảnh báo',
+          text: 'Vui lòng nhập khối lượng hợp lệ',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
         return;
       }
 
       if (!warehouseGroup || !targetWarehouse) {
-        alert('Vui lòng chọn kho đích');
+        Swal.fire({
+          title: 'Cảnh báo',
+          text: 'Vui lòng chọn cụm kho và kho đích',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
         return;
       }
 
-      // In a real app, you would send this data to the server
-      console.log('Chuyển hàng:', {
-        owner: currentItem.owner,
-        product: currentItem.product,
-        weight,
-        warehouseGroup,
-        targetWarehouse,
-        productType: currentItem.productType
+      Swal.fire({
+        title: 'Chuyển hàng thành công',
+        text: `Đã chuyển ${weight} ${transferUnit} ${currentItem.product} từ kho hiện tại đến ${targetWarehouse}`,
+        icon: 'success',
+        confirmButtonText: 'OK'
       });
-
-      alert(`Đã xác nhận chuyển ${weight} tấn ${currentItem.product} đến ${targetWarehouse}`);
       closeModal('transferModal');
     }
 
