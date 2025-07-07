@@ -178,14 +178,14 @@
                 </a>
               </li>
               <li>
-                <a href="/nhapkho.html"
+                <a href="./DangKyXeNhapKho.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-down fa-fw mr-3"></i>
                   <span class="nav-text">Nhập kho</span>
                 </a>
               </li>
               <li>
-                <a href="/xuatkho.html"
+                <a href="./DangKyXeXuatKho.html"
                   class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-up fa-fw mr-3"></i>
                   <span class="nav-text">Xuất kho</span>
@@ -458,16 +458,22 @@
             <tr>
                 <th class="w-24 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ảnh</th>
                 
-                <th onclick="sortTable('name')" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th onclick="sortTable('name')" class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                 Tên sản phẩm 
                 <i id="nameSortIcon" class="fas fa-sort ml-1 text-gray-400"></i>
                 </th>
                 
-                <th class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Đơn vị tính</th>
+                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Đơn vị tính</th>
                 
-                <th onclick="sortTable('group')" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
+                <th onclick="sortTable('group')" class="w-[18%] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer">
                 Nhóm sản phẩm 
                 <i id="groupSortIcon" class="fas fa-sort ml-1 text-gray-400"></i>
+                </th>
+                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Tỉ lệ hao hụt 
+                </th>
+                <th class="w-[14%] px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Giá đền bù 
                 </th>
                 
                 <th class="w-32 px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
@@ -614,6 +620,17 @@
             </div>
             </div>
 
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block mb-1 font-medium">Tỉ lệ hao hụt (%)</label>
+                <input type="number" id="productLossRate" min="0" max="100" class="w-full border px-3 py-2 rounded" />
+              </div>
+              <div>
+                <label class="block mb-1 font-medium">Giá đền bù (đ)</label>
+                <input type="number" id="productCompensationPrice" min="0" class="w-full border px-3 py-2 rounded" />
+              </div>
+            </div>
+
             <div>
             <label class="block mb-1 font-medium">Ghi chú</label>
             <textarea id="productNote" rows="2" class="w-full border px-3 py-2 rounded"></textarea>
@@ -659,6 +676,8 @@
         costPrice: 40000,
         defaultPrice: 60000,
         note: 'Sản phẩm demo',
+        lossRate: 5,
+        compensationPrice: 10000,
         active: true
       },
       {
@@ -999,9 +1018,11 @@ function updateSortIcons() {
             <td class="w-24 px-4 py-4 whitespace-nowrap">
                 ${product.image ? `<img src="${product.image}" class="w-12 h-12 object-cover rounded" />` : '<span class="text-gray-400">No Image</span>'}
             </td>
-            <td class="w-1/4 px-6 py-4 whitespace-nowrap">${product.name}</td>
-            <td class="w-1/4 px-6 py-4 whitespace-nowrap">${product.unit}</td>
-            <td class="w-1/4 px-6 py-4 whitespace-nowrap">${product.group}</td>
+            <td class="w-[18%] px-4 py-4 whitespace-nowrap">${product.name}</td>
+            <td class="w-[14%] px-4 py-4 whitespace-nowrap">${product.unit}</td>
+            <td class="w-[18%] px-4 py-4 whitespace-nowrap">${product.group}</td>
+            <td class="w-[14%] px-4 py-4 whitespace-nowrap">${product.lossRate ? product.lossRate + '%' : '0%'}</td>
+            <td class="w-[14%] px-4 py-4 whitespace-nowrap">${product.compensationPrice ? product.compensationPrice.toLocaleString() + ' đ' : '0 đ'}</td>
             <td class="w-32 px-4 py-4 whitespace-nowrap text-sm font-medium text-right">
                 <button class="text-blue-600 hover:text-blue-900 mr-4" onclick="editProduct(${product.id})"><i class="fas fa-edit"></i></button>
                 <button class="text-red-600 hover:text-red-900" onclick="deleteProduct(${product.id})" title="Xóa"><i class="fas fa-trash"></i></button>
@@ -1054,6 +1075,8 @@ function updateSortIcons() {
         costPrice: +document.getElementById('productCostPrice').value,
         defaultPrice: +document.getElementById('productDefaultPrice').value,
         note: document.getElementById('productNote').value.trim(),
+        lossRate: +document.getElementById('productLossRate').value || 0,
+        compensationPrice: +document.getElementById('productCompensationPrice').value || 0,
         active: document.getElementById('productActive').checked
       };
 
@@ -1090,6 +1113,8 @@ function updateSortIcons() {
       document.getElementById('productCostPrice').value = product.costPrice;
       document.getElementById('productDefaultPrice').value = product.defaultPrice;
       document.getElementById('productNote').value = product.note;
+      document.getElementById('productLossRate').value = product.lossRate || 0;
+      document.getElementById('productCompensationPrice').value = product.compensationPrice || 0;
       document.getElementById('productActive').checked = product.active;
 
       // Handle image preview if exists
