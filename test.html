@@ -533,12 +533,7 @@
         <div class="bg-white rounded-lg shadow">
           <div class="p-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
             <h2 class="text-lg font-semibold text-gray-800">Danh sách hợp đồng</h2>
-            <div class="flex flex-wrap gap-4">
-              <div class="relative w-full md:w-64">
-                <input type="text" placeholder="Tìm hợp đồng..."
-                  class="pl-10 pr-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-              </div>
+            <div class="flex flex-wrap gap-2">
               <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 flex items-center">
                 <i class="fas fa-plus mr-2"></i> Thêm mới
               </button>
@@ -577,7 +572,7 @@
                     </th>
                     <th scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ngày kết thúc <i class="fas fa-sort"></i>
+                      Ngày kết thúc
                     </th>
                     <th scope="col"
                       class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -615,8 +610,8 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Còn
-                        hiệu lực</span>
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                        hoạt động</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button class="text-primary hover:text-blue-600 mr-3">
@@ -696,8 +691,8 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Còn
-                        hiệu lực</span>
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                        hoạt động</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button class="text-primary hover:text-blue-600 mr-3">
@@ -776,8 +771,8 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <span
-                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Còn
-                        hiệu lực</span>
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                        hoạt động</span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button class="text-primary hover:text-blue-600 mr-3">
@@ -842,7 +837,7 @@
     </div>
   </div>
   <!-- Modal for Contract Details -->
-  <div id="contract-details-modal" class="fixed inset-0 z-1001 hidden overflow-y-auto">
+  <div id="contract-details-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -895,8 +890,8 @@
                   <div>
                     <p class="text-sm text-gray-500">Tình trạng</p>
                     <span
-                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Còn
-                      hiệu lực</span>
+                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-success text-white">Đang
+                      hoạt động</span>
                   </div>
                   <!-- Row 3 -->
                   <div>
@@ -909,17 +904,9 @@
                     <p class="text-sm text-gray-500">Diện tích thuê</p>
                     <p class="text-sm font-medium text-gray-900">150 m²</p>
                   </div>
-                  <div>
-                    <p class="text-sm text-gray-500">Trọng lượng thuê</p>
-                    <p class="text-sm font-medium text-gray-900">-</p>
-                  </div>
+
                   <!-- Row 3 -->
-                  <div>
-                    <p class="text-sm text-gray-500">Loại hình thuê</p>
-                    <p class="text-sm font-medium text-gray-900">
-                      Thuê theo tháng
-                    </p>
-                  </div>
+
                   <div>
                     <p class="text-sm text-gray-500">Đơn giá thuê</p>
                     <p class="text-sm font-medium text-gray-900">
@@ -927,69 +914,12 @@
                     </p>
                   </div>
                 </div>
-                <!-- <div>
+                <div>
                   <p class="text-sm text-gray-500">Hàng hóa</p>
                   <p class="text-sm font-medium text-gray-900">
-                    Phân NPK, kali
+                    Thực phẩm đông lạnh
                   </p>
-                </div> -->
-                <table class="w-full border text-sm text-left">
-                  <thead class="bg-gray-100">
-                    <tr>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Hàng hóa</th>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Tỉ lệ hao hụt (%)
-                      </th>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Loại đền bù</th>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Giá đền bù
-                        (vnd/kg)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">Phân NPK</p>
-                      </td>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">1.5</p>
-                      </td>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">Cố định</p>
-                      </td>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">200000</p>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-
-                <table class="w-full border text-sm text-left">
-                  <thead class="bg-gray-100">
-                    <tr>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Dịch vụ</th>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Số lượng</th>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Đơn vị tính</th>
-                      <th class="w-1/4 text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Giá (vnd)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">Trộn hàng</p>
-                      </td>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">2</p>
-                      </td>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">Tấn</p>
-                      </td>
-                      <td class="w-1/4 p-2">
-                        <p class="w-full border rounded p-1">1000000</p>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
+                </div>
 
                 <!-- Cost Calculations -->
                 <div class="border-t border-gray-200 pt-4">
@@ -1117,7 +1047,7 @@
   </div>
 
   <!-- Modal for Delete Confirmation -->
-  <div id="delete-confirm-modal" class="fixed inset-0 z-1001 hidden overflow-y-auto">
+  <div id="delete-confirm-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -1161,7 +1091,7 @@
   </div>
 
   <!-- Modal dùng chung cho New / Edit Contract -->
-  <div id="contract-modal" class="fixed inset-0 z-1001 hidden overflow-y-auto">
+  <div id="contract-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <div class="fixed inset-0 transition-opacity" aria-hidden="true">
         <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -1275,26 +1205,6 @@
                     <span id="add-goods-span" class="text-sm text-blue-600 hover:underline cursor-pointer">+ Thêm hàng
                       hóa</span>
                   </div>
-
-                  <div class="md:col-span-2 pt-3 border-t">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Danh sách dịch vụ</label>
-                    <table class="w-full border text-sm text-left">
-                      <thead class="bg-gray-100">
-                        <tr>
-                          <th class="text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Dịch vụ</th>
-                          <th class="text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Số lượng</th>
-                          <th class="text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Đơn vị tính</th>
-                          <th class="text-xs font-medium text-gray-500 uppercase tracking-wider p-2">Giá (vnd)</th>
-                          <th class="text-xs font-medium text-gray-500 uppercase tracking-wider p-2"></th>
-                        </tr>
-                      </thead>
-                      <tbody id="services-table-body">
-                        <!-- dynamic rows -->
-                      </tbody>
-                    </table>
-                    <span id="add-service-span" class="text-sm text-blue-600 hover:underline cursor-pointer">+ Thêm dịch
-                      vụ</span>
-                  </div>
                 </div>
               </form>
             </div>
@@ -1316,13 +1226,19 @@
     </div>
   </div>
 
+  <!-- insert script here -->
+
+
+  <!-- insert script here -->
+
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
   <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
   <script>
-    // Khởi tạo FilePond
+    // Khởi tạo filepond
     FilePond.registerPlugin();
-    const pond = FilePond.create(document.querySelector('input[name="contractFiles"]'), {
+    FilePond.create(document.querySelector('input[name="contractFiles"]'), {
       allowMultiple: true,
       labelIdle: 'Kéo & thả tệp hoặc <span class="filepond--label-action">Chọn</span>',
       acceptedFileTypes: [
@@ -1340,9 +1256,7 @@
       const weightField = document.getElementById("weight-field");
       const priceUnit = document.getElementById("price-unit");
       const goodsTableBody = document.getElementById("goods-table-body");
-      const servicesTableBody = document.getElementById("services-table-body");
       const addGoodsSpan = document.getElementById("add-goods-span");
-      const addServiceSpan = document.getElementById("add-service-span");
 
       // Toggle diện tích / trọng lượng
       contractTypeSelect.addEventListener("change", function () {
@@ -1358,147 +1272,11 @@
       });
 
       // Thêm hàng hóa
-      addGoodsSpan.addEventListener("click", () => appendGoodsRow(goodsTableBody));
-
-      // Xóa hàng hóa
-      goodsTableBody.addEventListener("click", function (e) {
-        if (e.target.closest(".remove-goods-span")) {
-          e.target.closest("tr").remove();
-        }
-      });
-
-      // Autofill hàng hóa
-      goodsTableBody.addEventListener("change", function (e) {
-        if (e.target.tagName === "SELECT") {
-          const goodsName = e.target.value;
-          const goodsFakeData = {
-            "Phân NPK": { rate: 1.5, price: 200000 },
-            "Phân kali": { rate: 2.0, price: 250000 },
-            "Phân hữu cơ": { rate: 1.2, price: 180000 },
-            "Phân vi sinh": { rate: 1.0, price: 170000 },
-            "Phân lân": { rate: 1.3, price: 190000 },
-            "Phân ure": { rate: 1.4, price: 210000 },
-            "Phân DAP": { rate: 1.6, price: 220000 }
-          };
-          const tr = e.target.closest("tr");
-          if (goodsFakeData[goodsName]) {
-            tr.querySelectorAll("input")[0].value = goodsFakeData[goodsName].rate;
-            tr.querySelectorAll("input")[1].value = goodsFakeData[goodsName].price;
-          }
-        }
-      });
-
-      // Thêm dịch vụ
-      addServiceSpan.addEventListener("click", () => appendServiceRow(servicesTableBody));
-
-      // Xóa dịch vụ
-      servicesTableBody.addEventListener("click", function (e) {
-        if (e.target.closest(".remove-service-span")) {
-          e.target.closest("tr").remove();
-        }
-      });
-
-      // Đổi đơn vị dịch vụ
-      servicesTableBody.addEventListener("change", function (e) {
-        if (e.target.classList.contains("service-name-select")) {
-          const tr = e.target.closest("tr");
-          const unitInput = tr.querySelector(".unit-input");
-          unitInput.value = e.target.value === "Đóng bao" ? "Bao" :
-            e.target.value === "Trộn hàng" ? "Tấn" : "";
-        }
-      });
-
-      // Mở modal thêm mới
-      document.querySelector("button:has(i.fa-plus)").addEventListener("click", () => openNewContractModal());
-
-      // Mở modal sửa
-      document.querySelectorAll("button:has(i.fa-edit)").forEach(btn => {
-        btn.addEventListener("click", () => openEditContractModal("HD-2023-001"));
-      });
-
-      // Xem chi tiết
-      document.querySelectorAll("button:has(i.fa-eye)").forEach(btn => {
-        btn.addEventListener("click", () => document.getElementById("contract-details-modal").classList.remove("hidden"));
-      });
-
-      // Xác nhận xóa
-      document.querySelectorAll("button:has(i.fa-trash)").forEach(btn => {
-        btn.addEventListener("click", function () {
-          const modal = document.getElementById("delete-confirm-modal");
-          modal.classList.remove("hidden");
-          modal._deleteButton = this;
-        });
-      });
-      document.getElementById("confirm-delete").addEventListener("click", () => {
-        const modal = document.getElementById("delete-confirm-modal");
-        modal._deleteButton.closest("tr").remove();
-        modal.classList.add("hidden");
-      });
-
-      // Cancel modal
-      document.querySelectorAll("#contract-modal button:not(:has(i))").forEach(btn => {
-        btn.addEventListener("click", () => closeContractModal());
-      });
-
-      // Sidebar toggle
-      document.getElementById("toggle-sidebar").addEventListener("click", () => {
-        document.querySelector(".sidebar").classList.toggle("collapsed");
-      });
-      document.getElementById("menu-btn").addEventListener("click", () => {
-        document.querySelector(".sidebar").classList.toggle("collapsed");
-      });
-
-      // User menu
-      document.getElementById("user-menu-button").addEventListener("click", e => {
-        e.stopPropagation();
-        document.getElementById("user-menu").classList.toggle("hidden");
-      });
-      document.addEventListener("click", () => {
-        document.getElementById("user-menu").classList.add("hidden");
-      });
-
-      // Chart doanh thu tháng
-      const monthlyCtx = document.getElementById("monthlyRevenueChart").getContext("2d");
-      new Chart(monthlyCtx, {
-        type: "bar",
-        data: {
-          labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
-          datasets: [{
-            label: "Doanh thu (triệu đồng)",
-            data: [120, 150, 180, 200, 220, 250, 280, 300, 290, 310, 320, 350],
-            backgroundColor: "rgba(59,130,246,0.7)"
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-      });
-
-      // Chart khách hàng
-      const customerCtx = document.getElementById("customerRevenueChart").getContext("2d");
-      new Chart(customerCtx, {
-        type: "pie",
-        data: {
-          labels: ["Công ty TNHH ABC", "Công ty CP XYZ", "Công ty TNHH DEF", "Công ty TNHH GHI", "Công ty CP JKL"],
-          datasets: [{
-            data: [350, 280, 200, 150, 120],
-            backgroundColor: [
-              "rgba(59,130,246,0.7)",
-              "rgba(16,185,129,0.7)",
-              "rgba(245,158,11,0.7)",
-              "rgba(239,68,68,0.7)",
-              "rgba(100,116,139,0.7)"
-            ]
-          }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
-
-      // helper
-      function appendGoodsRow(tbody) {
+      addGoodsSpan.addEventListener("click", function () {
         const tr = document.createElement("tr");
         tr.innerHTML = `
         <td class="p-2">
           <select class="w-full border rounded p-1">
-            <option hidden>--Chọn hàng hóa--</option>
             <option>Phân NPK</option>
             <option>Phân kali</option>
             <option>Phân hữu cơ</option>
@@ -1508,7 +1286,9 @@
             <option>Phân DAP</option>
           </select>
         </td>
-        <td class="p-2"><input type="number" class="w-full border rounded p-1" step="0.1" /></td>
+        <td class="p-2">
+          <input type="number" class="w-full border rounded p-1" placeholder="1.5" step="0.1" />
+        </td>
         <td class="p-2">
           <select class="w-full border rounded p-1">
             <option>Cố định</option>
@@ -1516,133 +1296,248 @@
             <option>Hóa đơn</option>
           </select>
         </td>
-        <td class="p-2"><input type="number" class="w-full border rounded p-1" /></td>
-        <td class="text-center"><span class="text-red-500 hover:underline cursor-pointer remove-goods-span"><i class="fas fa-trash"></i></span></td>
+        <td class="p-2">
+          <input type="number" class="w-full border rounded p-1" placeholder="200000" />
+        </td>
+        <td class="text-center">
+          <span class="text-red-500 hover:underline cursor-pointer remove-goods-span"><i class="fas fa-trash"></i></span>
+        </td>
       `;
-        tbody.appendChild(tr);
+        goodsTableBody.appendChild(tr);
+      });
+
+      // Xóa hàng hóa
+      goodsTableBody.addEventListener("click", function (e) {
+        if (e.target.closest(".remove-goods-span")) {
+          e.target.closest("tr").remove();
+        }
+      });
+
+      // Mở modal thêm hợp đồng
+      document.querySelector("button:has(i.fa-plus)").addEventListener("click", function () {
+        openNewContractModal();
+      });
+
+      // Mở modal sửa hợp đồng
+      document.querySelectorAll("button:has(i.fa-edit)").forEach((button) => {
+        button.addEventListener("click", function () {
+          openEditContractModal("HD-2023-001");
+        });
+      });
+
+      // Xử lý nút cancel
+      document.querySelectorAll("#contract-modal button:not(:has(i))").forEach((button) => {
+        button.addEventListener("click", function () {
+          closeContractModal();
+        });
+      });
+
+      // Chart doanh thu theo tháng
+      const monthlyCtx = document.getElementById("monthlyRevenueChart").getContext("2d");
+      new Chart(monthlyCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+            "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+          ],
+          datasets: [{
+            label: "Doanh thu (triệu đồng)",
+            data: [120, 150, 180, 200, 220, 250, 280, 300, 290, 310, 320, 350],
+            backgroundColor: "rgba(59, 130, 246, 0.7)",
+            borderColor: "rgba(59, 130, 246, 1)",
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+
+      // Chart doanh thu theo khách hàng
+      const customerCtx = document.getElementById("customerRevenueChart").getContext("2d");
+      new Chart(customerCtx, {
+        type: "pie",
+        data: {
+          labels: [
+            "Công ty TNHH ABC", "Công ty CP XYZ", "Công ty TNHH DEF",
+            "Công ty TNHH GHI", "Công ty CP JKL"
+          ],
+          datasets: [{
+            label: "Doanh thu (triệu đồng)",
+            data: [350, 280, 200, 150, 120],
+            backgroundColor: [
+              "rgba(59, 130, 246, 0.7)",
+              "rgba(16, 185, 129, 0.7)",
+              "rgba(245, 158, 11, 0.7)",
+              "rgba(239, 68, 68, 0.7)",
+              "rgba(100, 116, 139, 0.7)"
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      // Show contract details modal
+      document.querySelectorAll("button:has(i.fa-eye)").forEach((button) => {
+        button.addEventListener("click", function () {
+          document.getElementById("contract-details-modal").classList.remove("hidden");
+        });
+      });
+
+      // Delete confirm modal
+      document.querySelectorAll("button:has(i.fa-trash)").forEach((button) => {
+        button.addEventListener("click", function () {
+          const deleteModal = document.getElementById("delete-confirm-modal");
+          deleteModal.classList.remove("hidden");
+          deleteModal._deleteButton = this;
+        });
+      });
+      document.getElementById("confirm-delete").addEventListener("click", function () {
+        const deleteModal = document.getElementById("delete-confirm-modal");
+        const deleteButton = deleteModal._deleteButton;
+        deleteButton.closest("tr").remove();
+        deleteModal.classList.add("hidden");
+      });
+    });
+
+    // Sidebar
+    document.getElementById("toggle-sidebar").addEventListener("click", function () {
+      document.querySelector(".sidebar").classList.toggle("collapsed");
+    });
+    document.getElementById("menu-btn").addEventListener("click", function () {
+      document.querySelector(".sidebar").classList.toggle("collapsed");
+    });
+
+    // User menu
+    document.getElementById("user-menu-button").addEventListener("click", function (e) {
+      e.stopPropagation();
+      document.getElementById("user-menu").classList.toggle("hidden");
+    });
+    document.addEventListener('click', function () {
+      document.getElementById("user-menu").classList.add("hidden");
+    });
+
+    // Mở modal thêm mới
+    function openNewContractModal() {
+      const modal = document.getElementById("contract-modal");
+      modal.classList.remove("hidden");
+      document.getElementById("contract-modal-title").textContent = "Thêm hợp đồng mới";
+      document.getElementById("contract-form").reset();
+      goodsTableBody.innerHTML = "";
+      priceUnit.textContent = "vnd/m²";
+      areaField.classList.remove("hidden");
+      weightField.classList.add("hidden");
+    }
+
+    // Mở modal sửa
+    function openEditContractModal(contractId) {
+      const modal = document.getElementById("contract-modal");
+      modal.classList.remove("hidden");
+      document.getElementById("contract-modal-title").textContent = "Chỉnh sửa hợp đồng";
+
+      // fake data
+      const fake = {
+        contractNumber: contractId,
+        customer: "Công ty TNHH ABC",
+        startDate: "2023-01-15",
+        endDate: "2023-12-15",
+        contractType: "area",
+        area: 150,
+        weight: 5000,
+        rentType: "month",
+        unitPrice: 50000,
+        goods: [
+          { name: "Phân NPK", rate: 1.5, compensate: "Cố định", price: 200000 },
+          { name: "Phân kali", rate: 2.0, compensate: "Hóa đơn", price: 250000 },
+          { name: "Phân hữu cơ", rate: 1.2, compensate: "Thị trường", price: 180000 }
+        ],
+        attachments: [
+          { name: "file1.pdf", size: 102400, type: "application/pdf" },
+          { name: "image1.jpg", size: 204800, type: "image/jpeg" }
+        ]
+      };
+
+      // fill form
+      const form = document.getElementById("contract-form");
+      form.contractNumber.value = fake.contractNumber;
+      form.customer.value = fake.customer;
+      form.startDate.value = fake.startDate;
+      form.endDate.value = fake.endDate;
+      form.contractType.value = fake.contractType;
+      form.area.value = fake.area;
+      form.weight.value = fake.weight;
+      form.rentType.value = fake.rentType;
+      form.unitPrice.value = fake.unitPrice;
+
+      if (fake.contractType === "area") {
+        document.getElementById("area-field").classList.remove("hidden");
+        document.getElementById("weight-field").classList.add("hidden");
+        document.getElementById("price-unit").textContent = "vnd/m²";
+      } else {
+        document.getElementById("area-field").classList.add("hidden");
+        document.getElementById("weight-field").classList.remove("hidden");
+        document.getElementById("price-unit").textContent = "vnd/tấn";
       }
 
-      function appendServiceRow(tbody) {
+      // fill hàng hóa
+      const tbody = document.getElementById("goods-table-body");
+      tbody.innerHTML = "";
+      fake.goods.forEach((g) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-        <td class="p-2">
-          <select class="w-full border rounded p-1 service-name-select">
-            <option hidden>--Chọn dịch vụ--</option>
-            <option>Trộn hàng</option>
-            <option>Đóng bao</option>
-          </select>
-        </td>
-        <td class="p-2"><input type="number" class="w-full border rounded p-1" min="1" placeholder="1"/></td>
-        <td class="p-2"><input type="text" class="w-full border rounded p-1 unit-input" readonly placeholder="Đơn vị tính"/></td>
-        <td class="p-2"><input type="number" class="w-full border rounded p-1" placeholder="100000"/></td>
-        <td class="text-center"><span class="text-red-500 hover:underline cursor-pointer remove-service-span"><i class="fas fa-trash"></i></span></td>
-      `;
+      <td class="p-2">
+        <select class="w-full border rounded p-1">
+          <option ${g.name === "Phân NPK" ? "selected" : ""}>Phân NPK</option>
+          <option ${g.name === "Phân kali" ? "selected" : ""}>Phân kali</option>
+          <option ${g.name === "Phân hữu cơ" ? "selected" : ""}>Phân hữu cơ</option>
+          <option>Phân vi sinh</option>
+          <option>Phân lân</option>
+          <option>Phân ure</option>
+          <option>Phân DAP</option>
+        </select>
+      </td>
+      <td class="p-2">
+        <input type="number" class="w-full border rounded p-1" value="${g.rate}" />
+      </td>
+      <td class="p-2">
+        <select class="w-full border rounded p-1">
+          <option ${g.compensate === "Cố định" ? "selected" : ""}>Cố định</option>
+          <option ${g.compensate === "Thị trường" ? "selected" : ""}>Thị trường</option>
+          <option ${g.compensate === "Hóa đơn" ? "selected" : ""}>Hóa đơn</option>
+        </select>
+      </td>
+      <td class="p-2">
+        <input type="number" class="w-full border rounded p-1" value="${g.price}" />
+      </td>
+      <td class="text-center">
+        <span class="text-red-500 hover:underline cursor-pointer remove-goods-span"><i class="fas fa-trash"></i></span>
+      </td>
+    `;
         tbody.appendChild(tr);
+      });
+
+      // fake file (FilePond)
+      const pond = FilePond.find(document.querySelector('input[name="contractFiles"]'));
+      if (pond) {
+        pond.removeFiles(); // reset trước
+        pond.files = fake.attachments.map((file) => ({
+          source: file.name,
+          options: {
+            type: 'local',
+            file: {
+              name: file.name,
+              size: file.size,
+              type: file.type
+            },
+            metadata: {}
+          }
+        }));
       }
-
-      function openNewContractModal() {
-        const modal = document.getElementById("contract-modal");
-        modal.classList.remove("hidden");
-        document.getElementById("contract-modal-title").textContent = "Thêm hợp đồng mới";
-        document.getElementById("contract-form").reset();
-        goodsTableBody.innerHTML = "";
-        servicesTableBody.innerHTML = "";
-        pond.removeFiles();
-        priceUnit.textContent = "vnd/m²";
-        areaField.classList.remove("hidden");
-        weightField.classList.add("hidden");
-      }
-
-      function openEditContractModal(contractId) {
-        const modal = document.getElementById("contract-modal");
-        modal.classList.remove("hidden");
-        document.getElementById("contract-modal-title").textContent = "Chỉnh sửa hợp đồng";
-
-        // fake data
-        const fake = {
-          contractNumber: contractId,
-          customer: "Công ty TNHH ABC",
-          startDate: "2023-01-15",
-          endDate: "2023-12-15",
-          contractType: "area",
-          area: 150,
-          weight: 5000,
-          rentType: "month",
-          unitPrice: 50000,
-          goods: [
-            { name: "Phân NPK", rate: 1.5, compensate: "Cố định", price: 200000 },
-            { name: "Phân kali", rate: 2.0, compensate: "Hóa đơn", price: 250000 }
-          ],
-          services: [
-            { name: "Trộn hàng", quantity: 2, unit: "Tấn", price: 1000000 },
-            { name: "Đóng bao", quantity: 100, unit: "Bao", price: 15000 }
-          ],
-          attachments: [
-            { name: "file1.pdf", size: 102400, type: "application/pdf" },
-            { name: "image1.jpg", size: 204800, type: "image/jpeg" }
-          ]
-        };
-
-        // fill form
-        const form = document.getElementById("contract-form");
-        form.contractNumber.value = fake.contractNumber;
-        form.customer.value = fake.customer;
-        form.startDate.value = fake.startDate;
-        form.endDate.value = fake.endDate;
-        form.contractType.value = fake.contractType;
-        form.area.value = fake.area;
-        form.weight.value = fake.weight;
-        form.rentType.value = fake.rentType;
-        form.unitPrice.value = fake.unitPrice;
-
-        if (fake.contractType === "area") {
-          areaField.classList.remove("hidden");
-          weightField.classList.add("hidden");
-          priceUnit.textContent = "vnd/m²";
-        } else {
-          areaField.classList.add("hidden");
-          weightField.classList.remove("hidden");
-          priceUnit.textContent = "vnd/tấn";
-        }
-
-        goodsTableBody.innerHTML = "";
-        fake.goods.forEach(g => {
-          appendGoodsRow(goodsTableBody);
-          const lastTr = goodsTableBody.lastElementChild;
-          lastTr.querySelector("select").value = g.name;
-          lastTr.querySelectorAll("input")[0].value = g.rate;
-          lastTr.querySelectorAll("input")[1].value = g.price;
-          lastTr.querySelectorAll("select")[1].value = g.compensate;
-        });
-
-        servicesTableBody.innerHTML = "";
-        fake.services.forEach(s => {
-          appendServiceRow(servicesTableBody);
-          const lastTr = servicesTableBody.lastElementChild;
-          lastTr.querySelector("select").value = s.name;
-          lastTr.querySelectorAll("input")[0].value = s.quantity;
-          lastTr.querySelectorAll("input")[1].value = s.unit;
-          lastTr.querySelectorAll("input")[2].value = s.price;
-        });
-
-        pond.removeFiles();
-        pond.addFiles(
-          fake.attachments.map(file => ({
-            source: file.name,
-            options: {
-              type: "local",
-              file: {
-                name: file.name,
-                size: file.size,
-                type: file.type
-              }
-            }
-          }))
-        );
-      }
-
-
-    });
+    }
     function closeContractModal() {
       document.getElementById("contract-modal").classList.add("hidden");
       // reset bảng hàng hóa
@@ -1650,11 +1545,8 @@
       // reset FilePond
       const pond = FilePond.find(document.querySelector('input[name="contractFiles"]'));
       if (pond) pond.removeFiles();
-      // reset service
-      document.getElementById("services-table-body").innerHTML = "";
     }
   </script>
-
 
 </body>
 
