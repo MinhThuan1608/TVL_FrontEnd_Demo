@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng hợp doanh thu theo khách hàng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#3b82f6",
+                        secondary: "#64748b",
+                        success: "#10b981",
+                        danger: "#ef4444",
+                        warning: "#f59e0b",
+                        info: "#06b6d4",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        #totalRevenue {
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-sm">
+    <div class="min-h-screen p-4 lg:p-6">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <!-- Header -->
+            <div class="bg-white rounded-2xl shadow p-4 lg:p-6 border-l-4 border-green-500">
+                <h2 class="text-xl lg:text-2xl font-bold">Tổng hợp doanh thu theo khách hàng</h2>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-xs lg:text-sm">Tổng đơn hàng</p>
+                            <h3 class="text-lg lg:text-2xl font-bold" id="totalOrders">120</h3>
+                        </div>
+                        <div
+                            class="p-2 lg:p-3 rounded-full bg-blue-50 text-primary w-[40px] lg:w-[50px] flex justify-center items-center">
+                            <i class="fas fa-file-contract text-lg lg:text-2xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-green-500 mt-2">
+                        <i class="fas fa-caret-up mr-1"></i> 20% so với tháng trước
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4 lg:p-6 ">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-xs lg:text-sm">Tổng doanh thu</p>
+                            <h3 id="totalRevenue"
+                                class="text-sm lg:text-2xl font-bold break-words max-w-full whitespace-normal leading-snug">
+                                10.483.000.000 ₫
+                            </h3>
+
+                        </div>
+                        <div
+                            class="p-2 lg:p-3 rounded-full bg-green-50 text-success w-[40px] lg:w-[50px] flex justify-center items-center">
+                            <i class="fas fa-hand-holding-usd text-lg lg:text-2xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-red-500 mt-2">
+                        <i class="fas fa-caret-down mr-1"></i> 5% so với tháng trước
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-xs lg:text-sm">Số khách hàng</p>
+                            <h3 class="text-lg lg:text-2xl font-bold" id="totalCustomers">10</h3>
+                        </div>
+                        <div
+                            class="p-2 lg:p-3 rounded-full bg-yellow-50 text-warning w-[40px] lg:w-[50px] flex justify-center items-center">
+                            <i class="fas fa-users text-lg lg:text-2xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-green-500 mt-2">
+                        <i class="fas fa-caret-up mr-1"></i> 8% so với tháng trước
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-500 text-xs lg:text-sm">Hợp đồng</p>
+                            <h3 class="text-lg lg:text-2xl font-bold" id="totalContracts">15</h3>
+                        </div>
+                        <div
+                            class="p-2 lg:p-3 rounded-full bg-red-50 text-danger w-[40px] lg:w-[50px] flex justify-center items-center">
+                            <i class="fa-solid fa-file text-lg lg:text-2xl"></i>
+                        </div>
+                    </div>
+                    <p class="text-xs text-red-500 mt-2">
+                        <i class="fas fa-caret-down mr-1"></i> 2% so với tháng trước
+                    </p>
+                </div>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="bg-white rounded-lg shadow p-4 lg:p-6">
+                <div class="space-y-4">
+                    <!-- Search Bar -->
+                    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                        <h3 class="font-semibold text-gray-700">Bộ lọc chi tiết</h3>
+                        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                            <div class="relative flex-1 sm:w-64">
+                                <i
+                                    class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                                <input type="text" id="searchInput" placeholder="Tìm kiếm..."
+                                    class="border px-10 py-2 rounded text-sm w-full shadow-sm focus:ring-2 focus:ring-blue-200 focus:outline-none">
+                            </div>
+                            <button id="toggleFilters"
+                                class="sm:hidden bg-gray-100 border px-4 py-2 rounded text-sm flex items-center">
+                                <i class="fas fa-filter mr-2"></i>
+                                Bộ lọc
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div id="filtersSection" class="hidden sm:block">
+                        <div class="flex flex-col lg:flex-row gap-4 items-end">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 flex-1 w-full">
+                                <div class="space-y-2">
+                                    <label class="block text-sm text-gray-600">Khách hàng</label>
+                                    <select id="customerFilter" class="border px-3 py-2 rounded text-sm w-full">
+                                        <option value="">Tất cả khách hàng</option>
+                                        <option value="Công ty ABC">Công ty ABC</option>
+                                        <option value="Công ty XYZ">Công ty XYZ</option>
+                                        <option value="Công ty CBTECH">Công ty CBTECH</option>
+                                        <option value="Công ty Đông Dương">Công ty Đông Dương</option>
+                                        <option value="Công ty Minh Tâm">Công ty Minh Tâm</option>
+                                        <option value="Công ty Thành Thái">Công ty Thành Thái</option>
+                                        <option value="Công ty Diên Hồng">Công ty Diên Hồng</option>
+                                        <option value="Công ty Phú Thọ">Công ty Phú Thọ</option>
+                                        <option value="Công ty ADC">Công ty ADC</option>
+                                        <option value="Công ty DC">Công ty DC</option>
+                                        <option value="Công ty Marvel">Công ty Marvel</option>
+                                    </select>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm text-gray-600">Từ ngày</label>
+                                    <input type="date" id="fromDate" class="border px-3 py-2 rounded text-sm w-full">
+                                </div>
+
+                                <div class="space-y-2">
+                                    <label class="block text-sm text-gray-600">Đến ngày</label>
+                                    <input type="date" id="toDate" class="border px-3 py-2 rounded text-sm w-full">
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
+                                <button onclick="applyFilters()"
+                                    class="bg-blue-600 text-white px-4 py-2 rounded text-sm w-full sm:w-auto">
+                                    Lọc
+                                </button>
+                                <button onclick="exportExcel()"
+                                    class="bg-green-600 text-white px-4 py-2 rounded text-sm w-full sm:w-auto">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Xuất Excel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="overflow-x-auto">
+                    <table id="revenueTable" class="min-w-full text-sm">
+                        <thead class="bg-gray-100 text-left">
+                            <tr>
+                                <th class="p-3 cursor-pointer text-gray-500 hover:bg-gray-200 min-w-[150px]"
+                                    onclick="sortTable(0, 'string', this)">
+                                    KHÁCH HÀNG <i class="fas fa-sort text-xs ml-1"></i>
+                                </th>
+                                <th class="p-3 cursor-pointer text-gray-500 hover:bg-gray-200 min-w-[100px]"
+                                    onclick="sortTable(1, 'string', this)">
+                                    HỢP ĐỒNG <i class="fas fa-sort text-xs ml-1"></i>
+                                </th>
+                                <th class="p-3 cursor-pointer text-gray-500 hover:bg-gray-200 min-w-[120px]"
+                                    onclick="sortTable(2, 'date', this)">
+                                    NGÀY <i class="fas fa-sort text-xs ml-1"></i>
+                                </th>
+                                <th class="p-3 cursor-pointer text-gray-500 hover:bg-gray-200 min-w-[150px]"
+                                    onclick="sortTable(3, 'number', this)">
+                                    TỔNG TIỀN <i class="fas fa-sort text-xs ml-1"></i>
+                                </th>
+                                <th class="p-3 text-gray-500 min-w-[80px]">CHI TIẾT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td class="p-3 font-medium">Công ty ABC</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD01</span></td>
+                                <td class="p-3">2025-07-06</td>
+                                <td class="p-3 font-medium">145.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD01')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty XYZ</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD02</span></td>
+                                <td class="p-3">2025-07-05</td>
+                                <td class="p-3 font-medium">30.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD02')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty CBTECH</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD03</span></td>
+                                <td class="p-3">2025-09-06</td>
+                                <td class="p-3 font-medium">500.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD03')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty Đông Dương</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD04</span></td>
+                                <td class="p-3">2025-06-28</td>
+                                <td class="p-3 font-medium">9.800.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD04')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty Minh Tâm</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD05</span></td>
+                                <td class="p-3">2025-06-28</td>
+                                <td class="p-3 font-medium">17.600.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD05')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty Thành Thái</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD06</span></td>
+                                <td class="p-3">2025-12-30</td>
+                                <td class="p-3 font-medium">30.600.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD06')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty Diên Hồng</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD07</span></td>
+                                <td class="p-3">2025-01-29</td>
+                                <td class="p-3 font-medium">70.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD07')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty Phú Thọ</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD08</span></td>
+                                <td class="p-3">2025-06-28</td>
+                                <td class="p-3 font-medium">30.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD08')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty ADC</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD09</span></td>
+                                <td class="p-3">2025-03-28</td>
+                                <td class="p-3 font-medium">100.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD09')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty DC</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD10</span></td>
+                                <td class="p-3">2024-11-30</td>
+                                <td class="p-3 font-medium">150.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD10')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium">Công ty Marvel</td>
+                                <td class="p-3"><span class="bg-gray-100 px-2 py-1 rounded text-xs">HD11</span></td>
+                                <td class="p-3">2024-02-29</td>
+                                <td class="p-3 font-medium">500.000.000 ₫</td>
+                                <td class="p-3">
+                                    <button onclick="openModal('HD11')" class="text-blue-600 hover:text-blue-800 p-1">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t">
+                    <div class="text-sm text-gray-700 order-2 sm:order-1">
+                        Hiển thị <span class="font-medium">1</span> đến <span class="font-medium">10</span> của <span
+                            class="font-medium" id="totalResults">11</span> kết quả
+                    </div>
+
+                    <div class="flex items-center gap-2 order-1 sm:order-2">
+                        <button id="prevPage"
+                            class="border border-gray-300 bg-white text-sm px-3 py-2 rounded-l-md hover:bg-gray-50 disabled:opacity-50"
+                            disabled>
+                            <i class="fas fa-chevron-left"></i>
+                            <span class="hidden sm:inline ml-1">Trước</span>
+                        </button>
+
+                        <div class="flex items-center gap-1" id="pageNumbers">
+                            <button
+                                class="bg-blue-50 border-blue-500 text-blue-600 px-3 py-2 border text-sm font-medium">1</button>
+                            <button
+                                class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 px-3 py-2 border text-sm font-medium">2</button>
+                        </div>
+
+                        <button id="nextPage"
+                            class="border border-gray-300 bg-white text-sm px-3 py-2 rounded-r-md hover:bg-gray-50">
+                            <span class="hidden sm:inline mr-1">Sau</span>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết -->
+    <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center hidden z-50 p-4">
+        <div class="bg-white rounded-xl p-4 lg:p-6 max-w-6xl w-full relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-xl p-2">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="text-lg lg:text-xl font-semibold mb-4">Chi tiết doanh thu</h3>
+
+            <!-- Chi phí kho -->
+            <div class="mb-6">
+                <h4 class="text-base lg:text-lg font-semibold mb-2 text-gray-700">Chi phí thuê kho</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[700px] text-sm border mb-4">
+                        <thead class="bg-gray-100 text-sm text-gray-700">
+                            <tr>
+                                <th class="p-2 text-left">Dịch vụ</th>
+                                <th class="p-2 text-left">Loại hình thuê</th>
+                                <th class="p-2 text-left">Ngày bắt đầu</th>
+                                <th class="p-2 text-left">Ngày kết thúc</th>
+                                <th class="p-2 text-left">Đơn giá</th>
+                                <th class="p-2 text-left">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bulkBodyKho"></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            
+            <div>
+                <h4 class="text-base lg:text-lg font-semibold mb-2 text-gray-700">Chi phí dịch vụ</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[500px] text-sm border mb-4">
+                        <thead class="bg-gray-100 text-sm text-gray-700">
+                            <tr>
+                                <th class="p-2 text-left">Loại dịch vụ</th>
+                                <th class="p-2 text-left">Số lượng</th>
+                                <th class="p-2 text-left">Đơn vị</th>
+                                <th class="p-2 text-left">Đơn giá</th>
+                                <th class="p-2 text-left">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bagBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data for contract details
+        const detailsMap = {
+            HD01: {
+                thueKho: { type: "Theo tháng", startDate: "2025-07-01", endDate: "2025-07-31", price: 200000, total: 20000000 },
+                hangBao: [
+                    { type: "Đóng bao (Bao Jumbo)", qty: 300, unit: "bao", price: 50000, total: 15000000 },
+                    { type: "Đóng bao (Bao Jumbo)", qty: 100, unit: "bao", price: 100000, total: 10000000 },
+                    { type: "Trộn hàng", qty: 200, unit: "tấn", price: 1000000, total: 100000000 }
+                ]
+            },
+            HD02: {
+                thueKho: { type: "Theo ngày", startDate: "2025-07-01", endDate: "2025-07-10", price: 300000, total: 3000000 },
+                hangBao: []
+            },
+            HD03: {
+                thueKho: { type: "Theo năm", startDate: "2025-01-01", endDate: "2025-12-31", price: 5000000, total: 50000000 },
+                hangBao: [
+                    { type: "Đóng bao (Bao Jumbo)", qty: 1000, unit: "bao", price: 200000, total: 200000000 },
+                    { type: "Đóng bao (Bao 100kg)", qty: 500, unit: "bao", price: 200000, total: 100000000 },
+                    { type: "Đóng bao (Bao 200kg)", qty: 2000, unit: "bao", price: 100000, total: 200000000 }
+                ]
+            },
+            HD04: {
+                thueKho: { type: "Theo tháng", startDate: "2025-06-01", endDate: "2025-06-30", price: 180000, total: 18000000 },
+                hangBao: [
+                    { type: "Trộn hàng", qty: 20, unit: "tấn", price: 60000, total: 4800000 }
+                ]
+            },
+            HD05: {
+                thueKho: { type: "Theo ngày", startDate: "2025-08-05", endDate: "2025-08-20", price: 250000, total: 3750000 },
+                hangBao: [
+                    { type: "Đóng bao (Bao 100kg)", qty: 200, unit: "bao", price: 88000, total: 17600000 }
+                ]
+            },
+            HD06: {
+                thueKho: { type: "Theo năm", startDate: "2025-01-01", endDate: "2025-12-31", price: 7000000, total: 70000000 },
+                hangBao: [
+                    { type: "Trộn hàng", qty: 100, unit: "tấn", price: 186000, total: 18600000 }
+                ]
+            },
+            HD07: {
+                thueKho: { type: "Theo tháng", startDate: "2025-09-01", endDate: "2025-09-30", price: 220000, total: 22000000 },
+                hangBao: [
+                    { type: "Đóng bao (Bao 50kg)", qty: 500, unit: "bao", price: 100000, total: 50000000 }
+                ]
+            },
+            HD08: {
+                thueKho: { type: "Theo ngày", startDate: "2025-10-10", endDate: "2025-10-15", price: 150000, total: 900000 },
+                hangBao: [
+                    { type: "Đóng bao (Bao 200kg)", qty: 100, unit: "bao", price: 270000, total: 27000000 }
+                ]
+            },
+            HD09: {
+                thueKho: { type: "Theo năm", startDate: "2025-01-01", endDate: "2025-12-31", price: 6000000, total: 60000000 },
+                hangBao: [
+                    { type: "Trộn hàng", qty: 1000, unit: "bao", price: 100000, total: 100000000 }
+                ]
+            },
+            HD10: {
+                thueKho: { type: "Theo tháng", startDate: "2025-11-01", endDate: "2025-11-30", price: 210000, total: 21000000 },
+                hangBao: [
+                    { type: "Đóng bao (Bao 500kg)", qty: 300, unit: "bao", price: 300000, total: 90000000 }
+                ]
+            },
+            HD11: {
+                thueKho: { type: "Theo ngày", startDate: "2025-12-01", endDate: "2025-12-10", price: 320000, total: 3200000 },
+                hangBao: [
+                    { type: "Trộn hàng", qty: 450, unit: "bao", price: 1000000, total: 450000000 }
+                ]
+            }
+        };
+
+        // Toggle filters on mobile
+        document.getElementById('toggleFilters').addEventListener('click', function () {
+            const filtersSection = document.getElementById('filtersSection');
+            filtersSection.classList.toggle('hidden');
+        });
+
+        // Export to Excel
+        function exportExcel() {
+            const wb = XLSX.utils.book_new();
+            const ws_data = [["Khách hàng", "Hợp đồng", "Ngày", "Tổng tiền"]];
+            const rows = document.querySelectorAll("#tableBody tr");
+
+            rows.forEach(row => {
+                if (row.style.display !== "none") {
+                    const cells = row.querySelectorAll("td");
+                    ws_data.push([
+                        cells[0].textContent,
+                        cells[1].textContent.trim(),
+                        cells[2].textContent,
+                        cells[3].textContent
+                    ]);
+                }
+            });
+
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            XLSX.utils.book_append_sheet(wb, ws, "DoanhThu");
+            XLSX.writeFile(wb, "doanh_thu_khach_hang.xlsx");
+        }
+
+        // Open modal
+        function openModal(contractId) {
+            const data = detailsMap[contractId];
+            const modal = document.getElementById('detailModal');
+            const bulkBodyKho = document.getElementById("bulkBodyKho");
+            const bagBody = document.getElementById("bagBody");
+
+            bulkBodyKho.innerHTML = "";
+            bagBody.innerHTML = "";
+
+            if (data.thueKho) {
+                bulkBodyKho.innerHTML = `
+                    <tr>
+                        <td class="p-2">Thuê kho</td>
+                        <td class="p-2">${data.thueKho.type}</td>
+                        <td class="p-2">${data.thueKho.startDate}</td>
+                        <td class="p-2">${data.thueKho.endDate}</td>
+                        <td class="p-2">${data.thueKho.price.toLocaleString('vi-VN')} ₫</td>
+                        <td class="p-2">${data.thueKho.total.toLocaleString('vi-VN')} ₫</td>
+                    </tr>
+                `;
+            } else {
+                bulkBodyKho.innerHTML = `<tr><td colspan="6" class="p-2 italic text-gray-500 text-center">Không có chi phí thuê kho.</td></tr>`;
+            }
+
+            if (data.hangBao && data.hangBao.length > 0) {
+                data.hangBao.forEach(row => {
+                    bagBody.innerHTML += `
+                        <tr>
+                            <td class="p-2">${row.type}</td>
+                            <td class="p-2">${row.qty}</td>
+                            <td class="p-2">${row.unit}</td>
+                            <td class="p-2">${row.price.toLocaleString('vi-VN')} ₫</td>
+                            <td class="p-2">${row.total.toLocaleString('vi-VN')} ₫</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                bagBody.innerHTML = `<tr><td colspan="5" class="p-2 italic text-gray-500 text-center">Không có hàng bao.</td></tr>`;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // Sort table
+        let sortState = {};
+        function sortTable(columnIndex, type, th) {
+            const tableBody = document.getElementById('tableBody');
+            const rows = Array.from(tableBody.querySelectorAll("tr"));
+            const ascending = !sortState[columnIndex];
+
+            rows.sort((a, b) => {
+                const cellA = a.children[columnIndex].textContent.trim();
+                const cellB = b.children[columnIndex].textContent.trim();
+                let valA = cellA, valB = cellB;
+
+                if (type === 'number') {
+                    valA = parseFloat(cellA.replace(/[^\d.-]/g, '')) || 0;
+                    valB = parseFloat(cellB.replace(/[^\d.-]/g, '')) || 0;
+                } else if (type === 'date') {
+                    valA = new Date(cellA);
+                    valB = new Date(cellB);
+                } else {
+                    valA = cellA.toLowerCase();
+                    valB = cellB.toLowerCase();
+                }
+
+                if (valA < valB) return ascending ? -1 : 1;
+                if (valA > valB) return ascending ? 1 : -1;
+                return 0;
+            });
+
+            tableBody.innerHTML = "";
+            rows.forEach(row => tableBody.appendChild(row));
+
+            // Reset icons
+            document.querySelectorAll("thead th i").forEach(icon => {
+                icon.className = "fas fa-sort text-xs ml-1";
+            });
+
+            // Set correct icon
+            const icon = th.querySelector("i");
+            icon.className = ascending
+                ? "fas fa-sort-up text-xs ml-1"
+                : "fas fa-sort-down text-xs ml-1";
+
+            sortState = {};
+            sortState[columnIndex] = ascending;
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const keyword = this.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('#tableBody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                const isVisible = text.includes(keyword);
+                row.style.display = isVisible ? '' : 'none';
+                if (isVisible) visibleCount++;
+            });
+
+            document.getElementById('totalResults').textContent = visibleCount;
+            updateKPIs();
+        });
+
+        // Apply filters
+        function applyFilters() {
+            const customerFilter = document.getElementById('customerFilter').value;
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+            const rows = document.querySelectorAll('#tableBody tr');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const customer = row.children[0].textContent;
+                const date = row.children[2].textContent;
+
+                let show = true;
+
+                if (customerFilter && customer !== customerFilter) {
+                    show = false;
+                }
+
+                if (fromDate && date < fromDate) {
+                    show = false;
+                }
+
+                if (toDate && date > toDate) {
+                    show = false;
+                }
+
+                row.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            document.getElementById('totalResults').textContent = visibleCount;
+            updateKPIs();
+        }
+
+        // Update KPIs based on visible rows
+        function updateKPIs() {
+            const visibleRows = document.querySelectorAll('#tableBody tr:not([style*="display: none"])');
+            const customers = new Set();
+            const contracts = new Set();
+            let totalRevenue = 0;
+
+            visibleRows.forEach(row => {
+                customers.add(row.children[0].textContent);
+                contracts.add(row.children[1].textContent.trim());
+                const amount = parseFloat(row.children[3].textContent.replace(/[^\d.-]/g, '')) || 0;
+                totalRevenue += amount;
+            });
+
+            
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('detailModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            updateKPIs();
+        });
+    </script>
+</body>
+
+</html>
