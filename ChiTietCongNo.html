@@ -529,6 +529,7 @@
                             <!-- Table rows will be dynamically inserted here -->
                         </tbody>
                     </table>
+                    <div id="loadMoreWrapper" class="flex justify-center mt-4"></div>
                 </div>
             </div>
         </div>
@@ -659,7 +660,12 @@
                     debts: [
                         { contract: 'HD001', invoice: 'HDN001', total: 15000000, paid: 5000000, dueDate: '2023-05-15', overdue: 15 },
                         { contract: 'HD002', invoice: 'HDN002', total: 20000000, paid: 10000000, dueDate: '2023-06-10', overdue: 0 },
-                        { contract: 'HD003', invoice: 'HDN003', total: 5000000, paid: 0, dueDate: '2023-07-01', overdue: 0 }
+                        { contract: 'HD003', invoice: 'HDN003', total: 5000000, paid: 0, dueDate: '2023-07-01', overdue: 0 },
+                        { contract: 'HD004', invoice: 'HDN004', total: 8000000, paid: 2000000, dueDate: '2023-07-15', overdue: 0 },
+                        { contract: 'HD005', invoice: 'HDN005', total: 12000000, paid: 3000000, dueDate: '2023-08-01', overdue: 0 },
+                        { contract: 'HD006', invoice: 'HDN006', total: 12000000, paid: 4000000, dueDate: '2023-08-01', overdue: 0 },
+                        { contract: 'HD007', invoice: 'HDN007', total: 12000000, paid: 5000000, dueDate: '2023-08-01', overdue: 0 }
+                        
                     ]
                 },
                 'KH002': {
@@ -698,50 +704,50 @@
                 customerSelect.dispatchEvent(new Event('change'));
             });
 
-            customerSelect.addEventListener('change', function() {
-                const selectedCustomer = customerSelect.value;
+            // Pagination variables
+            let currentPage = 1;
+            const recordsPerPage = 5;
+            let currentDebts = [];
+            let loadMoreBtn = null;
+            
+            function createLoadMoreButton() {
+              if (loadMoreBtn) loadMoreBtn.remove();
+
+              loadMoreBtn = document.createElement('button');
+              loadMoreBtn.id = 'loadMoreBtn';
+              loadMoreBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors';
+              loadMoreBtn.innerHTML = '<i class="fas fa-plus-circle mr-2"></i>Xem thêm';
+              loadMoreBtn.addEventListener('click', loadMoreRecords);
+
+              const wrapper = document.getElementById('loadMoreWrapper');
+              wrapper.appendChild(loadMoreBtn);
+            }
+            
+            function loadMoreRecords() {
+                currentPage++;
+                displayRecords();
+            }
+            
+            function displayRecords() {
+                const startIndex = 0;
+                const endIndex = currentPage * recordsPerPage;
+                const paginatedDebts = currentDebts.slice(startIndex, endIndex);
                 
-                if (!selectedCustomer) {
-                    noCustomerMessage.classList.remove('hidden');
-                    debtTable.classList.add('hidden');
-                    return;
-                }
-                
-                // Show the table and hide the message
-                noCustomerMessage.classList.add('hidden');
-                debtTable.classList.remove('hidden');
-                
-                // Update customer name
-                const customerData = mockData[selectedCustomer] || { name: 'Unknown', debts: [] };
-                customerNameSpan.textContent = customerData.name;
-                
-                // Clear existing table rows
+                // Clear existing table rows (except header)
                 debtTableBody.innerHTML = '';
                 
-                // Calculate total debt
-                let totalDebt = 0;
-                let totalPaid = 0;
-                
-                // Filter out fully paid debts
-                const unpaidDebts = customerData.debts.filter(debt => debt.paid < debt.total);
-                
-                // Add rows or show "no data" message
-                if (unpaidDebts.length === 0) {
+                if (paginatedDebts.length === 0) {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">Không có công nợ nào</td>
+                        <td colspan="7" class="px-6 py-4 text-center text-gray-500">Không có công nợ nào</td>
                     `;
                     debtTableBody.appendChild(row);
                 } else {
-                    unpaidDebts.forEach(debt => {
-                        totalDebt += debt.total;
-                        totalPaid += debt.paid;
+                    paginatedDebts.forEach(debt => {
+                        const overdueClass = debt.overdue > 0 ? 'text-red-600 font-medium' : '';
                         
                         const row = document.createElement('tr');
                         row.className = 'hover:bg-gray-50';
-                        
-                        const overdueClass = debt.overdue > 0 ? 'text-red-600 font-medium' : '';
-                        
                         row.innerHTML = `
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${debt.contract}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${debt.invoice}</td>
@@ -755,13 +761,73 @@
                                 </button>
                             </td>
                         `;
-                        
                         debtTableBody.appendChild(row);
                     });
                 }
                 
+                // Show/hide load more button
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = (endIndex < currentDebts.length) ? 'block' : 'none';
+                }
+
+                // Add count row
+                const countRow = document.createElement('tr');
+                countRow.className = 'bg-gray-50';
+                countRow.innerHTML = `
+                    <td colspan="7" class="px-2 py-2 text-sm text-gray-500 text-left">
+                        Đang hiển thị ${Math.min(endIndex, currentDebts.length)}/${currentDebts.length} dòng
+                    </td>
+                `;
+                debtTableBody.appendChild(countRow);
+            }
+            
+            customerSelect.addEventListener('change', function() {
+                currentPage = 1;
+                const selectedCustomer = customerSelect.value;
+                
+                if (!selectedCustomer) {
+                    noCustomerMessage.classList.remove('hidden');
+                    debtTable.classList.add('hidden');
+                    if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+                    return;
+                }
+                
+                // Show the table and hide the message
+                noCustomerMessage.classList.add('hidden');
+                debtTable.classList.remove('hidden');
+                
+                // Update customer name
+                const customerData = mockData[selectedCustomer] || { name: 'Unknown', debts: [] };
+                customerNameSpan.textContent = customerData.name;
+                
+                // Calculate total debt
+                let totalDebt = 0;
+                let totalPaid = 0;
+                
+                // Filter out fully paid debts
+                currentDebts = customerData.debts.filter(debt => debt.paid < debt.total);
+                
+                // Calculate totals
+                currentDebts.forEach(debt => {
+                    totalDebt += debt.total;
+                    totalPaid += debt.paid;
+                });
+                
+                // Create load more button if needed
+                if (currentDebts.length > recordsPerPage && !loadMoreBtn) {
+                    createLoadMoreButton();
+                }
+                
+                // Display first page of records
+                displayRecords();
+                
                 // Update total debt
                 totalDebtSpan.textContent = formatCurrency(totalDebt - totalPaid) + ' ₫';
+                
+                // Hide load more button if not needed
+                if (loadMoreBtn) {
+                    loadMoreBtn.style.display = (currentDebts.length > recordsPerPage) ? 'block' : 'none';
+                }
             });
             
             // Helper functions
