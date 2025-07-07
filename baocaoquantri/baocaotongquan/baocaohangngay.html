@@ -177,15 +177,13 @@
                 </a>
               </li>
               <li>
-                <a href="/nhapkho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/nhapkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-down fa-fw mr-3"></i>
                   <span class="nav-text">Nhập kho</span>
                 </a>
               </li>
               <li>
-                <a href="/xuatkho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/xuatkho.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-arrow-up fa-fw mr-3"></i>
                   <span class="nav-text">Xuất kho</span>
                 </a>
@@ -443,10 +441,10 @@
             <p class="text-sm text-gray-500">Thống kê hoạt động xe trong ngày</p>
           </div>
 
-          <!-- KPI cards -->
+          <!-- KPI Cards -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="bg-white rounded-2xl shadow p-4">
-              <p class="text-sm text-gray-500">🚛 Lượt xe vào hôm nay</p>
+              <p class="text-sm text-gray-500">Lượt xe vào hôm nay</p>
               <h2 class="text-3xl font-bold text-blue-600">36</h2>
               <div class="flex items-center mt-2">
                 <span class="text-xs text-green-500 bg-green-50 px-2 py-1 rounded-full">
@@ -456,7 +454,7 @@
               </div>
             </div>
             <div class="bg-white rounded-2xl shadow p-4">
-              <p class="text-sm text-gray-500">⚖️ Tổng khối lượng hôm nay</p>
+              <p class="text-sm text-gray-500">Tổng khối lượng hôm nay</p>
               <h2 class="text-3xl font-bold text-green-600">182,360 kg</h2>
               <div class="flex items-center mt-2">
                 <span class="text-xs text-red-500 bg-red-50 px-2 py-1 rounded-full">
@@ -466,7 +464,7 @@
               </div>
             </div>
             <div class="bg-white rounded-2xl shadow p-4">
-              <p class="text-sm text-gray-500">⏱️ Thời gian trung bình</p>
+              <p class="text-sm text-gray-500">Thời gian trung bình</p>
               <h2 class="text-3xl font-bold text-purple-600">42 phút</h2>
               <div class="flex items-center mt-2">
                 <span class="text-xs text-green-500 bg-green-50 px-2 py-1 rounded-full">
@@ -476,7 +474,7 @@
               </div>
             </div>
             <div class="bg-white rounded-2xl shadow p-4">
-              <p class="text-sm text-gray-500">👷 Nhân viên làm việc</p>
+              <p class="text-sm text-gray-500">Nhân viên làm việc</p>
               <h2 class="text-3xl font-bold text-amber-600">12</h2>
               <div class="flex items-center mt-2">
                 <span class="text-xs text-gray-500">Đang hoạt động</span>
@@ -484,14 +482,15 @@
             </div>
           </div>
 
-          <!-- Chart -->
+
+          <!-- Chart & Top 5 -->
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <!-- Simplified Weight Chart -->
+            <!-- Trọng lượng theo thời gian -->
             <div class="bg-white rounded-2xl shadow p-4 hover:shadow-md transition-shadow duration-200 col-span-2">
               <div class="flex items-center justify-between mb-2">
-                <p class="font-semibold">📊 Trọng lượng hàng theo thời gian</p>
+                <p class="font-semibold">Trọng lượng hàng theo thời gian</p>
                 <select id="weightTimeRange"
-                  class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                  class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none">
                   <option>Hôm nay</option>
                   <option>7 ngày</option>
                   <option>30 ngày</option>
@@ -502,44 +501,36 @@
               </div>
             </div>
 
-            <!-- Top xe nặng -->
-            <div class="bg-white rounded-2xl shadow p-4 mb-6">
-              <p class="font-semibold mb-2">🏆 Top 5 xe có hàng nặng nhất</p>
+            <!-- Top 5 xe nặng -->
+            <div class="bg-white rounded-2xl shadow p-4">
+              <p class="font-semibold mb-2">Top 5 xe có hàng nặng nhất</p>
               <ul class="text-sm space-y-3">
-                <li class="flex items-center justify-between">
-                  <span>1. 51C-123.45</span><span class="font-medium">10,200 kg</span>
-                </li>
-                <li class="flex items-center justify-between">
-                  <span>2. 51D-678.90</span><span class="font-medium">9,850 kg</span>
-                </li>
-                <li class="flex items-center justify-between">
-                  <span>3. 60A-123.78</span><span class="font-medium">9,740 kg</span>
-                </li>
-                <li class="flex items-center justify-between">
-                  <span>4. 61B-332.18</span><span class="font-medium">9,300 kg</span>
-                </li>
-                <li class="flex items-center justify-between">
-                  <span>5. 50F-999.99</span><span class="font-medium">9,100 kg</span>
-                </li>
+                <li class="flex justify-between"><span>1. 51C-123.45</span><span>10,200 kg</span></li>
+                <li class="flex justify-between"><span>2. 51D-678.90</span><span>9,850 kg</span></li>
+                <li class="flex justify-between"><span>3. 60A-123.78</span><span>9,740 kg</span></li>
+                <li class="flex justify-between"><span>4. 61B-332.18</span><span>9,300 kg</span></li>
+                <li class="flex justify-between"><span>5. 50F-999.99</span><span>9,100 kg</span></li>
               </ul>
             </div>
           </div>
 
+          <!-- Danh sách xe vào gần đây -->
           <div class="bg-white rounded-2xl shadow p-4 hover:shadow-md transition-shadow duration-200">
             <div class="flex items-center justify-between mb-4">
-              <p class="font-semibold">🕑 Xe vào gần đây</p>
+              <p class="font-semibold">Xe vào gần đây</p>
               <button class="text-sm text-primary hover:text-blue-700 flex items-center">
                 <i class="fas fa-sync-alt mr-1"></i> Làm mới
               </button>
             </div>
             <div class="overflow-auto">
-              <table class="table-auto w-full text-sm min-w-[500px]">
+              <table class="table-auto w-full text-sm min-w-[650px]">
                 <thead>
                   <tr class="bg-gray-100">
                     <th class="p-2 text-left">Biển số</th>
                     <th class="p-2 text-left">Giờ vào</th>
                     <th class="p-2 text-left">Trọng lượng</th>
                     <th class="p-2 text-left">Nhân viên</th>
+                    <th class="p-2 text-left">Loại hàng</th> <!-- NEW -->
                     <th class="p-2 text-left">Trạng thái</th>
                   </tr>
                 </thead>
@@ -550,7 +541,11 @@
                     <td class="p-2">10,200 kg</td>
                     <td class="p-2">Nguyễn Văn A</td>
                     <td class="p-2">
-                      <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">Hoàn thành</span>
+                      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">Nhập</span>
+                    </td>
+                    <td class="p-2">
+                      <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">Hoàn
+                        thành</span>
                     </td>
                   </tr>
                   <tr class="border-t hover:bg-gray-50">
@@ -559,7 +554,11 @@
                     <td class="p-2">9,850 kg</td>
                     <td class="p-2">Trần Thị B</td>
                     <td class="p-2">
-                      <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">Hoàn thành</span>
+                      <span class="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full">Xuất</span>
+                    </td>
+                    <td class="p-2">
+                      <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full">Hoàn
+                        thành</span>
                     </td>
                   </tr>
                   <tr class="border-t hover:bg-gray-50">
@@ -568,7 +567,11 @@
                     <td class="p-2">9,740 kg</td>
                     <td class="p-2">Lê Văn C</td>
                     <td class="p-2">
-                      <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full">Đang xử lý</span>
+                      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">Nhập</span>
+                    </td>
+                    <td class="p-2">
+                      <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-0.5 rounded-full">Đang xử
+                        lý</span>
                     </td>
                   </tr>
                   <tr class="border-t hover:bg-gray-50">
@@ -577,7 +580,11 @@
                     <td class="p-2">9,300 kg</td>
                     <td class="p-2">Phạm Thị D</td>
                     <td class="p-2">
-                      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">Chờ kiểm tra</span>
+                      <span class="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded-full">Xuất</span>
+                    </td>
+                    <td class="p-2">
+                      <span class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">Chờ kiểm
+                        tra</span>
                     </td>
                   </tr>
                 </tbody>
@@ -644,26 +651,19 @@
             </div>
           </div>
         </div>
+        <!-- insert code here -->
+      </main>
     </div>
-    <!-- insert code here -->
-    </main>
-  </div>
   </div>
 
   <!-- insert script here -->
-
   <script>
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: {
-          position: 'top',
-        },
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        }
+        legend: { position: 'top' },
+        tooltip: { mode: 'index', intersect: false }
       },
       scales: {
         y: {
@@ -685,7 +685,7 @@
           labels: ['6h', '8h', '10h', '12h', '14h', '16h', '18h'],
           datasets: [
             {
-              label: 'Trọng lượng nhập (kg)',
+              label: '📥 Trọng lượng nhập (kg)',
               data: [12500, 22500, 30000, 37500, 45000, 55000, 62500],
               backgroundColor: 'rgba(59, 130, 246, 0.1)',
               borderColor: '#3b82f6',
@@ -694,7 +694,7 @@
               fill: true
             },
             {
-              label: 'Trọng lượng xuất (kg)',
+              label: '📤 Trọng lượng xuất (kg)',
               data: [10000, 18000, 24000, 30000, 36000, 44000, 50000],
               backgroundColor: 'rgba(239, 68, 68, 0.1)',
               borderColor: '#ef4444',
@@ -715,7 +715,6 @@
       }
     );
   </script>
-
   <!-- insert script here -->
 
 
