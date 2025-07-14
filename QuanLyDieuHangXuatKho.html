@@ -606,11 +606,11 @@
             <div class="col-span-1 text-center cursor-pointer sticky left-0 bg-gray-50 z-10"><span>Biển số<i class="p-1 fas fa-sort"></i></span></div>
             <div class="col-span-1 text-center cursor-pointer"><span>Tài xế<i class="p-1 fas fa-sort"></i></span></div>
             <div class="col-span-2 text-center cursor-pointer">Vào lúc<i class="p-1 fas fa-sort"></i></div>
-            <div class="col-span-1 text-center cursor-pointer"><span>Lượng hàng<i class="p-1 fas fa-sort"></i><br><span
-                  class="text-xs font-normal">(kg)</span></span></div>
-            <div class="col-span-1 text-center cursor-pointer"><span>Tại Cân<i class="p-1 fas fa-sort"></i><br><span
+            <div class="col-span-1 text-center cursor-pointer"><span>Xe vào<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(kg)</span></span></div>
             <div class="col-span-1 text-center cursor-pointer"><span>Xe ra<i class="p-1 fas fa-sort"></i><br><span
+                  class="text-xs font-normal">(kg)</span></span></div>
+            <div class="col-span-1 text-center cursor-pointer"><span>Lượng hàng<i class="p-1 fas fa-sort"></i><br><span
                   class="text-xs font-normal">(kg)</span></span></div>
             <div class="col-span-1 text-center cursor-pointer"><span>Hợp đồng<i class="p-1 fas fa-sort"></i></span>
             </div>
@@ -794,11 +794,10 @@
         inTime: "03/07/2025 07:45",
         licensePlate: "29A-54321",
         driver: "Vũ Văn Hải",
-        inWeight: 14000.00,
-        outTime: "03/07/2025 08:15",
-        outWeight: 14000,
-        portWeight: 0,
-        totalWeight: 12000.00,
+        inWeight: 8000.00, // Empty truck weight
+        outTime: "03/07/2025 08:15", 
+        outWeight: 20000, // Truck + goods weight
+        totalWeight: 12000.00, // Goods weight (outWeight - inWeight)
         warehouse: '',
         cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
@@ -810,11 +809,11 @@
         inTime: "03/07/2025 09:30",
         licensePlate: "29B-98765",
         driver: "Ngô Thị Lan",
-        inWeight: 20000.50,
+        inWeight: 12000.00, // Empty truck weight
         outTime: "03/07/2025 10:00",
-        outWeight: 0,
-        portWeight: 18000.50,
-        totalWeight: 18000.50,
+        outWeight: 30000.50, // Truck + goods weight
+        portWeight: 0,
+        totalWeight: 18000.50, // Goods weight (outWeight - inWeight)
         warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
         cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
@@ -826,11 +825,11 @@
         inTime: "03/07/2025 11:15",
         licensePlate: "29C-11223",
         driver: "Đặng Văn Tú",
-        inWeight: 17000.25,
+        inWeight: 10000.00, // Empty truck weight
         outTime: "03/07/2025 11:45",
-        outWeight: 15000.25,
+        outWeight: 25000.25, // Truck + goods weight
         portWeight: 0,
-        totalWeight: 15000.25,
+        totalWeight: 15000.25, // Goods weight (outWeight - inWeight)
         warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
         cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
@@ -842,11 +841,11 @@
         inTime: "03/07/2025 13:30",
         licensePlate: "29D-44556",
         driver: "Lý Thị Mai",
-        inWeight: 11000.75,
+        inWeight: 8500.00, // Empty truck weight
         outTime: "03/07/2025 14:00",
-        outWeight: 0,
-        portWeight: 9000.75,
-        totalWeight: 9000.75,
+        outWeight: 17500.75, // Truck + goods weight
+        portWeight: 0,
+        totalWeight: 9000.75, // Goods weight (outWeight - inWeight)
         warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
         cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
@@ -858,11 +857,11 @@
         inTime: "03/07/2025 15:45",
         licensePlate: "29E-77889",
         driver: "Trương Văn Sơn",
-        inWeight: 24000.00,
+        inWeight: 15000.00, // Empty truck weight
         outTime: "03/07/2025 16:15",
-        outWeight: 22000.00,
+        outWeight: 37000.00, // Truck + goods weight
         portWeight: 0,
-        totalWeight: 22000.00,
+        totalWeight: 22000.00, // Goods weight (outWeight - inWeight)
         warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
         cluster: clusters[Math.floor(Math.random() * clusters.length)]
       }
@@ -875,19 +874,8 @@
       let contractText = truckRegistration.contract.join('</a>, <a href="#" class="text-blue-600 hover:underline text-sm">');
       contractText = `<a href="#" class="text-blue-600 hover:underline text-sm">${contractText}</a>`;
       const portWeight = truckRegistration.portWeight ? truckRegistration.portWeight.toLocaleString('en-US') : '_';
-      let warningClass = '', warningText = '';
-      if (truckRegistration.portWeight && Math.abs(truckRegistration.portWeight - truckRegistration.totalWeight) > 100) {
-        warningClass = 'border-2 border-red-700 bg-yellow-200 hover:bg-yellow-300';
-        warningText = 'Cảnh báo: Trọng lượng tại cảng không khớp!';
-      } else {
-        warningClass = 'hover:bg-gray-50';
-      }
-
+      const warningClass = 'hover:bg-gray-50';
       const detailsLink = 'DangKyXeNhapKhoDetails.html';
-
-      const warningLabel = document.createElement('p');
-      warningLabel.className = 'text-red-600 text-xs italic text-right';
-      warningLabel.textContent = warningText;
       const registration = document.createElement('div');
       
       const bounder = document.createElement('div');
@@ -905,13 +893,13 @@
                     <div class="font-medium text-sm">${truckRegistration.inTime}</div>
                 </div>
                 <div class="col-span-1 text-center">
-                    <div class="font-medium text-sm text-purple-600">${truckRegistration.totalWeight.toLocaleString('en-US')}</div>
-                </div>
-                <div class="col-span-1 text-center">
-                    <div class="font-medium text-sm text-blue-600">${portWeight}</div>
-                </div>
-                <div class="col-span-1 text-center">
                     <div class="font-medium text-sm text-blue-600">${truckRegistration.inWeight.toLocaleString('en-US')}</div>
+                </div>
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm text-blue-600">${truckRegistration.outWeight.toLocaleString('en-US')}</div>
+                </div>
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm text-purple-600">${truckRegistration.totalWeight.toLocaleString('en-US')}</div>
                 </div>
                 <div class="col-span-1 text-center">
                     <div class="font-medium text-gray-900">${contractText}</div>
@@ -937,7 +925,6 @@
       // }
 
       bounder.appendChild(registration);
-      bounder.appendChild(warningLabel);
       truckRegistratorList.appendChild(bounder);
     });
 
