@@ -207,7 +207,7 @@
               <li>
                 <a href="/QuanLyDangKyXe.html"
                   class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
-                  <i class="fas fa-arrow-down fa-fw mr-3"></i>
+                  <i class="fas fa-truck-fast fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý đăng ký xe</span>
                 </a>
               </li>
@@ -275,8 +275,7 @@
                 </a>
               </li>
               <li>
-                <a href="/DanhMucHangHoa.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/DanhMucHangHoa.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-cubes fa-fw mr-3"></i>
                   <span class="nav-text">Hàng hóa</span>
                 </a>
@@ -319,7 +318,8 @@
                 </a>
               </li>
               <li>
-                <a href="/tonghopdoanhthutheokhachhang.html" class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                <a href="/tonghopdoanhthutheokhachhang.html"
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-hand-holding-dollar fa-fw mr-3"></i>
                   <span class="nav-text">Doanh thu theo KH</span>
                 </a>
@@ -339,7 +339,7 @@
             </ul>
           </div>
 
-          
+
 
           <!-- Báo cáo tổng quan -->
           <div class="mb-6">
@@ -506,7 +506,7 @@
             <div class="flex justify-between items-start">
               <div>
                 <p class="text-gray-500 text-sm">Cảnh báo</p>
-                <h3 class="text-2xl font-bold text-red-600">1 <span class="text-sm">ĐKX</span></h3>
+                <h3 class="text-2xl font-bold text-red-600">2 <span class="text-sm">ĐKX</span></h3>
               </div>
               <div class="bg-red-100 p-3 rounded-full">
                 <i class="fas fa-exclamation text-red-600 text-xl"></i>
@@ -688,10 +688,11 @@
         contract: ["HD003"],
         inTime: "02/07/2025 11:00",
         inWeight: 12000.75,
-        outTime: "02/07/2025 11:30",
-        outWeight: 2000,
+        outTime: "_",
+        outWeight: "_",
         portWeight: 9989.50,
-        totalWeight: 10000.75
+        totalWeight: "_",
+        isTimeOut: true
       },
       {
         type: "Xuất kho",
@@ -712,6 +713,26 @@
         outWeight: 4000,
         portWeight: 12020.50,
         totalWeight: 12000.80
+      },
+      {
+        type: "Xuất kho",
+        contract: ["HD0058"],
+        inTime: "07/07/2025 13:00",
+        inWeight: 30000.80,
+        outTime: "07/07/2025 14:30",
+        outWeight: 4000,
+        portWeight: "_",
+        totalWeight: 25000.80
+      },
+      {
+        type: "Nhập kho",
+        contract: ["HD0088"],
+        inTime: "08/07/2025 13:00",
+        inWeight: 50000.80,
+        outTime: "08/07/2025 15:30",
+        outWeight: 3000,
+        portWeight: 46010.00,
+        totalWeight: 46000.80
       }
     ];
 
@@ -727,19 +748,20 @@
       if (truckRegistration.portWeight && Math.abs(truckRegistration.portWeight - truckRegistration.totalWeight) > 100) {
         warningClass = 'border-2 border-red-700 bg-yellow-200 hover:bg-yellow-300';
         warningText = 'Cảnh báo: Trọng lượng tại cảng không khớp!';
+      } else if (truckRegistration.isTimeOut) {
+        warningClass = 'border-2 border-red-700 bg-orange-200 hover:bg-orange-300';
+        warningText = 'Cảnh báo: Chưa cân xe ra (đã hơn 5 tiếng từ lúc xe vào)!';
       } else {
         warningClass = 'hover:bg-gray-50';
       }
 
-      const detailsLink = truckRegistration.type === 'Nhập kho' ? 'DangKyXeNhapKhoDetails.html' : truckRegistration.type === 'Xuất kho' ? 'DangKyXeXuatKhoDetails.html': 'DangKyXeChuaRoDetails.html';
+      const detailsLink = truckRegistration.type === 'Nhập kho' ? 'DangKyXeNhapKhoDetails.html' : truckRegistration.type === 'Xuất kho' ? 'DangKyXeXuatKhoDetails.html' : 'DangKyXeChuaRoDetails.html';
 
       const warningLabel = document.createElement('p');
       warningLabel.className = 'text-red-600 text-xs italic text-right';
       warningLabel.textContent = warningText;
       const registration = document.createElement('div');
-      registration.onclick = function () {
-        window.location.href = detailsLink;
-      };
+
       const bounder = document.createElement('div');
       registration.className = 'grid grid-cols-24 px-6 py-4 transition-colors rounded cursor-pointer rigisteration-item min-w-[800] ' + warningClass;
       registration.innerHTML = `
