@@ -146,6 +146,13 @@
         margin-left: 10px;
       }
     }
+    select option {
+      padding: 0.5rem;
+    }
+    select option:checked {
+      background-color: #3b82f6;
+      color: white;
+    }
   </style>
   <!-- insert libs here -->
   <script>
@@ -163,6 +170,26 @@
   <!-- insert libs here -->
   <!-- insert style here -->
   <style>
+    .status-new {
+      background-color: #e5e7eb;
+      color: #374151;
+    }
+    .status-weighing {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .status-completed {
+      background-color: #10b981;
+      color: white;
+    }
+    .status-routed {
+      background-color: #f59e0b;
+      color: white;
+    }
+    #warehouse-modal {
+      z-index: 1001;
+    }
+    
     .warehouse-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -206,14 +233,14 @@
             <ul>
               <li>
                 <a href="/QuanLyDangKyXe.html"
-                  class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
+                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-truck-fast fa-fw mr-3"></i>
                   <span class="nav-text">Quản lý đăng ký xe</span>
                 </a>
               </li>
               <li>
                 <a href="/QuanLyDieuHangNhapKho.html"
-                  class="flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                  class="flex items-center p-2 bg-blue-50 text-blue-600 hover:bg-gray-100 rounded-lg">
                   <i class="fas fa-circle-down fa-fw mr-3"></i>
                   <span class="nav-text">Điều hàng nhập kho</span>
                 </a>
@@ -468,7 +495,7 @@
       <header class="bg-white shadow-sm p-4 flex justify-between items-center pt-[0.5rem] pb-[0.7rem] ml-4 rounded">
         <i class="fas fa-bars text-xl inline md:hidden" id="menu-btn"></i>
         <h1 class="text-xl font-semibold text-blue-800 uppercase">
-          Quản lý đăng ký xe
+          Quản lý điều hàng nhập kho
         </h1>
         <div class="flex item-right gap-4">
           <div class="hidden md:flex items-center space-x-4">
@@ -504,38 +531,38 @@
       <main class="p-4">
         <!-- insert code here -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-500">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-gray-500 text-sm">Đăng ký mới</p>
+                <h3 class="text-2xl font-bold text-blue-600">120 <span class="text-sm">lượt</span></h3>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-full">
+                <i class="fas fa-file-circle-plus text-blue-600 text-xl"></i>
+              </div>
+            </div>
+          </div>
+
           <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-orange-500">
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-gray-500 text-sm">Tổng ĐKX hôm nay</p>
-                <h3 class="text-2xl font-bold text-orange-600">235 <span class="text-sm">lượt</span></h3>
+                <p class="text-gray-500 text-sm">Cân lần 1</p>
+                <h3 class="text-2xl font-bold text-orange-600">85 <span class="text-sm">lượt</span></h3>
               </div>
               <div class="bg-orange-100 p-3 rounded-full">
-                <i class="fas fa-truck text-orange-600 text-xl"></i>
+                <i class="fas fa-weight-scale text-orange-600 text-xl"></i>
               </div>
             </div>
           </div>
 
-          <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-red-500">
+          <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-purple-600">
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-gray-500 text-sm">Cảnh báo</p>
-                <h3 class="text-2xl font-bold text-red-600">1 <span class="text-sm">ĐKX</span></h3>
+                <p class="text-gray-500 text-sm">Đã điều hướng</p>
+                <h3 class="text-2xl font-bold text-purple-600">65 <span class="text-sm">lượt</span></h3>
               </div>
-              <div class="bg-red-100 p-3 rounded-full">
-                <i class="fas fa-exclamation text-red-600 text-xl"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-600">
-            <div class="flex justify-between items-start">
-              <div>
-                <p class="text-gray-500 text-sm">ĐKX nhập kho</p>
-                <h3 class="text-2xl font-bold text-blue-600">167 <span class="text-sm">lượt</span></h3>
-              </div>
-              <div class="bg-blue-100 p-3 rounded-full">
-                <i class="fas fa-down-long text-blue-600 text-xl"></i>
+              <div class="bg-purple-100 p-3 rounded-full">
+                <i class="fas fa-route text-purple-600 text-xl"></i>
               </div>
             </div>
           </div>
@@ -543,11 +570,11 @@
           <div class="bg-white p-4 rounded-lg shadow-md border-l-4 border-green-600">
             <div class="flex justify-between items-start">
               <div>
-                <p class="text-gray-500 text-sm">ĐKX xuất kho</p>
-                <h3 class="text-2xl font-bold text-green-600">68 <span class="text-sm">lượt</span></h3>
+                <p class="text-gray-500 text-sm">Hoàn tất</p>
+                <h3 class="text-2xl font-bold text-green-600">45 <span class="text-sm">lượt</span></h3>
               </div>
               <div class="bg-green-100 p-3 rounded-full">
-                <i class="fas fa-up-long text-green-600 text-xl"></i>
+                <i class="fas fa-check-circle text-green-600 text-xl"></i>
               </div>
             </div>
           </div>
@@ -563,14 +590,7 @@
               <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
             </div>
             <div class="flex space-x-2 justify-end">
-              <a href="DangKyXeNhapKho.html"><button
-                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-900 flex items-center">
-                  <i class="fas fa-arrow-down mr-2"></i> Thêm đăng ký nhập
-                </button></a>
-              <a href="DangKyXeXuatKho.html"><button
-                  class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-900 flex items-center">
-                  <i class="fas fa-arrow-up mr-2"></i> Thêm đăng ký xuất
-                </button></a>
+              
               <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center">
                 <i class="fas fa-filter mr-2"></i> Lọc
               </button>
@@ -582,21 +602,21 @@
 
           <!-- Table Header (Desktop) -->
           <div
-            class="grid grid-cols-24 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[800px]">
-            <div class="col-span-2">Loại</div>
-            <div class="col-span-2 text-left cursor-pointer"><span>Hợp đồng<i class="p-1 fas fa-sort"></i></span>
+            class="grid grid-cols-12 bg-gray-50 px-6 py-3 text-sm font-medium text-gray-500 uppercase tracking-wider min-w-[800px]">
+            <div class="col-span-1 text-center cursor-pointer sticky left-0 bg-gray-50 z-10"><span>Biển số<i class="p-1 fas fa-sort"></i></span></div>
+            <div class="col-span-1 text-center cursor-pointer"><span>Tài xế<i class="p-1 fas fa-sort"></i></span></div>
+            <div class="col-span-2 text-center cursor-pointer">Vào lúc<i class="p-1 fas fa-sort"></i></div>
+            <div class="col-span-1 text-center cursor-pointer"><span>Xe vào<i class="p-1 fas fa-sort"></i><br><span
+                  class="text-xs font-normal">(kg)</span></span></div>
+            <div class="col-span-1 text-center cursor-pointer"><span>Tại cảng<i class="p-1 fas fa-sort"></i><br><span
+                  class="text-xs font-normal">(kg)</span></span></div>
+            <div class="col-span-1 text-center cursor-pointer"><span>Lượng hàng<i class="p-1 fas fa-sort"></i><br><span
+                  class="text-xs font-normal">(kg)</span></span></div>
+            <div class="col-span-1 text-center cursor-pointer"><span>Hợp đồng<i class="p-1 fas fa-sort"></i></span>
             </div>
-            <div class="col-span-3 text-center">Vào lúc<i class="p-1 fas fa-sort"></i></div>
-            <div class="col-span-3 text-center cursor-pointer"><span>Xe vào<i class="p-1 fas fa-sort"></i><br><span
-                  class="text-xs font-normal">(kg)</span></span></div>
-            <div class="col-span-3 text-center">Ra lúc<i class="p-1 fas fa-sort"></i></div>
-            <div class="col-span-3 text-center cursor-pointer"><span>Xe ra<i class="p-1 fas fa-sort"></i><br><span
-                  class="text-xs font-normal">(kg)</span></span></div>
-            <div class="col-span-2 text-center cursor-pointer"><span>Tại cảng<i class="p-1 fas fa-sort"></i><br><span
-                  class="text-xs font-normal">(kg)</span></span></div>
-            <div class="col-span-3 text-center cursor-pointer"><span>Lượng hàng<i class="p-1 fas fa-sort"></i><br><span
-                  class="text-xs font-normal">(kg)</span></span></div>
-            <div class="col-span-3 text-right cursor-pointer">Thao tác</div>
+            <div class="col-span-2 text-center cursor-pointer">Trạng thái<i class="p-1 fas fa-sort"></i></div>
+            <div class="col-span-1 text-center cursor-pointer">Đến kho<i class="p-1 fas fa-sort"></i></div>
+            <div class="col-span-1 text-center cursor-pointer sticky right-0 bg-gray-50 z-10 pr-[10px]">Thao tác</div>
           </div>
 
           <!-- Warehouse Items -->
@@ -629,111 +649,229 @@
     </div>
   </div>
 
-  <!-- Modal for Delete Confirmation -->
-  <div id="delete-confirm-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <!-- Adjustment Modal -->
+  <div id="adjustment-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-      </div>
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
       <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-      <div
-        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div class="sm:flex sm:items-start">
-            <div
-              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <i class="fas fa-exclamation-triangle text-red-600"></i>
+      <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="bg-white px-6 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="border-b pb-4 mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Phiếu điều chỉnh thông tin kho</h3>
+            <p class="text-sm text-gray-500 mt-1">Điều chỉnh thông tin kho cho đăng ký xe</p>
+          </div>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Cụm kho:</label>
+            <input type="text" id="adjust-cluster" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50 px-4 py-2" readonly>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-6">
+            <!-- Old Information (Right Column) -->
+            <div>
+              <h4 class="text-lg font-medium text-gray-700 mb-3 border-b pb-2">Thông tin cũ</h4>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Kho:</label>
+                  <input type="text" id="old-warehouse" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50 px-4 py-2" readonly>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng bao:</label>
+                  <input type="text" id="old-bags" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50 px-4 py-2" readonly>
+                </div>
+              </div>
             </div>
-            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-              <h3 class="text-lg leading-6 font-medium text-gray-900">
-                Xác nhận xóa
-              </h3>
-              <div class="mt-2">
-                <p class="text-sm text-gray-500">
-                  Bạn có chắc chắn muốn xóa hợp đồng này? Hành động này không
-                  thể hoàn tác.
-                </p>
+            
+            <!-- New Information (Left Column) -->
+            <div>
+              <h4 class="text-lg font-medium text-gray-700 mb-3 border-b pb-2">Thông tin mới</h4>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Kho mới:</label>
+                  <select id="new-warehouse" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white px-4 py-2">
+                    <option value="">-- Chọn kho --</option>
+                    <option value="Kho A">Kho A</option>
+                    <option value="Kho B">Kho B</option>
+                    <option value="Kho C">Kho C</option>
+                    <option value="Kho D">Kho D</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng bao mới:</label>
+                  <input type="number" id="new-bags" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white px-4 py-2" placeholder="Nhập số lượng bao">
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button type="button"
-            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
-            id="confirm-delete">
-            Xóa
+        <div class="px-6 py-3 sm:px-6 flex justify-end space-x-2 border-t">
+          <button type="button" id="cancel-adjustment" class="whitespace-nowrap inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            <i class="fas fa-times mr-2"></i> Hủy
           </button>
-          <button type="button"
-            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-            onclick="document.getElementById('delete-confirm-modal').classList.add('hidden')">
-            Hủy
+          <button type="button" id="confirm-adjustment" class="whitespace-nowrap inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2 bg-purple-600 text-sm font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+            <i class="fas fa-check mr-2"></i> Xác nhận điều chỉnh
           </button>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Warehouse Selection Modal -->
+  <div id="warehouse-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="border-b pb-4 mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Chọn kho cho đăng ký xe</h3>
+            <p class="text-sm text-gray-500 mt-1">Vui lòng chọn kho phù hợp từ danh sách</p>
+          </div>
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Cụm kho:</label>
+              <div class="relative">
+                <input type="text" id="cluster-name" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-50 px-4 py-2" readonly>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <i class="fas fa-warehouse text-gray-400"></i>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Chọn kho:</label>
+              <div class="relative">
+                <select id="warehouse-select" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white px-4 py-2 pr-8 appearance-none">
+                  <option value="">-- Chọn kho --</option>
+                  <option value="Kho A">Kho A</option>
+                  <option value="Kho B">Kho B</option>
+                  <option value="Kho C">Kho C</option>
+                  <option value="Kho D">Kho D</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div id="bag-quantity-container" class="hidden">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Số lượng bao:</label>
+            <div class="relative">
+              <input type="number" id="bag-quantity" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white px-4 py-2" placeholder="Nhập số lượng bao">
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="px-4 py-3 sm:px-6 flex justify-end space-x-2">
+          <button type="button" id="cancel-warehouse" class="whitespace-nowrap inline-flex items-center justify-center rounded-lg border border-gray-300 px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+            <i class="fas fa-times mr-2"></i> Hủy
+          </button>
+          <button type="button" id="confirm-warehouse" class="whitespace-nowrap inline-flex items-center justify-center rounded-lg border border-transparent px-4 py-2 bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+            <i class="fas fa-check mr-2"></i> Xác nhận
+          </button>
+        </div>
+  </div>
+
   <!-- insert script here -->
   <script>
     // Warehouse data
+    function getStatusClass(status) {
+      switch(status) {
+        case 'Cân lần 1': return 'status-weighing';
+        case 'Hoàn tất': return 'status-completed';
+        case 'Đã điều hướng': return 'status-routed';
+        default: return 'status-new';
+      }
+    }
+
+    const clusters = ['TVL 1', 'TVL 2', 'BCC 2', 'BCC 3', 'BCC 5'];
+    const warehouses = ['Kho A', 'Kho B', 'Kho C', 'Kho D', 'Kho E'];
+    
     const truckRegistrations = [
       {
         type: "Nhập kho",
+        itemType: "Hàng bao",
         contract: ["HD001"],
+        status: "ĐK mới",
         inTime: "02/07/2025 08:30",
+        licensePlate: "51A-12345",
+        driver: "Nguyễn Văn A",
         inWeight: 15000.50,
         outTime: "02/07/2025 09:00",
         outWeight: 1500,
         portWeight: 13490.50,
-        totalWeight: 13500.50
+        totalWeight: 13500.50,
+        warehouse: '',
+        cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
       {
         type: "Nhập kho",
+        itemType: "Hàng xá",
         contract: ["HD002"],
+        status: "Cân lần 1",
         inTime: "02/07/2025 10:00",
+        licensePlate: "51B-67890",
+        driver: "Trần Thị B",
         inWeight: 20000.00,
         outTime: "02/07/2025 10:30",
         outWeight: 5000,
-        portWeight: 14490.50,
-        totalWeight: 15000.00
+        portWeight: 14990.50,
+        totalWeight: 15000.00,
+        warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
+        cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
       {
         type: "Nhập kho",
+        itemType: "Hàng bao",
         contract: ["HD003"],
+        status: "Hoàn tất",
         inTime: "02/07/2025 11:00",
+        licensePlate: "51C-13579",
+        driver: "Lê Văn C",
         inWeight: 12000.75,
         outTime: "02/07/2025 11:30",
         outWeight: 2000,
         portWeight: 9989.50,
-        totalWeight: 10000.75
-      },
-      {
-        type: "Xuất kho",
-        contract: ["HD004"],
-        inTime: "02/07/2025 12:00",
-        inWeight: 18000.25,
-        outTime: "02/07/2025 12:30",
-        outWeight: 3000,
-        portWeight: 0,
-        totalWeight: 15000.25
+        totalWeight: 10000.75,
+        warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
+        cluster: clusters[Math.floor(Math.random() * clusters.length)]
       },
       {
         type: "Nhập kho",
+        itemType: "Hàng bao",
+        contract: ["HD004"],
+        status: "Đã điều hướng",
+        inTime: "02/07/2025 12:00",
+        licensePlate: "51D-24680",
+        driver: "Phạm Thị D",
+        inWeight: 18000.25,
+        outTime: "02/07/2025 12:30",
+        outWeight: 3000,
+        portWeight: 14999,
+        totalWeight: 15000.25,
+        warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
+        cluster: clusters[Math.floor(Math.random() * clusters.length)]
+      },
+      {
+        type: "Nhập kho",
+        itemType: "Hàng bao",
         contract: ["HD005"],
+        status: "Hoàn tất",
         inTime: "02/07/2025 13:00",
+        licensePlate: "51E-11223",
+        driver: "Hoàng Văn E",
         inWeight: 16000.80,
         outTime: "02/07/2025 13:30",
         outWeight: 4000,
         portWeight: 12020.50,
-        totalWeight: 12000.80
+        totalWeight: 12000.80,
+        warehouse: warehouses[Math.floor(Math.random() * warehouses.length)],
+        cluster: clusters[Math.floor(Math.random() * clusters.length)]
       }
     ];
 
     // Render warehouse list
     const truckRegistratorList = document.getElementById('truckRegistratorList');
 
-    truckRegistrations.forEach(truckRegistration => {
-      const typeClass = truckRegistration.type === 'Nhập kho' ? 'bg-blue-600' : truckRegistration.type === 'Xuất kho' ? 'bg-green-600' : 'bg-gray-600';
+    truckRegistrations.forEach((truckRegistration, index) => {
       let contractText = truckRegistration.contract.join('</a>, <a href="#" class="text-blue-600 hover:underline text-sm">');
       contractText = `<a href="#" class="text-blue-600 hover:underline text-sm">${contractText}</a>`;
       const portWeight = truckRegistration.portWeight ? truckRegistration.portWeight.toLocaleString('en-US') : '_';
@@ -745,7 +883,7 @@
         warningClass = 'hover:bg-gray-50';
       }
 
-      const detailsLink = truckRegistration.type === 'Nhập kho' ? 'DangKyXeNhapKhoDetails.html' : truckRegistration.type === 'Xuất kho' ? 'DangKyXeXuatKhoDetails.html': 'DangKyXeChuaRoDetails.html';
+      const detailsLink = 'DangKyXeNhapKhoDetails.html';
 
       const warningLabel = document.createElement('p');
       warningLabel.className = 'text-red-600 text-xs italic text-right';
@@ -753,41 +891,45 @@
       const registration = document.createElement('div');
       
       const bounder = document.createElement('div');
-      registration.className = 'grid grid-cols-24 px-6 py-4 transition-colors rounded cursor-pointer rigisteration-item min-w-[800] ' + warningClass;
+      registration.className = 'grid grid-cols-12 px-6 py-4 transition-colors rounded cursor-pointer registration-item min-w-[800] ' + warningClass;
+      registration.dataset.index = index; // Gán chỉ số vào DOM
+      registration.style.cursor = 'pointer';
       registration.innerHTML = `
-                <div class="col-span-2 mb-2 md:mb-0">
-                    <div class="font-medium text-gray-900">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${typeClass} text-white text-center"
-                          >${truckRegistration.type}</span>
-                    </div>
+                <div class="col-span-1 text-center sticky left-0 bg-white z-10">
+                    <div class="font-medium text-sm text-green-600">${truckRegistration.licensePlate}</div>
                 </div>
-                <div class="col-span-2 mb-2 md:mb-0">
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm">${truckRegistration.driver}</div>
+                </div>
+                <div class="col-span-2 text-center">
+                    <div class="font-medium text-sm">${truckRegistration.inTime}</div>
+                </div>
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm text-blue-600">${truckRegistration.inWeight.toLocaleString('en-US')}</div>
+                </div>
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm text-blue-600">${portWeight}</div>
+                </div>
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm text-purple-600">${truckRegistration.totalWeight.toLocaleString('en-US')}</div>
+                </div>
+                <div class="col-span-1 text-center">
                     <div class="font-medium text-gray-900">${contractText}</div>
                 </div>
-                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
-                    <div class="font-medium text-sm text-center">${truckRegistration.inTime}</div>
-                </div>
-                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
-                    <div class="font-medium text-sm text-blue-600 text-center">${truckRegistration.inWeight.toLocaleString('en-US')}</div>
-                </div>
-                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
-                    <div class="font-medium text-sm text-center">${truckRegistration.outTime}</div>
-                </div>
-                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
-                    <div class="font-medium text-sm text-blue-600 text-center">${truckRegistration.outWeight.toLocaleString('en-US')}</div>
-                </div>
-                <div class="col-span-2 mb-2 md:mb-0 md:text-right">
-                    <div class="font-medium text-sm text-blue-600 text-center">${portWeight}</div>
-                </div>
-                <div class="col-span-3 mb-2 md:mb-0 md:text-right">
-                    <div class="font-medium text-sm text-purple-600 text-center">${truckRegistration.totalWeight.toLocaleString('en-US')}</div>
-                </div>
-                <div class="col-span-3 md:text-right">
-                    <span class="flex space-x-3 justify-end items-center px-2 py-1 text-xm rounded-full">
-                        <a href="${detailsLink}"><i class="fas fa-eye text-blue-600 hover:text-blue-900"></i></a>
-                        <a href="${detailsLink}"><i class="fas fa-edit text-yellow-600 hover:text-yellow-900"></i></a>
-                        <i class="fas fa-trash text-red-600 hover:text-red-900"></i>
+                <div class="col-span-2 text-center">
+                    <span class="inline-block px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(truckRegistration.status)} whitespace-nowrap">
+                        ${truckRegistration.status || 'ĐK mới'}
                     </span>
+                </div>
+                <div class="col-span-1 text-center">
+                    <div class="font-medium text-sm ${!truckRegistration.warehouse ? 'text-red-600' : ''}">${truckRegistration.warehouse || 'Chưa chọn'}</div>
+                </div>
+                <div class="col-span-1 text-center sticky right-0 bg-white z-10 pr-[10px]">
+                    <div class="flex flex-col items-center">
+                        <div>
+                            <i class="fas fa-file-pen text-purple-600 hover:text-purple-900 adjust-btn"></i>
+                        </div>
+                    </div>
                 </div>
             `;
       // registration.onclick = function () {
@@ -799,35 +941,129 @@
       truckRegistratorList.appendChild(bounder);
     });
 
-    // Handle delete confirmation
-    document
-      .querySelectorAll("i.fa-trash")
-      .forEach((button) => {
-        button.addEventListener("click", function () {
-          const deleteModal = document.getElementById(
-            "delete-confirm-modal"
-          );
-          deleteModal.classList.remove("hidden");
-
-          // Store the clicked button for later reference
-          deleteModal._deleteButton = this;
-        });
+    // Handle adjustment modal
+    const adjustmentModal = document.getElementById('adjustment-modal');
+    const adjustButtons = document.querySelectorAll('.adjust-btn');
+    const confirmAdjustBtn = document.getElementById('confirm-adjustment');
+    const cancelAdjustBtn = document.getElementById('cancel-adjustment');
+    
+    adjustButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        // Get the row data
+        const row = this.closest('.registration-item');
+        const rowIndex = Array.from(row.parentNode.children).indexOf(row) / 2;
+        const registration = truckRegistrations[rowIndex];
+        
+        // Set values in modal
+        document.getElementById('adjust-cluster').value = registration.cluster;
+        document.getElementById('old-warehouse').value = 'Kho A'; // Default value, replace with actual data
+        document.getElementById('old-bags').value = registration.itemType === 'Hàng bao' ? '100' : 'N/A'; // Replace with actual data
+        
+        // Show modal
+        adjustmentModal.classList.remove('hidden');
       });
+    });
+    
+    // Confirm adjustment
+    confirmAdjustBtn.addEventListener('click', function() {
+      const newWarehouse = document.getElementById('new-warehouse').value;
+      const newBags = document.getElementById('new-bags').value;
+      
+      if (newWarehouse || newBags) {
+        alert(`Đã điều chỉnh thông tin:\nKho mới: ${newWarehouse || 'Giữ nguyên'}\nSố bao mới: ${newBags || 'Giữ nguyên'}`);
+        adjustmentModal.classList.add('hidden');
+      } else {
+        alert('Vui lòng nhập thông tin điều chỉnh');
+      }
+    });
+    
+    // Cancel adjustment
+    cancelAdjustBtn.addEventListener('click', function() {
+      adjustmentModal.classList.add('hidden');
+      document.getElementById('new-warehouse').value = '';
+      document.getElementById('new-bags').value = '';
+    });
 
-    // Confirm delete action
-    document
-      .getElementById("confirm-delete")
-      .addEventListener("click", function () {
-        const deleteModal = document.getElementById("delete-confirm-modal");
-        const deleteButton = deleteModal._deleteButton;
-        const row = deleteButton.closest(".rigisteration-item");
-        row.parentNode.removeChild(row);
+    // Handle warehouse selection modal
+    const warehouseModal = document.getElementById('warehouse-modal');
+    const confirmWarehouseBtn = document.getElementById('confirm-warehouse');
+    const cancelWarehouseBtn = document.getElementById('cancel-warehouse');
+    const warehouseSelect = document.getElementById('warehouse-select');
 
-        deleteModal.classList.add("hidden");
+    // Store the clicked row for later reference
+    let currentRow = null;
+
+    // Handle row click to show modal
+    document.querySelectorAll('.registration-item').forEach(row => {
+      row.addEventListener('click', function(e) {
+        // Don't show modal if clicking on action buttons or adjustment button
+        if (e.target.closest('i.fa-eye, i.fa-edit, i.fa-file-pen')) {
+          return;
+        }
+        
+        currentRow = this;
+        const rowIndex = parseInt(this.dataset.index);
+        const registration = truckRegistrations[rowIndex];
+        
+        // Reset modal fields
+        document.getElementById('warehouse-select').value = '';
+        document.getElementById('bag-quantity').value = '';
+        
+        // Show/hide bag quantity field based on item type
+        const bagContainer = document.getElementById('bag-quantity-container');
+        if (registration.itemType === 'Hàng bao') {
+          bagContainer.classList.remove('hidden');
+        } else {
+          bagContainer.classList.add('hidden');
+        }
+        
+        // Set cluster name in modal
+        document.getElementById('cluster-name').value = registration.cluster;
+        
+        // Show modal
+        warehouseModal.classList.remove('hidden');
       });
+    });
+
+    // Confirm warehouse selection
+    confirmWarehouseBtn.addEventListener('click', function() {
+      if (!warehouseSelect.value) {
+        alert('Vui lòng chọn kho');
+        return;
+      }
+
+      const rowIndex = Array.from(currentRow.parentNode.children).indexOf(currentRow) / 2;
+      const registration = truckRegistrations[rowIndex];
+      
+      // Update warehouse display
+      const warehouseDisplay = currentRow.querySelector('.col-span-1:nth-last-child(2) div');
+      warehouseDisplay.textContent = warehouseSelect.value;
+      
+      // Update status to "Đã điều hướng"
+      const statusDisplay = currentRow.querySelector('.col-span-1:nth-last-child(3) span');
+      statusDisplay.textContent = 'Đã điều hướng';
+      statusDisplay.className = 'px-2 py-1 text-xs font-semibold rounded-full status-routed';
+      
+      // Update data
+      registration.warehouse = warehouseSelect.value;
+      registration.status = 'Đã điều hướng';
+      
+      warehouseModal.classList.add('hidden');
+      warehouseSelect.value = '';
+    });
+
+    // Cancel warehouse selection
+    cancelWarehouseBtn.addEventListener('click', function() {
+      warehouseModal.classList.add('hidden');
+      warehouseSelect.value = ''; // Reset selection
+    });
+
   </script>
 
   <!-- insert script here -->
+$0
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
