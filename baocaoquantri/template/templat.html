@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chứng từ Xuất/Nhập khẩu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .header-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        }
+
+        .divider {
+            border-top: 2px dashed #e5e7eb;
+        }
+
+        .signature-line {
+            border-top: 1px solid #9ca3af;
+            width: 200px;
+            display: inline-block;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto my-8 bg-white shadow-lg rounded-lg overflow-hidden">
+        <!-- Header -->
+        <div class="header-bg text-white px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold">BÁO CÁO TỒN KHO</h1>
+                </div>
+                <div class="text-right">
+                    <p class="text-blue-100">Ngày: <span class="font-semibold">15/11/2025</span></p>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Customer Information -->
+        <div class="px-6 py-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-user-tie mr-2 text-blue-600"></i> THÔNG TIN KHÁCH HÀNG
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <p class="text-sm text-gray-500">Loại khách hàng</p>
+                    <p class="font-medium">CÔNG TY TNHH ABC TRADING</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Người liên hệ</p>
+                    <p class="font-medium">Ông Minh</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Số điện thoại</p>
+                    <p class="font-medium">(+84)-123-312</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Email</p>
+                    <p class="font-medium">ABC@abctrading.com</p>
+                </div>
+                <div class="md:col-span-2">
+                    <p class="text-sm text-gray-500">Địa chỉ</p>
+                    <p class="font-medium">45 Hoàng Quốc Việt, Phường Phú Mỹ, Quận 7, TP.HCM</p>
+                </div>
+
+                <div>
+                    <p class="text-sm text-gray-500">Mã khách hàng</p>
+                    <p class="font-medium">KH-001</p>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Thông tin hàng hóa -->
+        <div class="px-6 py-4">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-boxes mr-2 text-blue-600"></i> THÔNG TIN HÀNG HÓA
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                STT</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Mô tả hàng hóa</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Kho</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                loại hàng</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                số lượng</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Đơn vi tính</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tồn kho từ ngày</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-3 py-2 whitespace-nowrap">1</td>
+                            <td class="px-3 py-2">Phân bón Rynan Smart Fertilizers</td>
+                            <td class="px-3 py-2">TVL-1</td>
+                            <td class="px-3 py-2">Hàng xá</td>
+                            <td class="px-3 py-2">20</td>
+                            <td class="px-3 py-2">Tấn</td>
+                            <td class="px-3 py-2">13/07/2025</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="px-3 py-2 whitespace-nowrap">2</td>
+                            <td class="px-3 py-2">Phân bón Nhật NPK Japo</td>
+                            <td class="px-3 py-2">TVL-2</td>
+                            <td class="px-3 py-2">Hàng bao</td>
+                            <td class="px-3 py-2">500</td>
+                            <td class="px-3 py-2">KG</td>
+                            <td class="px-3 py-2">13/01/2025</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 whitespace-nowrap">3</td>
+                            <td class="px-3 py-2"> Phân bón Con Cò Vàng</td>
+                            <td class="px-3 py-2">BBC-2</td>
+                            <td class="px-3 py-2">Hàng xá</td>
+                            <td class="px-3 py-2">25</td>
+                            <td class="px-3 py-2">Tấn</td>
+                            <td class="px-3 py-2">22/07/2024</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </div>
+         <hr>   
+        </div>
+        <!-- Company Info -->
+         
+        <div class="px-6 py-12 border-b">
+            <div class="flex items-center">
+                <div class="mr-4">
+                    <img src="https://tvl-demo.onrender.com/logo.png" alt="Logo công ty"
+                        class="w-20 h-20 object-contain">
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">Thorasen Vinama Logistics Company Limited</h2>
+                    <p class="text-gray-600"><i class="fas fa-map-marker-alt mr-2"></i> 123 Trung tâm Thương mại, Quận
+                        1, TP.HCM</p>
+                    <p class="text-gray-600"><i class="fas fa-phone mr-2"></i> +84 28 1234 5678</p>
+                    <p class="text-gray-600"><i class="fas fa-envelope mr-2"></i> info@globaltrade.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
